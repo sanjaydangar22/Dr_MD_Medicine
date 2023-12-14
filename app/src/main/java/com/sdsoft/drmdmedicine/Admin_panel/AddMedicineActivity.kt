@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -38,8 +39,8 @@ class AddMedicineActivity : AppCompatActivity() {
     private lateinit var mDbRef: DatabaseReference
     lateinit var storageReference: StorageReference
 
-    lateinit var frontImagePath: Uri
-    lateinit var backImagePath: Uri
+    var frontImagePath: Uri? = null
+    var backImagePath: Uri? = null
 
     var imageUploadCompleted = 0
     var selectedImage = 0
@@ -73,52 +74,32 @@ class AddMedicineActivity : AppCompatActivity() {
         }
 
         addMedicineBinding.cdUploadImage.setOnClickListener {
-            imageUpload()
-        }
-        addMedicineBinding.cdSave.setOnClickListener {
-            var medicineCompanyName = addMedicineBinding.edtMedicineCompanyName.text.toString()
-            var medicineName = addMedicineBinding.edtMedicineName.text.toString()
-            var medicineUse = addMedicineBinding.edtMedicineName.text.toString()
 
-            if (medicineCompanyName.isEmpty()) {
-                Toast.makeText(this, "Medicine Company name is empty", Toast.LENGTH_SHORT).show()
-            } else if (medicineName.isEmpty()) {
-                Toast.makeText(this, "Medicine  name is empty", Toast.LENGTH_SHORT).show()
-            } else if (medicineUse.isEmpty()) {
-                Toast.makeText(this, "Medicine use is empty", Toast.LENGTH_SHORT).show()
+            if (frontImagePath == null) {
+
+                Toast.makeText(this, "Please Select Front Image", Toast.LENGTH_SHORT).show()
+
+            } else if (backImagePath == null) {
+
+                Toast.makeText(this, "Please Select Back Image", Toast.LENGTH_SHORT).show()
+
             } else {
-                mDbRef.child("MedicineList").setValue(
-                    MedicineModelClass(
-                        frontImage!!,
-                        backImage!!,
-                        medicineCompanyName,
-                        medicineName,
-                        medicineUse
-                    )
-                ).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Toast.makeText(
-                            this,
-                            "Record Save Successfully",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-
-
-                        var i = Intent(this, AdminHomeActivity::class.java)
-                        startActivity(i)
-                    }
-                }.addOnFailureListener {
-                    Log.e("TAG", "fail: " + it.message)
-
-                }
-
-                if (imageUploadCompleted == 1) {
-
-                }
+                imageUpload()
             }
         }
+
+        addMedicineBinding.cdSave.setOnClickListener {
+
+
+//                if (imageUploadCompleted == 1) {
+
+                    saveData()
+//                }
+
+        }
     }
+
+
 
 
     private fun selectedImageDialog() {
@@ -163,14 +144,15 @@ class AddMedicineActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult(),
         ActivityResultCallback<ActivityResult> { result ->
             if (result.resultCode == RESULT_OK) {
-                val data = result.data
+                val data = result.data!!
                 val b = data!!.extras!!["data"] as Bitmap?
 
                 if (selectedImage == 1) {
                     frontImagePath = data.data!!
                     addMedicineBinding.imgFrontImage.setImageBitmap(b)
+
                 } else if (selectedImage == 2) {
-                    backImagePath = data.data!!
+//                    backImagePath = data.data!!
                     addMedicineBinding.imgBackImage.setImageBitmap(b)
                 }
             }
@@ -181,7 +163,7 @@ class AddMedicineActivity : AppCompatActivity() {
     var gallery_Launcher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
         ActivityResultCallback<ActivityResult> { result ->
-            if (result.resultCode === RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val data: Intent = result.data!!
 
 //                var selectedImageUri = getImagePathFromURI(uri!!)
@@ -215,7 +197,7 @@ class AddMedicineActivity : AppCompatActivity() {
             // Upload each image in the list
             imagesPath.forEachIndexed { index, imageUri ->
                 // Adding listeners on upload or failure of the image
-                val uploadTask = ref.child("image${index + 1}").putFile(imageUri)
+                val uploadTask = ref.child("image${index + 1}").putFile(imageUri!!)
 
                 uploadTask.addOnSuccessListener {
                     // Image uploaded successfully
@@ -224,9 +206,12 @@ class AddMedicineActivity : AppCompatActivity() {
                         val imageUrl = uri.toString()
                         Log.e("TAG", "uploadImage: $imageUrl")
                         // Handle the download URL as needed
+                        frontImage=imageUrl
                         progressDialog.dismiss()
                         Toast.makeText(this, "Images Uploaded!!", Toast.LENGTH_SHORT).show()
                         imageUploadCompleted = 1
+
+                        addMedicineBinding.cdUploadImage.visibility=View.GONE
                     }
                 }
                     .addOnFailureListener { e ->
@@ -254,6 +239,48 @@ class AddMedicineActivity : AppCompatActivity() {
 //                    progressDialog.dismiss()
 //                    Toast.makeText(this, "Failed ${e.message}", Toast.LENGTH_SHORT).show()
 //                }
+        }
+    }
+
+
+    private fun saveData() {
+
+        var medicineCompanyName = addMedicineBinding.edtMedicineCompanyName.text.toString()
+        var medicineName = addMedicineBinding.edtMedicineName.text.toString()
+        var medicineUse = addMedicineBinding.edtMedicineName.text.toString()
+
+        if (medicineCompanyName.isEmpty()) {
+            Toast.makeText(this, "Medicine Company name is empty", Toast.LENGTH_SHORT).show()
+        } else if (medicineName.isEmpty()) {
+            Toast.makeText(this, "Medicine  name is empty", Toast.LENGTH_SHORT).show()
+        } else if (medicineUse.isEmpty()) {
+            Toast.makeText(this, "Medicine use is empty", Toast.LENGTH_SHORT).show()
+        } else {
+            mDbRef.child("MedicineList").setValue(
+                MedicineModelClass(
+                    frontImage!!,
+                    backImage!!,
+                    medicineCompanyName,
+                    medicineName,
+                    medicineUse
+                )
+            ).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Toast.makeText(
+                        this,
+                        "Record Save Successfully",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+
+
+                    var i = Intent(this, AdminHomeActivity::class.java)
+                    startActivity(i)
+                }
+            }.addOnFailureListener {
+                Log.e("TAG", "fail: " + it.message)
+
+            }
         }
     }
 }
