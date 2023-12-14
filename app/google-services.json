@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "103755695344",
+    "project_id": "dr-md-medicine",
+    "storage_bucket": "dr-md-medicine.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103755695344:android:7673c5d3de0eea04892e35",
+        "android_client_info": {
+          "package_name": "com.sdsoft.drmdmedicine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzA7nHuQmkK7CydH-0FMmQXGBz8Bd7RP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
