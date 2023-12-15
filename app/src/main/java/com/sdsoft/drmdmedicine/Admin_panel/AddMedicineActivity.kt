@@ -19,7 +19,6 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -28,6 +27,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.databinding.ActivityAddMedicineBinding
 import com.sdsoft.drmdmedicine.databinding.ImageSelctedDialogBinding
 import java.util.UUID
@@ -38,6 +38,8 @@ class AddMedicineActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var mDbRef: DatabaseReference
     lateinit var storageReference: StorageReference
+
+    lateinit var progressBarDialog: ProgressBarDialog
 
     var frontImagePath: Uri? = null
     var backImagePath: Uri? = null
@@ -51,6 +53,8 @@ class AddMedicineActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         addMedicineBinding = ActivityAddMedicineBinding.inflate(layoutInflater)
         setContentView(addMedicineBinding.root)
+
+        progressBarDialog = ProgressBarDialog(this)
 
         mDbRef = FirebaseDatabase.getInstance().reference
         // Initialize Firebase Auth
@@ -90,16 +94,58 @@ class AddMedicineActivity : AppCompatActivity() {
 
         addMedicineBinding.cdSave.setOnClickListener {
 
+            if (imageUploadCompleted == 1) {
 
-//                if (imageUploadCompleted == 1) {
+                var frontImage = frontImage
+                var backImage = backImage
+                var medicineCompanyName = addMedicineBinding.edtMedicineCompanyName.text.toString()
+                var medicineName = addMedicineBinding.edtMedicineName.text.toString()
+                var medicineUse = addMedicineBinding.edtMedicineUse.text.toString()
 
-                    saveData()
-//                }
+                if (medicineCompanyName.isEmpty()) {
+                    Toast.makeText(this, "Medicine Company name is empty", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (medicineName.isEmpty()) {
+                    Toast.makeText(this, "Medicine name is empty", Toast.LENGTH_SHORT).show()
+                } else if (medicineUse.isEmpty()) {
+                    Toast.makeText(this, "Medicine use is empty", Toast.LENGTH_SHORT).show()
+                } else {
+                    progressBarDialog.show()
+                    mDbRef.child("MedicineList/ " + UUID.randomUUID().toString()).setValue(
+                        MedicineModelClass(
+                            frontImage!!,
+                            backImage!!,
+                            medicineCompanyName,
+                            medicineName,
+                            medicineUse
+                        )
+                    ).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            Toast.makeText(
+                                this,
+                                "Record Save Successfully",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+
+                            var i = Intent(this, AdminHomeActivity::class.java)
+                            startActivity(i)
+                            progressBarDialog.dismiss()
+                        }
+                    }.addOnFailureListener {
+                        Log.e("TAG", "fail: " + it.message)
+                        progressBarDialog.dismiss()
+
+                    }
+                }
+
+
+            } else {
+                Toast.makeText(this, "First Image Upload", Toast.LENGTH_SHORT).show()
+            }
 
         }
     }
-
-
 
 
     private fun selectedImageDialog() {
@@ -182,7 +228,7 @@ class AddMedicineActivity : AppCompatActivity() {
         if (frontImagePath != null && backImagePath != null) {
 
             val imagesPath = listOf(frontImagePath, backImagePath)
-
+            val imagesBitmap = listOf(frontImagePath!!, backImagePath!!)
             // Code for showing progressDialog while uploading
             val progressDialog = ProgressDialog(this)
             progressDialog.setTitle("Uploading...")
@@ -193,7 +239,7 @@ class AddMedicineActivity : AppCompatActivity() {
             val ref = storageReference.child("images/" + UUID.randomUUID().toString())
 
             val uploadTasks = mutableListOf<UploadTask>()
-
+            val downloadUrls = mutableListOf<String>()
             // Upload each image in the list
             imagesPath.forEachIndexed { index, imageUri ->
                 // Adding listeners on upload or failure of the image
@@ -203,15 +249,30 @@ class AddMedicineActivity : AppCompatActivity() {
                     // Image uploaded successfully
                     // You can get the download URL or perform other operations here
                     it.storage.downloadUrl.addOnSuccessListener { uri ->
+
                         val imageUrl = uri.toString()
-                        Log.e("TAG", "uploadImage: $imageUrl")
-                        // Handle the download URL as needed
-                        frontImage=imageUrl
-                        progressDialog.dismiss()
-                        Toast.makeText(this, "Images Uploaded!!", Toast.LENGTH_SHORT).show()
+                        downloadUrls.add(imageUrl)
+
+                        if (downloadUrls.size == imagesBitmap.size) {
+                            // Both images uploaded, you can use downloadUrls[0] and downloadUrls[1]
+                            progressDialog.dismiss()
+                            Toast.makeText(this, "Images Uploaded!!", Toast.LENGTH_SHORT).show()
+
+                            // Handle the download URLs as needed (e.g., save to database)
+                            val frontImageUrl = downloadUrls[0]
+                            val backImageUrl = downloadUrls[1]
+
+                            Log.e("TAG", "frontImageUrl:  $frontImageUrl ")
+                            Log.e("TAG", "backImageUrl:  $backImageUrl ")
+
+                            frontImage = frontImageUrl
+                            backImage = backImageUrl
+                            // Do something with the download URLs
+                        }
+
                         imageUploadCompleted = 1
 
-                        addMedicineBinding.cdUploadImage.visibility=View.GONE
+                        addMedicineBinding.cdUploadImage.visibility = View.GONE
                     }
                 }
                     .addOnFailureListener { e ->
@@ -243,44 +304,4 @@ class AddMedicineActivity : AppCompatActivity() {
     }
 
 
-    private fun saveData() {
-
-        var medicineCompanyName = addMedicineBinding.edtMedicineCompanyName.text.toString()
-        var medicineName = addMedicineBinding.edtMedicineName.text.toString()
-        var medicineUse = addMedicineBinding.edtMedicineName.text.toString()
-
-        if (medicineCompanyName.isEmpty()) {
-            Toast.makeText(this, "Medicine Company name is empty", Toast.LENGTH_SHORT).show()
-        } else if (medicineName.isEmpty()) {
-            Toast.makeText(this, "Medicine  name is empty", Toast.LENGTH_SHORT).show()
-        } else if (medicineUse.isEmpty()) {
-            Toast.makeText(this, "Medicine use is empty", Toast.LENGTH_SHORT).show()
-        } else {
-            mDbRef.child("MedicineList").setValue(
-                MedicineModelClass(
-                    frontImage!!,
-                    backImage!!,
-                    medicineCompanyName,
-                    medicineName,
-                    medicineUse
-                )
-            ).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Toast.makeText(
-                        this,
-                        "Record Save Successfully",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-
-
-                    var i = Intent(this, AdminHomeActivity::class.java)
-                    startActivity(i)
-                }
-            }.addOnFailureListener {
-                Log.e("TAG", "fail: " + it.message)
-
-            }
-        }
-    }
 }
