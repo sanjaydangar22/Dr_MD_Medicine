@@ -21,6 +21,7 @@ import com.google.firebase.storage.StorageReference
 import com.sdsoft.drmdmedicine.Admin_panel.AddMedicineActivity
 import com.sdsoft.drmdmedicine.Admin_panel.MedicineListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.MedicineModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.MedicineViewActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.FragmentMedicineBinding
@@ -58,7 +59,12 @@ class MedicineFragment : Fragment() {
             var i = Intent(this.activity, AddMedicineActivity::class.java)
             requireContext().startActivity(i)
         }
-        var adapter = MedicineListAdapter(requireContext())
+        var adapter = MedicineListAdapter(requireContext()){
+
+            var i=Intent(requireContext(),MedicineViewActivity::class.java)
+            i.putExtra("medicineUid",it.medicineUid)
+            requireContext().startActivity(i)
+        }
         var manger = GridLayoutManager(context, 2)
 
         medicineBinding.rcvMedicineList.layoutManager = manger

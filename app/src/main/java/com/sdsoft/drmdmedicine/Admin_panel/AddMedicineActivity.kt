@@ -101,6 +101,7 @@ class AddMedicineActivity : AppCompatActivity() {
                 var medicineCompanyName = addMedicineBinding.edtMedicineCompanyName.text.toString()
                 var medicineName = addMedicineBinding.edtMedicineName.text.toString()
                 var medicineUse = addMedicineBinding.edtMedicineUse.text.toString()
+                var medicineUid = UUID.randomUUID().toString()
 
                 if (medicineCompanyName.isEmpty()) {
                     Toast.makeText(this, "Medicine Company name is empty", Toast.LENGTH_SHORT)
@@ -111,13 +112,14 @@ class AddMedicineActivity : AppCompatActivity() {
                     Toast.makeText(this, "Medicine use is empty", Toast.LENGTH_SHORT).show()
                 } else {
                     progressBarDialog.show()
-                    mDbRef.child("MedicineList/ " + UUID.randomUUID().toString()).setValue(
+                    mDbRef.child("MedicineList").child(medicineUid).setValue(
                         MedicineModelClass(
                             frontImage!!,
                             backImage!!,
                             medicineCompanyName,
                             medicineName,
-                            medicineUse
+                            medicineUse,
+                            medicineUid
                         )
                     ).addOnCompleteListener {
                         if (it.isSuccessful) {

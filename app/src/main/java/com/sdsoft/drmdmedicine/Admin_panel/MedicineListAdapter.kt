@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sdsoft.drmdmedicine.R
 
-class MedicineListAdapter(var context: Context) :
+class MedicineListAdapter(var context: Context, var itemClick: (MedicineModelClass) -> Unit) :
     RecyclerView.Adapter<MedicineListAdapter.MyViewHolder>() {
 
     var medicineList = ArrayList<MedicineModelClass>()
@@ -18,6 +19,7 @@ class MedicineListAdapter(var context: Context) :
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var medicineImage: ImageView = itemView.findViewById(R.id.imgMedicineImage)
         var medicineName: TextView = itemView.findViewById(R.id.txtMedicineName)
+        var cdMedicine: CardView = itemView.findViewById(R.id.cdMedicine)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -35,6 +37,10 @@ class MedicineListAdapter(var context: Context) :
 
         Glide.with(context).load(medicineList[position].frontImage)
             .placeholder(R.drawable.ic_image).into(holder.medicineImage)
+
+        holder.cdMedicine.setOnClickListener {
+            itemClick.invoke(medicineList[position])
+        }
     }
 
     fun updateList(medicineList: ArrayList<MedicineModelClass>) {
