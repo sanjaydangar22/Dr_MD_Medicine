@@ -17,7 +17,7 @@
             android:layout_width="@dimen/_65sdp"
             android:layout_height="@dimen/_65sdp"
             android:layout_centerHorizontal="true"
-            android:indeterminateTint="@color/sky_blue" />
+            android:indeterminateTint="@color/blue" />
 
 
         <TextView

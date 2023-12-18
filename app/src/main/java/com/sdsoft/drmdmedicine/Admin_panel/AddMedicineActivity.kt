@@ -19,15 +19,20 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.sdsoft.drmdmedicine.ProgressBarDialog
+import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityAddMedicineBinding
 import com.sdsoft.drmdmedicine.databinding.ImageSelctedDialogBinding
 import java.util.UUID
@@ -46,9 +51,13 @@ class AddMedicineActivity : AppCompatActivity() {
 
     var imageUploadCompleted = 0
     var selectedImage = 0
+
+
+    var medicineUid: String? = null
     var frontImage: String? = null
     var backImage: String? = null
 
+    var flag = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addMedicineBinding = ActivityAddMedicineBinding.inflate(layoutInflater)
@@ -66,6 +75,77 @@ class AddMedicineActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+
+        if (intent != null && intent.hasExtra("itemUpdate")) {  // data update key access this class
+
+            flag = 1
+
+            medicineUid = intent.getStringExtra("medicineUid")   // key set  variable
+
+            Log.e("TAG", "medicineUid: " + medicineUid)
+
+
+            mDbRef.child("MedicineList").child(medicineUid!!)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            val medicineItem = snapshot.getValue(MedicineModelClass::class.java)
+                            if (medicineItem != null) {
+                                // User data retrieved successfully
+                                val medicineUid = medicineItem.medicineUid
+                                val frontImage = medicineItem.frontImage
+                                val backImage = medicineItem.backImage
+                                val medicineCompanyName = medicineItem.medicineCompanyName
+                                val medicineName = medicineItem.medicineName
+                                var medicineUse = medicineItem.medicineUse
+
+
+
+
+                                Log.e("TAG", "frontImage:  $frontImage ")
+                                Log.e("TAG", "medicineName:  $medicineName ")
+
+
+
+
+                                Glide.with(this@AddMedicineActivity).load(frontImage)
+                                    .placeholder(R.drawable.ic_image)
+                                    .into(addMedicineBinding.imgFrontImage)
+                                Glide.with(this@AddMedicineActivity).load(backImage)
+                                    .placeholder(R.drawable.ic_image)
+                                    .into(addMedicineBinding.imgBackImage)
+
+                                addMedicineBinding.edtMedicineCompanyName.setText(
+                                    medicineCompanyName.toString()
+                                )
+                                addMedicineBinding.edtMedicineName.setText(medicineName.toString())
+                                addMedicineBinding.edtMedicineUse.setText(medicineUse.toString())
+
+                                //change page title
+                                addMedicineBinding.txtTitle.text = "Medicine Edit"
+                                //change button name
+                                addMedicineBinding.txtSave.text = "Update"
+
+                                frontImagePath = Uri.parse(frontImage)
+                                backImagePath = Uri.parse(backImage)
+                            }
+                        } else {
+                            // User data does not exist
+                            Toast.makeText(
+                                this@AddMedicineActivity,
+                                "No Medicine",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+
+                })
+
+        }
         addMedicineBinding.imgAddFrontImage.setOnClickListener {
 
             selectedImage = 1
@@ -101,7 +181,7 @@ class AddMedicineActivity : AppCompatActivity() {
                 var medicineCompanyName = addMedicineBinding.edtMedicineCompanyName.text.toString()
                 var medicineName = addMedicineBinding.edtMedicineName.text.toString()
                 var medicineUse = addMedicineBinding.edtMedicineUse.text.toString()
-                var medicineUid = UUID.randomUUID().toString()
+
 
                 if (medicineCompanyName.isEmpty()) {
                     Toast.makeText(this, "Medicine Company name is empty", Toast.LENGTH_SHORT)
@@ -111,33 +191,66 @@ class AddMedicineActivity : AppCompatActivity() {
                 } else if (medicineUse.isEmpty()) {
                     Toast.makeText(this, "Medicine use is empty", Toast.LENGTH_SHORT).show()
                 } else {
-                    progressBarDialog.show()
-                    mDbRef.child("MedicineList").child(medicineUid).setValue(
-                        MedicineModelClass(
-                            frontImage!!,
-                            backImage!!,
-                            medicineCompanyName,
-                            medicineName,
-                            medicineUse,
-                            medicineUid
-                        )
-                    ).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            Toast.makeText(
-                                this,
-                                "Record Save Successfully",
-                                Toast.LENGTH_SHORT
+                    if (flag == 1) {
+                        progressBarDialog.show()
+                        mDbRef.child("MedicineList").child(medicineUid!!).setValue(
+                            MedicineModelClass(
+                                frontImage!!,
+                                backImage!!,
+                                medicineCompanyName,
+                                medicineName,
+                                medicineUse,
+                                medicineUid!!
                             )
-                                .show()
+                        ).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    "Record Save Successfully",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
 
-                            var i = Intent(this, AdminHomeActivity::class.java)
-                            startActivity(i)
+                                var i = Intent(this, AdminHomeActivity::class.java)
+                                startActivity(i)
+                                progressBarDialog.dismiss()
+                            }
+                        }.addOnFailureListener {
+                            Log.e("TAG", "fail: " + it.message)
                             progressBarDialog.dismiss()
-                        }
-                    }.addOnFailureListener {
-                        Log.e("TAG", "fail: " + it.message)
-                        progressBarDialog.dismiss()
 
+                        }
+                    } else {
+
+                        var medicineUid = UUID.randomUUID().toString()
+                        progressBarDialog.show()
+                        mDbRef.child("MedicineList").child(medicineUid).setValue(
+                            MedicineModelClass(
+                                frontImage!!,
+                                backImage!!,
+                                medicineCompanyName,
+                                medicineName,
+                                medicineUse,
+                                medicineUid
+                            )
+                        ).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    "Record Save Successfully",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+
+                                var i = Intent(this, AdminHomeActivity::class.java)
+                                startActivity(i)
+                                progressBarDialog.dismiss()
+                            }
+                        }.addOnFailureListener {
+                            Log.e("TAG", "fail: " + it.message)
+                            progressBarDialog.dismiss()
+
+                        }
                     }
                 }
 
@@ -243,7 +356,7 @@ class AddMedicineActivity : AppCompatActivity() {
             val uploadTasks = mutableListOf<UploadTask>()
             val downloadUrls = mutableListOf<String>()
             // Upload each image in the list
-            imagesPath.forEachIndexed { index, imageUri ->
+            imagesBitmap.forEachIndexed { index, imageUri ->
                 // Adding listeners on upload or failure of the image
                 val uploadTask = ref.child("image${index + 1}").putFile(imageUri!!)
 
@@ -274,12 +387,15 @@ class AddMedicineActivity : AppCompatActivity() {
 
                         imageUploadCompleted = 1
 
-                        addMedicineBinding.cdUploadImage.visibility = View.GONE
+
                     }
                 }
                     .addOnFailureListener { e ->
                         // Error, Image not uploaded
                         Log.e("TAG", "Failed ${e.message}")
+                        progressDialog.dismiss()
+                        Toast.makeText(this, "Images Uploading Fail", Toast.LENGTH_SHORT).show()
+
                     }
                     .addOnProgressListener { taskSnapshot ->
                         // Progress Listener for loading percentage on the dialog box
