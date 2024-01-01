@@ -1,7 +1,9 @@
-package com.sdsoft.drmdmedicine.Admin_panel
+package com.sdsoft.drmdmedicine.Admin_panel.activity
 
+import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -11,7 +13,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -31,10 +32,12 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityAddMedicineBinding
 import com.sdsoft.drmdmedicine.databinding.ImageSelctedDialogBinding
+import java.io.ByteArrayOutputStream
 import java.util.UUID
 
 class AddMedicineActivity : AppCompatActivity() {
@@ -75,10 +78,13 @@ class AddMedicineActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-
+        addMedicineBinding.imgBack.setOnClickListener {
+            onBackPressed()
+        }
         if (intent != null && intent.hasExtra("itemUpdate")) {  // data update key access this class
 
             flag = 1
+            imageUploadCompleted = 1
 
             medicineUid = intent.getStringExtra("medicineUid")   // key set  variable
 
@@ -93,8 +99,8 @@ class AddMedicineActivity : AppCompatActivity() {
                             if (medicineItem != null) {
                                 // User data retrieved successfully
                                 val medicineUid = medicineItem.medicineUid
-                                val frontImage = medicineItem.frontImage
-                                val backImage = medicineItem.backImage
+                                frontImage = medicineItem.frontImage
+                                backImage = medicineItem.backImage
                                 val medicineCompanyName = medicineItem.medicineCompanyName
                                 val medicineName = medicineItem.medicineName
                                 var medicineUse = medicineItem.medicineUse
@@ -300,25 +306,38 @@ class AddMedicineActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    //camera
-    var camera_Launcher = registerForActivityResult<Intent, ActivityResult>(
-        ActivityResultContracts.StartActivityForResult(),
-        ActivityResultCallback<ActivityResult> { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data = result.data!!
-                val b = data!!.extras!!["data"] as Bitmap?
+
+    // Camera launcher
+    var camera_Launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent = result.data!!
+                val imageBitmap = data.extras?.getParcelable("data") as Bitmap?
 
                 if (selectedImage == 1) {
-                    frontImagePath = data.data!!
-                    addMedicineBinding.imgFrontImage.setImageBitmap(b)
+                    // Check if data.data is not null, otherwise use data.extras
+//
+                    frontImagePath = getImageUri(applicationContext, imageBitmap!!)
+                    Log.e("TAG", "frontImagePath:  $frontImagePath")
 
+                    addMedicineBinding.imgFrontImage.setImageBitmap(imageBitmap)
                 } else if (selectedImage == 2) {
-//                    backImagePath = data.data!!
-                    addMedicineBinding.imgBackImage.setImageBitmap(b)
+                    // Check if data.data is not null, otherwise use data.extras
+                    backImagePath = getImageUri(applicationContext, imageBitmap!!)
+                    Log.e("TAG", "backImagePath:  $backImagePath")
+                    addMedicineBinding.imgBackImage.setImageBitmap(imageBitmap)
                 }
             }
+        }
 
-        })
+    // Function to convert Bitmap to Uri
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path =
+            MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        return Uri.parse(path)
+    }
 
     //gallery
     var gallery_Launcher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -342,7 +361,7 @@ class AddMedicineActivity : AppCompatActivity() {
     private fun imageUpload() {
         if (frontImagePath != null && backImagePath != null) {
 
-            val imagesPath = listOf(frontImagePath, backImagePath)
+
             val imagesBitmap = listOf(frontImagePath!!, backImagePath!!)
             // Code for showing progressDialog while uploading
             val progressDialog = ProgressDialog(this)
@@ -351,7 +370,7 @@ class AddMedicineActivity : AppCompatActivity() {
             progressDialog.setCancelable(false)
 
             // Defining the child of storageReference
-            val ref = storageReference.child("images/" + UUID.randomUUID().toString())
+            val ref = storageReference.child("medicineImage/" + UUID.randomUUID().toString())
 
             val uploadTasks = mutableListOf<UploadTask>()
             val downloadUrls = mutableListOf<String>()
@@ -407,17 +426,7 @@ class AddMedicineActivity : AppCompatActivity() {
                 uploadTasks.add(uploadTask)
             }
 
-//            // Wait for all tasks to complete
-//            Tasks.whenAllSuccess(*uploadTasks.toTypedArray())
-//                .addOnCompleteListener {
-//                    progressDialog.dismiss()
-//                    Toast.makeText(this, "Images Uploaded!!", Toast.LENGTH_SHORT).show()
-//                    imageUploadCompleted = 1
-//                }
-//                .addOnFailureListener { e ->
-//                    progressDialog.dismiss()
-//                    Toast.makeText(this, "Failed ${e.message}", Toast.LENGTH_SHORT).show()
-//                }
+
         }
     }
 

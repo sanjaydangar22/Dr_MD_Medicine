@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel
+package com.sdsoft.drmdmedicine.Admin_panel.adapter_class
 
 import android.content.Context
 import android.util.Log

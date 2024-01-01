@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel
+package com.sdsoft.drmdmedicine.Admin_panel.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,6 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityAdminLoginBinding
 
 class AdminLoginActivity : AppCompatActivity() {

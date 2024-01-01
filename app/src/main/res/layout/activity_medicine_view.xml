@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Admin_panel.MedicineViewActivity">
+    tools:context=".Admin_panel.activity.MedicineViewActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -39,19 +39,13 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_15ssp"
             android:textStyle="bold" />
-        <!--        <ImageView-->
-        <!--            android:id="@+id/imgEdit"-->
-        <!--            android:layout_width="@dimen/_25sdp"-->
-        <!--            android:layout_gravity="end"-->
-        <!--            android:layout_marginHorizontal="@dimen/_10sdp"-->
-        <!--            android:layout_height="@dimen/_25sdp"-->
-        <!--            android:src="@drawable/ic_edit_icon" />-->
+
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_150sdp"
+        android:layout_height="@dimen/_200sdp"
         android:layout_margin="@dimen/_10sdp" />
 
     <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
@@ -60,11 +54,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/_10sdp"
-        app:dotsColor="@color/black"
+        app:dotsColor="@color/blue"
         app:dotsCornerRadius="8dp"
         app:dotsSize="10dp"
         app:dotsSpacing="4dp"
-        app:dotsStrokeColor="@color/white"
+        app:dotsStrokeColor="@color/blue"
         app:dotsStrokeWidth="2dp" />
 
     <!--    medicine company name-->

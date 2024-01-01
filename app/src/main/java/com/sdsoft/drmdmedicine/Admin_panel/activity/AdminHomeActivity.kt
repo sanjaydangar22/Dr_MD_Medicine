@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel
+package com.sdsoft.drmdmedicine.Admin_panel.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

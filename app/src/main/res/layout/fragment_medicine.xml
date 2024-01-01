@@ -1,16 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Admin_panel.fragment.MedicineFragment">
 
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginVertical="@dimen/_5sdp"
+        android:background="@drawable/frame_round"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Medicine"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+
+    <!--        no video found-->
+    <LinearLayout
+        android:id="@+id/linNoDataFound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginTop="@dimen/_140sdp"
+            app:tint="@color/sky_blue"
+            android:src="@drawable/medicine_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text=" Medicine Not Found"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvMedicineList"
-        android:layout_marginHorizontal="@dimen/_5sdp"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
         android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content" />
+        android:layout_marginHorizontal="@dimen/_5sdp" />
 
     <ImageView
         android:id="@+id/imgAddMedicine"

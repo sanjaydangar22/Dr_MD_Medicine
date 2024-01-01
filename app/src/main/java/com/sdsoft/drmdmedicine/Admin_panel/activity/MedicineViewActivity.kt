@@ -1,9 +1,13 @@
-package com.sdsoft.drmdmedicine.Admin_panel
+package com.sdsoft.drmdmedicine.Admin_panel.activity
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -15,7 +19,10 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.ViewPagerAdapter
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
 import com.sdsoft.drmdmedicine.databinding.ActivityMedicineViewBinding
+import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
 
 class MedicineViewActivity : AppCompatActivity() {
 
@@ -101,7 +108,45 @@ class MedicineViewActivity : AppCompatActivity() {
         }
 
         medicineViewBinding.cdDelete.setOnClickListener {
-
+            deleteRecordFromDatabase(medicineUid)
         }
+    }
+
+    private fun deleteRecordFromDatabase(medicineUid: String) {
+
+        var deleteDialog = Dialog(this)
+
+        var dialogBinding = DeleteDialogBinding.inflate(layoutInflater)
+        deleteDialog.setContentView(dialogBinding.root)
+
+        dialogBinding.btnCanselDelete.setOnClickListener {
+            deleteDialog.dismiss()
+            Toast.makeText(this, "Cansel", Toast.LENGTH_SHORT).show()
+        }
+        dialogBinding.btnDelete.setOnClickListener {
+            mDbRef.child("MedicineList").child(medicineUid).removeValue()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        onBackPressed()
+                        Toast.makeText(this, "Record Deleted Successfully", Toast.LENGTH_SHORT)
+                            .show()
+
+                    }
+                }.addOnFailureListener {
+                    Log.e("TAG", "initView: " + it.message)
+                    Toast.makeText(this, "fail", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            deleteDialog.dismiss()
+        }
+
+        deleteDialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        );
+        deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        deleteDialog.show()
+
     }
 }
