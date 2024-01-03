@@ -188,6 +188,7 @@ class AddPatientActivity : AppCompatActivity() {
                 var patientImage = patientImage
                 var patientName = addPatientBinding.edtPatientName.text.toString()
                 var patientAge = addPatientBinding.edtPatientAge.text.toString()
+                var patientMobileNo = addPatientBinding.edtPatientMobileNo.text.toString()
 
                 if (addPatientBinding.rgGender.checkedRadioButtonId == -1) {
 
@@ -211,6 +212,8 @@ class AddPatientActivity : AppCompatActivity() {
                         .show()
                 } else if (patientAge.isEmpty()) {
                     Toast.makeText(this, "patient Age is empty", Toast.LENGTH_SHORT).show()
+                } else if (patientMobileNo.isEmpty()) {
+                    Toast.makeText(this, "patient Mobile Number is empty", Toast.LENGTH_SHORT).show()
                 } else {
                     if (flag == 1) {
                         progressBarDialog.show()
@@ -220,6 +223,7 @@ class AddPatientActivity : AppCompatActivity() {
                                 patientName!!,
                                 patientAge,
                                 patientGender!!,
+                                patientMobileNo,
                                 patientUid!!
                             )
                         ).addOnCompleteListener {
@@ -250,6 +254,7 @@ class AddPatientActivity : AppCompatActivity() {
                                 patientName!!,
                                 patientAge,
                                 patientGender!!,
+                                patientMobileNo,
                                 patientUid
                             )
                         ).addOnCompleteListener {

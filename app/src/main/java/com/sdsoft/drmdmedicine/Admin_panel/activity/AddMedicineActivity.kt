@@ -396,12 +396,17 @@ class AddMedicineActivity : AppCompatActivity() {
                             val frontImageUrl = downloadUrls[0]
                             val backImageUrl = downloadUrls[1]
 
-                            Log.e("TAG", "frontImageUrl:  $frontImageUrl ")
-                            Log.e("TAG", "backImageUrl:  $backImageUrl ")
+//                            Log.e("TAG", "frontImageUrl:  $frontImageUrl ")
+                            Log.e("TAG", "frontImageUrl:  ${downloadUrls[0]} ")
+                            Log.e("TAG", "backImageUrl:  ${downloadUrls[1]} ")
+//                            Log.e("TAG", "backImageUrl:  $backImageUrl ")
 
                             frontImage = frontImageUrl
                             backImage = backImageUrl
                             // Do something with the download URLs
+
+                            Log.e("TAG", "frontImage:  $frontImage ", )
+                            Log.e("TAG", "backImage:  $backImage ", )
                         }
 
                         imageUploadCompleted = 1

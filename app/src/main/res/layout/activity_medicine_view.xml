@@ -45,8 +45,7 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp"
-        android:layout_margin="@dimen/_10sdp" />
+        android:layout_height="@dimen/_200sdp"/>
 
     <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
         android:id="@+id/worm_dots_indicator"
@@ -64,7 +63,7 @@
     <!--    medicine company name-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/_60sdp"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:background="@drawable/frame_round"
         android:orientation="vertical">
@@ -92,9 +91,9 @@
     <!--    medicine  name-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/_60sdp"
         android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:background="@drawable/frame_round"
         android:orientation="vertical">
 
@@ -121,9 +120,9 @@
     <!--    medicine  use-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/_60sdp"
         android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:background="@drawable/frame_round"
         android:orientation="vertical">
 

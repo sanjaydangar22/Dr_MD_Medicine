@@ -19,14 +19,17 @@ class PatientListAdapter(var context: Context, var itemClick: (PatientModelClass
     var patientList = ArrayList<PatientModelClass>()
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var patientImage: ImageView = itemView.findViewById(R.id.imgMedicineImage)
-        var patientName: TextView = itemView.findViewById(R.id.txtMedicineName)
-        var cdpatient: CardView = itemView.findViewById(R.id.cdMedicine)
+        var patientImage: ImageView = itemView.findViewById(R.id.imgPatientImage)
+        var patientName: TextView = itemView.findViewById(R.id.txtPatientName)
+        var patientAge: TextView = itemView.findViewById(R.id.txtPatientAge)
+        var patientGender: TextView = itemView.findViewById(R.id.txtPatientGender)
+        var patientMobileNo: TextView = itemView.findViewById(R.id.txtPatientMobileNo)
+        var cdpatient: CardView = itemView.findViewById(R.id.cdPatient)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.rcv_medicine_list, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.rcv_patient_list, parent, false)
         )
     }
 
@@ -36,9 +39,12 @@ class PatientListAdapter(var context: Context, var itemClick: (PatientModelClass
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.patientName.text = patientList[position].patientName
+        holder.patientAge.text = patientList[position].patientAge
+        holder.patientGender.text = patientList[position].patientGender
+        holder.patientMobileNo.text = patientList[position].patientMobileNo
 
         Glide.with(context).load(patientList[position].patientImage)
-            .placeholder(R.drawable.ic_image).into(holder.patientImage)
+            .placeholder(R.drawable.user_icon).into(holder.patientImage)
 
         holder.cdpatient.setOnClickListener {
             itemClick.invoke(patientList[position])

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
@@ -48,7 +48,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DrMDMedicine"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".Admin_panel.report.PatientReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin_panel.activity.PatientDataViewActivity"
+            android:exported="false" />
         <activity
             android:name=".Admin_panel.activity.AddPatientActivity"
             android:exported="false" />
@@ -57,7 +63,7 @@
             android:exported="false" />
         <activity
             android:name=".Admin_panel.activity.AdminLoginActivity"
-            android:exported="true" >
+            android:exported="true">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -72,7 +78,7 @@
         <activity
             android:name=".Admin_panel.activity.AdminHomeActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,7 +88,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->

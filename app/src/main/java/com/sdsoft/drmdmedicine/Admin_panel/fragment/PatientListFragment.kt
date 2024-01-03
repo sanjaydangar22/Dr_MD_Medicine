@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -22,6 +23,7 @@ import com.google.firebase.storage.StorageReference
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AddMedicineActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AddPatientActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.MedicineViewActivity
+import com.sdsoft.drmdmedicine.Admin_panel.activity.PatientDataViewActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog
@@ -60,11 +62,11 @@ class PatientListFragment : Fragment() {
 //        patient List adapter
         adapter = PatientListAdapter(requireContext()) {
 
-            var i = Intent(requireContext(), MedicineViewActivity::class.java)
-            i.putExtra("medicineUid", it.patientUid)
+            var i = Intent(requireContext(), PatientDataViewActivity::class.java)
+            i.putExtra("patientUid", it.patientUid)
             requireContext().startActivity(i)
         }
-        var manger = GridLayoutManager(context, 2)
+        var manger = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         patientBinding.rcvPatientList.layoutManager = manger
         patientBinding.rcvPatientList.adapter = adapter
