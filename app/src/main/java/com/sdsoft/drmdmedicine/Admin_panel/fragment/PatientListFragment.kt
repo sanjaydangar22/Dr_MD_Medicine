@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,9 +19,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.activity.AddMedicineActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AddPatientActivity
-import com.sdsoft.drmdmedicine.Admin_panel.activity.MedicineViewActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.PatientDataViewActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass

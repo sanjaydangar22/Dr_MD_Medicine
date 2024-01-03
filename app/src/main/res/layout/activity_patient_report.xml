@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".Admin_panel.report.PatientReportActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -32,8 +31,10 @@
     </androidx.appcompat.widget.Toolbar>
     <!--Patient Detail-->
     <androidx.cardview.widget.CardView
+        android:id="@+id/cdPatientDetail"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_60sdp"
+        android:layout_below="@id/toolbar"
         android:layout_margin="@dimen/_10sdp"
         app:cardBackgroundColor="#E1F6FA"
         app:cardCornerRadius="@dimen/_10sdp">
@@ -145,8 +146,52 @@
     </androidx.cardview.widget.CardView>
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
+        android:layout_below="@id/cdPatientDetail"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:background="#C4C9CD" />
-</LinearLayout>
+
+    <!--        no video found-->
+    <LinearLayout
+        android:id="@+id/linNoDataFound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginTop="@dimen/_140sdp"
+            app:tint="@color/sky_blue"
+            android:src="@drawable/medicine_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text=" Report Not Found"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvReportList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="@dimen/_5sdp" />
+
+    <ImageView
+        android:id="@+id/imgAddMedicine"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/_15sdp"
+        android:src="@drawable/ic_add_medicine" />
+</RelativeLayout>
