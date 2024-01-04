@@ -38,7 +38,7 @@ class ReportAdapter(var context: Context, var itemClick: (ReportModelClass) -> U
         holder.reportName.text = reportList[position].reportName
 
         Glide.with(context).load(reportList[position].reportImage)
-            .placeholder(R.drawable.user_icon).into(holder.reportImage)
+            .placeholder(R.drawable.ic_image).into(holder.reportImage)
 
         holder.cdreport.setOnClickListener {
             itemClick.invoke(reportList[position])

@@ -187,7 +187,7 @@
         android:layout_marginHorizontal="@dimen/_5sdp" />
 
     <ImageView
-        android:id="@+id/imgAddMedicine"
+        android:id="@+id/imgAddReport"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentEnd="true"

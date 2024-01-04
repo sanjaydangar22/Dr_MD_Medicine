@@ -29,6 +29,9 @@ import com.sdsoft.drmdmedicine.databinding.ActivityPatientReportBinding
 
 class PatientReportActivity : AppCompatActivity() {
     lateinit var patientDataViewBinding: ActivityPatientReportBinding
+
+    lateinit var progressBarDialog: ProgressBarDialog
+
     private lateinit var auth: FirebaseAuth
     private lateinit var mDbRef: DatabaseReference
     lateinit var storageReference: StorageReference
@@ -36,7 +39,7 @@ class PatientReportActivity : AppCompatActivity() {
     lateinit var adapter: ReportAdapter
     var reportList = ArrayList<ReportModelClass>()
 
-    lateinit var progressBarDialog: ProgressBarDialog
+    lateinit var patientUid: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         patientDataViewBinding = ActivityPatientReportBinding.inflate(layoutInflater)
@@ -51,14 +54,16 @@ class PatientReportActivity : AppCompatActivity() {
         storageReference = FirebaseStorage.getInstance().reference
 
         initView()
+        reports()
     }
+
 
     private fun initView() {
 
         patientDataViewBinding.imgBack.setOnClickListener {
             onBackPressed()
         }
-        var patientUid = intent.getStringExtra("patientUid")
+        patientUid = intent.getStringExtra("patientUid").toString()
 
         Log.e("TAG", "patientUid:  $patientUid ")
 
@@ -70,7 +75,7 @@ class PatientReportActivity : AppCompatActivity() {
                         val patientItem = snapshot.getValue(PatientModelClass::class.java)
                         if (patientItem != null) {
                             // User data retrieved successfully
-                            patientUid = patientItem.patientUid
+                            patientUid = patientItem.patientUid!!
                             val patientImage = patientItem.patientImage
                             val patientName = patientItem.patientName
 
@@ -81,7 +86,6 @@ class PatientReportActivity : AppCompatActivity() {
                                 .placeholder(R.drawable.ic_image)
                                 .into(patientDataViewBinding.imgPatientImage)
                             patientDataViewBinding.txtPatientName.text = patientName.toString()
-
 
 
                         }
@@ -101,12 +105,23 @@ class PatientReportActivity : AppCompatActivity() {
 
             })
 
-//        medicine List adapter
+//        add new report
+        patientDataViewBinding.imgAddReport.setOnClickListener {
+            var i = Intent(this, AddReportActivity::class.java)
+            i.putExtra("patientUid",patientUid)
+            startActivity(i)
+        }
+    }
+
+    private fun reports() {
+
+//        Reports List adapter
         adapter = ReportAdapter(this) {
 
             var i = Intent(this, MedicineViewActivity::class.java)
-            i.putExtra("medicineUid", it.reportUid)
-          startActivity(i)
+            i.putExtra("patientUid", patientUid)
+            i.putExtra("reportUid", it.reportUid)
+            startActivity(i)
         }
         var manger = GridLayoutManager(this, 2)
 
@@ -117,8 +132,8 @@ class PatientReportActivity : AppCompatActivity() {
         progressBarDialog.show()
 
 
-        //        medicine list show in recycler view
-        mDbRef.child("MedicineList")
+        //       Patient Report  show in recycler view
+        mDbRef.child("PatientList").child(patientUid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     reportList.clear()

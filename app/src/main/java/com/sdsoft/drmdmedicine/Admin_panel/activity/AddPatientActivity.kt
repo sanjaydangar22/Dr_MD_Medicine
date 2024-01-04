@@ -44,15 +44,13 @@ import java.util.UUID
 class AddPatientActivity : AppCompatActivity() {
 
     lateinit var addPatientBinding: ActivityAddPatientBinding
+    lateinit var progressBarDialog: ProgressBarDialog
 
     private lateinit var auth: FirebaseAuth
     private lateinit var mDbRef: DatabaseReference
     lateinit var storageReference: StorageReference
 
-    lateinit var progressBarDialog: ProgressBarDialog
-
     var patientImagePath: Uri? = null
-
 
     var imageUploadCompleted = 0
     var selectedImage = 0

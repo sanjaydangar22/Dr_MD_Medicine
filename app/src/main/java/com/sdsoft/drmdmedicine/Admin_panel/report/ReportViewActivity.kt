@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.activity
+package com.sdsoft.drmdmedicine.Admin_panel.report
 
 import android.app.Dialog
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -19,15 +20,18 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.sdsoft.drmdmedicine.Admin_panel.activity.AddMedicineActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.ViewPagerAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog
+import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityMedicineViewBinding
+import com.sdsoft.drmdmedicine.databinding.ActivityReportViewBinding
 import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
 
-class MedicineViewActivity : AppCompatActivity() {
+class ReportViewActivity : AppCompatActivity() {
 
-    lateinit var medicineViewBinding: ActivityMedicineViewBinding
+    lateinit var reportViewBinding: ActivityReportViewBinding
     lateinit var progressBarDialog: ProgressBarDialog
 
     private lateinit var auth: FirebaseAuth
@@ -35,8 +39,9 @@ class MedicineViewActivity : AppCompatActivity() {
     lateinit var storageReference: StorageReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        medicineViewBinding = ActivityMedicineViewBinding.inflate(layoutInflater)
-        setContentView(medicineViewBinding.root)
+        reportViewBinding = ActivityReportViewBinding.inflate(layoutInflater)
+        setContentView(reportViewBinding.root)
+
         progressBarDialog = ProgressBarDialog(this)
 
         mDbRef = FirebaseDatabase.getInstance().reference
@@ -50,53 +55,43 @@ class MedicineViewActivity : AppCompatActivity() {
 
     private fun initView() {
 
-        medicineViewBinding.imgBack.setOnClickListener {
+        reportViewBinding.imgBack.setOnClickListener {
             onBackPressed()
         }
-        var medicineUid = intent.getStringExtra("medicineUid")
+        var patientUid = intent.getStringExtra("patientUid").toString()
+        var reportUid = intent.getStringExtra("reportUid").toString()
 
-        Log.e("TAG", "medicineUid:  $medicineUid ")
-        var adapter = ViewPagerAdapter(this)
-        medicineViewBinding.viewPager.adapter = adapter
-        medicineViewBinding.wormDotsIndicator.attachTo(medicineViewBinding.viewPager)
-        adapter.notifyDataSetChanged()
+        Log.e("TAG", "reportUid:  $reportUid ")
+
 
         progressBarDialog.show()
-        mDbRef.child("MedicineList").child(medicineUid!!)
+        mDbRef.child("PatientList").child(patientUid).child("Reports").child(reportUid)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
-                        val medicineItem = snapshot.getValue(MedicineModelClass::class.java)
-                        if (medicineItem != null) {
+                        val reportItem = snapshot.getValue(ReportModelClass::class.java)
+                        if (reportItem != null) {
                             // User data retrieved successfully
-                            val medicineUid = medicineItem.medicineUid
-                            val frontImage = medicineItem.frontImage
-                            val backImage = medicineItem.backImage
-                            val medicineCompanyName = medicineItem.medicineCompanyName
-                            val medicineName = medicineItem.medicineName
-                            var medicineUse = medicineItem.medicineUse
-
-                            // Handle the user data as needed
-                            var imageList = ArrayList<String>()
+                            val reportUid = reportItem.reportUid
+                            val reportImage = reportItem.reportImage
+                            val reportName = reportItem.reportName
 
 
-                            Log.e("TAG", "frontImage:  $frontImage ")
-                            Log.e("TAG", "medicineName:  $medicineName ")
 
-                            imageList.add(frontImage.toString())
-                            imageList.add(backImage.toString())
 
-                            medicineViewBinding.txtMedicineCompanyName.text =
-                                medicineCompanyName.toString()
-                            medicineViewBinding.txtMedicineName.text = medicineName.toString()
-                            medicineViewBinding.txtMedicineUse.text = medicineUse.toString()
+                            reportViewBinding.txtReportName.text =
+                                reportName.toString()
+
+                            Glide.with(this@ReportViewActivity).load(reportImage)
+                                .placeholder(R.drawable.ic_image)
+                                .into(reportViewBinding.imgReportImage)
 
                             progressBarDialog.dismiss()
-                            adapter.updateList(imageList)
+
                         }
                     } else {
                         // User data does not exist
-                        Toast.makeText(this@MedicineViewActivity, "No Medicine", Toast.LENGTH_SHORT)
+                        Toast.makeText(this@ReportViewActivity, "No Reports", Toast.LENGTH_SHORT)
                             .show()
                         progressBarDialog.dismiss()
                     }
@@ -107,19 +102,14 @@ class MedicineViewActivity : AppCompatActivity() {
 
             })
 
-        medicineViewBinding.txtEdit.setOnClickListener {
-            var i = Intent(this, AddMedicineActivity::class.java)
-            i.putExtra("medicineUid", medicineUid)
-            i.putExtra("itemUpdate", true)
-            startActivity(i)
-        }
 
-        medicineViewBinding.cdDelete.setOnClickListener {
-            deleteRecordFromDatabase(medicineUid)
+
+        reportViewBinding.cdDelete.setOnClickListener {
+            deleteRecordFromDatabase(patientUid, reportUid)
         }
     }
 
-    private fun deleteRecordFromDatabase(medicineUid: String) {
+    private fun deleteRecordFromDatabase(patientUid: String, reportUid: String) {
 
         var deleteDialog = Dialog(this)
 
@@ -131,7 +121,8 @@ class MedicineViewActivity : AppCompatActivity() {
             Toast.makeText(this, "Cansel", Toast.LENGTH_SHORT).show()
         }
         dialogBinding.btnDelete.setOnClickListener {
-            mDbRef.child("MedicineList").child(medicineUid).removeValue()
+            mDbRef.child("PatientList").child(patientUid).child("Reports").child(reportUid)
+                .removeValue()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         onBackPressed()
