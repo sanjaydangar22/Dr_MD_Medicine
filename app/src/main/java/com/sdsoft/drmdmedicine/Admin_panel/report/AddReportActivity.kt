@@ -72,6 +72,9 @@ class AddReportActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+
+        patientUid = intent.getStringExtra("patientUid")
+
         addReportBinding.imgBack.setOnClickListener {
             onBackPressed()
         }
@@ -108,33 +111,36 @@ class AddReportActivity : AppCompatActivity() {
                     Toast.makeText(this, "Report Name is empty", Toast.LENGTH_SHORT)
                         .show()
                 } else {
-
+                    progressBarDialog.show()
                     var reportUid = UUID.randomUUID().toString()
                     progressBarDialog.show()
-                    mDbRef.child("PatientList").child(patientUid!!).child("Reports").child(reportUid).setValue(
-                        ReportModelClass(
-                            reportImage!!,
-                            reportName,
-                            reportUid
-                        )
-                    ).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            Toast.makeText(
-                                this,
-                                "Record Save Successfully",
-                                Toast.LENGTH_SHORT
+                    mDbRef.child("PatientList").child(patientUid!!).child("Reports")
+                        .child(reportUid).setValue(
+                            ReportModelClass(
+                                reportImage!!,
+                                reportName,
+                                reportUid
                             )
-                                .show()
+                        ).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    "Record Save Successfully",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                                progressBarDialog.dismiss()
+                                var i = Intent(this, PatientReportActivity::class.java)
+                                i.putExtra("patientUid", patientUid)
+                                startActivity(i)
 
-                            var i = Intent(this, AdminHomeActivity::class.java)
-                            startActivity(i)
+
+                            }
+                        }.addOnFailureListener {
+                            Log.e("TAG", "fail: " + it.message)
                             progressBarDialog.dismiss()
-                        }
-                    }.addOnFailureListener {
-                        Log.e("TAG", "fail: " + it.message)
-                        progressBarDialog.dismiss()
 
-                    }
+                        }
 
                 }
 

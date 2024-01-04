@@ -121,6 +121,7 @@ class ReportViewActivity : AppCompatActivity() {
             Toast.makeText(this, "Cansel", Toast.LENGTH_SHORT).show()
         }
         dialogBinding.btnDelete.setOnClickListener {
+            progressBarDialog.show()
             mDbRef.child("PatientList").child(patientUid).child("Reports").child(reportUid)
                 .removeValue()
                 .addOnCompleteListener {
@@ -128,7 +129,7 @@ class ReportViewActivity : AppCompatActivity() {
                         onBackPressed()
                         Toast.makeText(this, "Record Deleted Successfully", Toast.LENGTH_SHORT)
                             .show()
-
+                        progressBarDialog.dismiss()
                     }
                 }.addOnFailureListener {
                     Log.e("TAG", "initView: " + it.message)

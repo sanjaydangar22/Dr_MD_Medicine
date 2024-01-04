@@ -19,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sdsoft.drmdmedicine.Admin_panel.activity.MedicineViewActivity
+import com.sdsoft.drmdmedicine.Admin_panel.activity.PatientDataViewActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.MedicineListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
@@ -53,6 +54,8 @@ class PatientReportActivity : AppCompatActivity() {
         // get the Firebase  storage reference
         storageReference = FirebaseStorage.getInstance().reference
 
+        patientUid = intent.getStringExtra("patientUid").toString()
+        Log.e("TAG", "patientUid:  $patientUid ")
         initView()
         reports()
     }
@@ -61,13 +64,12 @@ class PatientReportActivity : AppCompatActivity() {
     private fun initView() {
 
         patientDataViewBinding.imgBack.setOnClickListener {
+
             onBackPressed()
         }
-        patientUid = intent.getStringExtra("patientUid").toString()
-
-        Log.e("TAG", "patientUid:  $patientUid ")
 
 
+        progressBarDialog.show()
         mDbRef.child("PatientList").child(patientUid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -87,7 +89,7 @@ class PatientReportActivity : AppCompatActivity() {
                                 .into(patientDataViewBinding.imgPatientImage)
                             patientDataViewBinding.txtPatientName.text = patientName.toString()
 
-
+                            progressBarDialog.dismiss()
                         }
                     } else {
                         // User data does not exist
@@ -108,8 +110,9 @@ class PatientReportActivity : AppCompatActivity() {
 //        add new report
         patientDataViewBinding.imgAddReport.setOnClickListener {
             var i = Intent(this, AddReportActivity::class.java)
-            i.putExtra("patientUid",patientUid)
+            i.putExtra("patientUid", patientUid)
             startActivity(i)
+            finish()
         }
     }
 
@@ -118,7 +121,7 @@ class PatientReportActivity : AppCompatActivity() {
 //        Reports List adapter
         adapter = ReportAdapter(this) {
 
-            var i = Intent(this, MedicineViewActivity::class.java)
+            var i = Intent(this, ReportViewActivity::class.java)
             i.putExtra("patientUid", patientUid)
             i.putExtra("reportUid", it.reportUid)
             startActivity(i)
@@ -133,7 +136,7 @@ class PatientReportActivity : AppCompatActivity() {
 
 
         //       Patient Report  show in recycler view
-        mDbRef.child("PatientList").child(patientUid!!)
+        mDbRef.child("PatientList").child(patientUid).child("Reports")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     reportList.clear()
@@ -151,6 +154,8 @@ class PatientReportActivity : AppCompatActivity() {
                     } else if (reportList.isNotEmpty()) {
                         patientDataViewBinding.linNoDataFound.visibility = View.GONE
                     }
+
+                    progressBarDialog.dismiss()
                     adapter.updateList(reportList)
                     progressBarDialog.dismiss()
                 }
