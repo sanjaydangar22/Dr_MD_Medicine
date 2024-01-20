@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.report
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.report
 
 import android.content.Context
 import android.view.LayoutInflater

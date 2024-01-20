@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.activity
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +16,10 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.ViewPagerAdapter
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.medicine.PatientMedicineActivity
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
-import com.sdsoft.drmdmedicine.Admin_panel.report.PatientReportActivity
+import com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.report.PatientReportActivity
 import com.sdsoft.drmdmedicine.R
-import com.sdsoft.drmdmedicine.databinding.ActivityMedicineViewBinding
 import com.sdsoft.drmdmedicine.databinding.ActivityPatientDataViewBinding
 
 class PatientDataViewActivity : AppCompatActivity() {
@@ -101,6 +99,12 @@ class PatientDataViewActivity : AppCompatActivity() {
 
         patientDataViewBinding.cdReport.setOnClickListener {
             var i = Intent(this, PatientReportActivity::class.java)
+            i.putExtra("patientUid", patientUid)
+            startActivity(i)
+        }
+
+        patientDataViewBinding.cdMedicine.setOnClickListener {
+            var i = Intent(this, PatientMedicineActivity::class.java)
             i.putExtra("patientUid", patientUid)
             startActivity(i)
         }

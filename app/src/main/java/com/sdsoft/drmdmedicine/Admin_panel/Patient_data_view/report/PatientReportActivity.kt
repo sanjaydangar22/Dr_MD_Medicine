@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.report
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.report
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,14 +18,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.activity.MedicineViewActivity
-import com.sdsoft.drmdmedicine.Admin_panel.activity.PatientDataViewActivity
-import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.MedicineListAdapter
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
-import com.sdsoft.drmdmedicine.databinding.ActivityPatientDataViewBinding
 import com.sdsoft.drmdmedicine.databinding.ActivityPatientReportBinding
 
 class PatientReportActivity : AppCompatActivity() {
@@ -40,24 +35,24 @@ class PatientReportActivity : AppCompatActivity() {
     lateinit var adapter: ReportAdapter
     var reportList = ArrayList<ReportModelClass>()
 
-    lateinit var patientUid: String
+     var patientUid: String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         patientDataViewBinding = ActivityPatientReportBinding.inflate(layoutInflater)
         setContentView(patientDataViewBinding.root)
         // Inflate the layout for this fragment
-        progressBarDialog = ProgressBarDialog(this)
+            progressBarDialog = ProgressBarDialog(this)
 
-        mDbRef = FirebaseDatabase.getInstance().reference
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-        // get the Firebase  storage reference
-        storageReference = FirebaseStorage.getInstance().reference
+            mDbRef = FirebaseDatabase.getInstance().reference
+            // Initialize Firebase Auth
+            auth = Firebase.auth
+            // get the Firebase  storage reference
+            storageReference = FirebaseStorage.getInstance().reference
 
-        patientUid = intent.getStringExtra("patientUid").toString()
-        Log.e("TAG", "patientUid:  $patientUid ")
-        initView()
-        reports()
+            patientUid = intent.getStringExtra("patientUid").toString()
+            Log.e("TAG", "patientUid:  $patientUid ")
+            initView()
+            reports()
     }
 
 
@@ -136,7 +131,7 @@ class PatientReportActivity : AppCompatActivity() {
 
 
         //       Patient Report  show in recycler view
-        mDbRef.child("PatientList").child(patientUid).child("Reports")
+        mDbRef.child("PatientList").child(patientUid!!).child("Reports")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     reportList.clear()

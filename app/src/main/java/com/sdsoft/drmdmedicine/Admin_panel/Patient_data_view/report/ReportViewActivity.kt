@@ -1,14 +1,13 @@
-package com.sdsoft.drmdmedicine.Admin_panel.report
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.report
 
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,27 +19,45 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.activity.AddMedicineActivity
-import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.ViewPagerAdapter
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
-import com.sdsoft.drmdmedicine.databinding.ActivityMedicineViewBinding
 import com.sdsoft.drmdmedicine.databinding.ActivityReportViewBinding
 import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
+import com.sdsoft.drmdmedicine.databinding.ReportZoomViewBinding
+
 
 class ReportViewActivity : AppCompatActivity() {
 
     lateinit var reportViewBinding: ActivityReportViewBinding
+//    lateinit var reportZoomViewBinding: ReportZoomViewBinding
     lateinit var progressBarDialog: ProgressBarDialog
 
     private lateinit var auth: FirebaseAuth
     private lateinit var mDbRef: DatabaseReference
     lateinit var storageReference: StorageReference
+
+    var reportImage: String? = null
+    var patientUid: String? = null
+    var reportUid: String? = null
+
+    private var useReportZoomLayout = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        reportZoomViewBinding = ReportZoomViewBinding.inflate(layoutInflater)
         reportViewBinding = ActivityReportViewBinding.inflate(layoutInflater)
-        setContentView(reportViewBinding.root)
+
+
+//        if (useReportZoomLayout == 1) {
+//            Log.e("TAG", "onCreate: Image Zoom ")
+//            setContentView(reportZoomViewBinding.root)
+//        } else {
+            Log.e("TAG", "onCreate: Image Not Zoom ")
+            setContentView(reportViewBinding.root)
+            // Initialize useReportZoomLayout before setting the content view
+//            useReportZoomLayout = 1 // Set to 1 if you want to use reportZoomViewBinding
+//
+//        }
 
         progressBarDialog = ProgressBarDialog(this)
 
@@ -58,14 +75,14 @@ class ReportViewActivity : AppCompatActivity() {
         reportViewBinding.imgBack.setOnClickListener {
             onBackPressed()
         }
-        var patientUid = intent.getStringExtra("patientUid").toString()
-        var reportUid = intent.getStringExtra("reportUid").toString()
+        patientUid = intent.getStringExtra("patientUid").toString()
+        reportUid = intent.getStringExtra("reportUid").toString()
 
         Log.e("TAG", "reportUid:  $reportUid ")
 
 
         progressBarDialog.show()
-        mDbRef.child("PatientList").child(patientUid).child("Reports").child(reportUid)
+        mDbRef.child("PatientList").child(patientUid!!).child("Reports").child(reportUid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -73,7 +90,7 @@ class ReportViewActivity : AppCompatActivity() {
                         if (reportItem != null) {
                             // User data retrieved successfully
                             val reportUid = reportItem.reportUid
-                            val reportImage = reportItem.reportImage
+                            reportImage = reportItem.reportImage!!
                             val reportName = reportItem.reportName
 
 
@@ -102,12 +119,28 @@ class ReportViewActivity : AppCompatActivity() {
 
             })
 
-
+//        reportViewBinding.imgFullScreen.setOnClickListener {
+//
+//            Toast.makeText(this, "Image Zoom", Toast.LENGTH_SHORT).show()
+//            reportZoomFunction(reportImage)
+//        }
 
         reportViewBinding.cdDelete.setOnClickListener {
-            deleteRecordFromDatabase(patientUid, reportUid)
+            deleteRecordFromDatabase(patientUid!!, reportUid!!)
         }
     }
+
+//    private fun reportZoomFunction(Image: String?) {
+////        useReportZoomLayout =true
+//
+//        Log.e("TAG", "reportZoomFunction: $Image", )
+//
+//
+//                            Glide.with(this@ReportViewActivity).load(Image)
+//                                .placeholder(R.drawable.ic_image)
+//                                .into(reportZoomViewBinding.imgZoomReportImage)
+//
+//    }
 
     private fun deleteRecordFromDatabase(patientUid: String, reportUid: String) {
 
@@ -126,10 +159,12 @@ class ReportViewActivity : AppCompatActivity() {
                 .removeValue()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        onBackPressed()
+
                         Toast.makeText(this, "Record Deleted Successfully", Toast.LENGTH_SHORT)
                             .show()
                         progressBarDialog.dismiss()
+
+                        onBackPressed()
                     }
                 }.addOnFailureListener {
                     Log.e("TAG", "initView: " + it.message)

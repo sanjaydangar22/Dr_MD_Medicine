@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Admin_panel.report.ReportViewActivity">
+    tools:context=".Admin_panel.Patient_data_view.report.ReportViewActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -61,14 +61,28 @@
             tools:text="Report Name" />
     </LinearLayout>
 
-
-    <ImageView
-        android:id="@+id/imgReportImage"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_280sdp"
-        android:layout_margin="@dimen/_10sdp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_image" />
+        android:layout_margin="@dimen/_10sdp">
+
+        <ImageView
+            android:id="@+id/imgReportImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_280sdp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_image" />
+
+        <ImageView
+            android:id="@+id/imgFullScreen"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_alignBottom="@id/imgReportImage"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:src="@drawable/ic_fullscreen_icon" />
+    </RelativeLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cdDelete"
