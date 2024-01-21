@@ -7,13 +7,13 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_300sdp"
+        android:layout_height="@dimen/_400sdp"
         app:cardCornerRadius="@dimen/_10sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:padding="@dimen/_10sdp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.Toolbar
@@ -79,9 +79,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvMedicineList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/searchView"
-                android:layout_centerHorizontal="true"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="@dimen/_5sdp" />
 
         </LinearLayout>

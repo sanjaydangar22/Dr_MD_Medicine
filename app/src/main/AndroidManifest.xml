@@ -50,6 +50,9 @@
         android:theme="@style/Theme.DrMDMedicine"
         tools:targetApi="31">
         <activity
+            android:name=".Admin_panel.Patient_data_view.medicine.PatientMedicineViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".Admin_panel.Patient_data_view.medicine.PatientMedicineAddActivity"
             android:exported="false" />
         <activity
