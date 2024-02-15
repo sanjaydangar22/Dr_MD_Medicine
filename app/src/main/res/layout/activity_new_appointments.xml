@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin_panel.fragment.MedicineFragment">
-
+    tools:context=".Admin_panel.activity.NewAppointmentsActivity">
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
@@ -14,12 +13,12 @@
         android:layout_marginVertical="@dimen/_5sdp"
         android:background="@drawable/frame_round"
         android:iconifiedByDefault="false"
-        android:queryHint="Search Medicine"
+        android:queryHint="Search Patient"
         android:focusable="true"
         android:focusableInTouchMode="true"/>
 
 
-    <!--        no video found-->
+    <!--        no Appointments found-->
     <LinearLayout
         android:id="@+id/linNoDataFound"
         android:layout_width="match_parent"
@@ -34,19 +33,19 @@
             android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_140sdp"
             app:tint="@color/sky_blue"
-            android:src="@drawable/medicine_icon" />
+            android:src="@drawable/list_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
-            android:text=" Medicine Not Found"
+            android:text="Appointments Not Found"
             android:textSize="@dimen/_15ssp"
             android:textStyle="bold" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvMedicineList"
+        android:id="@+id/rcvAppointmentsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/searchView"
@@ -54,7 +53,7 @@
         android:layout_marginHorizontal="@dimen/_5sdp" />
 
     <ImageView
-        android:id="@+id/imgAddMedicine"
+        android:id="@+id/imgAddAppointment"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentEnd="true"

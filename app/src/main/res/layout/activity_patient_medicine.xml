@@ -131,5 +131,5 @@
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_15sdp"
-        android:src="@drawable/ic_add_medicine" />
+        android:src="@drawable/ic_add_icon" />
 </RelativeLayout>

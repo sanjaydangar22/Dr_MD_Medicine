@@ -6,17 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.sdsoft.drmdmedicine.R
+import com.sdsoft.drmdmedicine.databinding.FragmentAdminHomeBinding
 
 
 class AdminHomeFragment : Fragment() {
-
+    lateinit var binding: FragmentAdminHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_home, container, false)
+        binding = FragmentAdminHomeBinding.inflate(layoutInflater, container, false)
+
+        initView()
+        return  binding.root
+    }
+
+    private fun initView() {
+
+
     }
 
 

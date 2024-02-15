@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sky_blue"
+    tools:context=".LoginOptionActivity">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/txtLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgLogo"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:text="Login"
+        android:textSize="@dimen/_25ssp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtLogin"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:text="Please select the sign-in option to continue."
+        android:textSize="@dimen/_15ssp" />
+
+    <LinearLayout
+        android:id="@+id/linLoginOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtLogin"
+        android:layout_marginTop="@dimen/_40sdp">
+
+        <!--        doctor login-->
+        <RelativeLayout
+            android:id="@+id/relDoctorLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_130sdp"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:background="@drawable/card_corner">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="Doctor"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/doctor_image1" />
+        </RelativeLayout>
+
+        <!-- staff login-->
+        <RelativeLayout
+            android:id="@+id/relStaffLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_130sdp"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:background="@drawable/card_corner">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="Staff"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/staff_image" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

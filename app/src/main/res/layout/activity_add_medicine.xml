@@ -67,7 +67,7 @@
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_margin="@dimen/_5sdp"
-                    android:src="@drawable/ic_add_medicine" />
+                    android:src="@drawable/ic_add_icon" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -102,7 +102,7 @@
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_margin="@dimen/_5sdp"
-                    android:src="@drawable/ic_add_medicine" />
+                    android:src="@drawable/ic_add_icon" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

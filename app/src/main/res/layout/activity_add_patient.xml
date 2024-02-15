@@ -70,7 +70,7 @@
                     android:layout_marginEnd="@dimen/_40sdp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_add_medicine" />
+                    android:src="@drawable/ic_add_icon" />
 
             </RelativeLayout>
         </LinearLayout>
