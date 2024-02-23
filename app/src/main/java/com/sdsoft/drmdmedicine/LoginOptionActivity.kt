@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminLoginActivity
 import com.sdsoft.drmdmedicine.databinding.ActivityLoginOptionBinding
 
-class LoginOptionActivity : AppCompatActivity() {
+class LoginOptionActivity : BaseActivity(R.layout.activity_login_option) {
 
     lateinit var binding:ActivityLoginOptionBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,6 @@ class LoginOptionActivity : AppCompatActivity() {
         binding.relDoctorLogin.setOnClickListener{
             var i=Intent(this,AdminLoginActivity::class.java)
             startActivity(i)
-
         }
     }
 }
