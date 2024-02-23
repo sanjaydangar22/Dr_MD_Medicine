@@ -83,6 +83,7 @@ class AdminHomeActivity : BaseActivity(R.layout.activity_admin_home) {
             Toast.makeText(this@AdminHomeActivity, "Logout", Toast.LENGTH_SHORT).show()
             var i = Intent(this@AdminHomeActivity, LoginOptionActivity::class.java)
             startActivity(i)
+            finish()
 
 
         }

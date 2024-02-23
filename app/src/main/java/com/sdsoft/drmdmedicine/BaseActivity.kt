@@ -19,12 +19,7 @@ abstract class BaseActivity(view: Int) : AppCompatActivity() {
         progressBarDialog = ProgressBarDialog(this)
 
         doctorsharedPreferences = getSharedPreferences("DoctorSharePref", AppCompatActivity.MODE_PRIVATE)
-        if (doctorsharedPreferences.getBoolean("isLogin", false) == true) {
-            val intent = Intent(this, AdminHomeActivity::class.java)
-            startActivity(intent)
-            finish()
 
-        }
     }
 
 
