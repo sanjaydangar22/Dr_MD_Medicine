@@ -4,22 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin_panel.fragment.MedicineFragment">
+    tools:context=".Admin_panel.Disease.DiseaseActivity">
+
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#CDF5FD">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:src="@drawable/ic_back_icon" />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Disease List"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+    </Toolbar>
 
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:layout_marginVertical="@dimen/_5sdp"
         android:background="@drawable/frame_round"
-        android:iconifiedByDefault="false"
-        android:queryHint="Search Medicine"
         android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        android:focusableInTouchMode="true"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Disease" />
 
 
-    <!--        no video found-->
+    <!--        no data found-->
     <LinearLayout
         android:id="@+id/linNoDataFound"
         android:layout_width="match_parent"
@@ -33,20 +57,20 @@
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_140sdp"
-            app:tint="@color/sky_blue"
-            android:src="@drawable/medicine_icon" />
+            android:src="@drawable/medicine_icon"
+            app:tint="@color/sky_blue" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
-            android:text=" Medicine Not Found"
+            android:text=" Disease Not Found"
             android:textSize="@dimen/_15ssp"
             android:textStyle="bold" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvMedicineList"
+        android:id="@+id/rcvDiseaseList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/searchView"
@@ -54,7 +78,7 @@
         android:layout_marginHorizontal="@dimen/_5sdp" />
 
     <ImageView
-        android:id="@+id/imgAddMedicine"
+        android:id="@+id/imgAddDisease"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentEnd="true"
@@ -64,4 +88,5 @@
         android:layout_marginEnd="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_15sdp"
         android:src="@drawable/ic_add_icon" />
+
 </RelativeLayout>

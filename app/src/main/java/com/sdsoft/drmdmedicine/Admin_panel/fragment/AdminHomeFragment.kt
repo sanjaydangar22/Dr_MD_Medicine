@@ -1,11 +1,12 @@
 package com.sdsoft.drmdmedicine.Admin_panel.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.sdsoft.drmdmedicine.R
+import com.sdsoft.drmdmedicine.Admin_panel.Disease.DiseaseActivity
 import com.sdsoft.drmdmedicine.databinding.FragmentAdminHomeBinding
 
 
@@ -19,11 +20,14 @@ class AdminHomeFragment : Fragment() {
         binding = FragmentAdminHomeBinding.inflate(layoutInflater, container, false)
 
         initView()
-        return  binding.root
+        return binding.root
     }
 
     private fun initView() {
-
+        binding.cdDiseaseList.setOnClickListener {
+            var i = Intent(requireContext(), DiseaseActivity::class.java)
+            startActivity(i)
+        }
 
     }
 

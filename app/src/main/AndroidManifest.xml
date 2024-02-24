@@ -43,6 +43,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DrMDMedicine"
         tools:targetApi="31" >
+     >
+        <activity
+            android:name=".Admin_panel.Disease.DiseaseActivity"
+            android:exported="false" />
         <activity
             android:name=".LoginOptionActivity"
             android:exported="false" />
