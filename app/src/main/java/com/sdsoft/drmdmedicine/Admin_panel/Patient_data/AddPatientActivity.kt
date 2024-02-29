@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.activity
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data
 
 import android.app.Activity
 import android.app.Dialog
@@ -9,7 +9,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -26,14 +25,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
+import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
+import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityAddPatientBinding
@@ -41,13 +40,11 @@ import com.sdsoft.drmdmedicine.databinding.ImageSelctedDialogBinding
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 
-class AddPatientActivity : AppCompatActivity() {
+class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
     lateinit var addPatientBinding: ActivityAddPatientBinding
-    lateinit var progressBarDialog: ProgressBarDialog
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var mDbRef: DatabaseReference
     lateinit var storageReference: StorageReference
 
     var patientImagePath: Uri? = null
@@ -87,7 +84,7 @@ class AddPatientActivity : AppCompatActivity() {
             flag = 1
             imageUploadCompleted = 1
 
-            patientUid = intent.getStringExtra("medicineUid")   // key set  variable
+            patientUid = intent.getStringExtra("patientUid")   // key set  variable
 
             Log.e("TAG", "patientUid: " + patientUid)
 
@@ -99,27 +96,24 @@ class AddPatientActivity : AppCompatActivity() {
                             val patientItem = snapshot.getValue(PatientModelClass::class.java)
                             if (patientItem != null) {
                                 // User data retrieved successfully
-                                val pa = patientItem.patientUid
+                                val patientUid = patientItem.patientUid
                                 patientImage = patientItem.patientImage
                                 val patientName = patientItem.patientName
                                 val patientAge = patientItem.patientAge
+                                val patientWeight = patientItem.patientWeight
+                                val patientMobileNo = patientItem.patientMobileNo
+                                val patientVillage = patientItem.patientVillage
                                 patientGender = patientItem.patientGender
-
-
-
-
-                                Log.e("TAG", "patientImage:  $patientImage ")
-
-
-
 
                                 Glide.with(this@AddPatientActivity).load(patientImage)
                                     .placeholder(R.drawable.ic_image)
                                     .into(addPatientBinding.imgPatientImage)
 
-
                                 addPatientBinding.edtPatientName.setText(patientName.toString())
                                 addPatientBinding.edtPatientAge.setText(patientAge.toString())
+                                addPatientBinding.edtPatientWeight.setText(patientWeight.toString())
+                                addPatientBinding.edtPatientMobileNo.setText(patientMobileNo.toString())
+                                addPatientBinding.edtPatientVillage.setText(patientVillage.toString())
 
                                 if (patientGender == "Male") {
                                     "Golden"
@@ -186,7 +180,9 @@ class AddPatientActivity : AppCompatActivity() {
                 var patientImage = patientImage
                 var patientName = addPatientBinding.edtPatientName.text.toString()
                 var patientAge = addPatientBinding.edtPatientAge.text.toString()
+                var patientWeight = addPatientBinding.edtPatientWeight.text.toString()
                 var patientMobileNo = addPatientBinding.edtPatientMobileNo.text.toString()
+                var patientVillage = addPatientBinding.edtPatientVillage.text.toString()
 
                 if (addPatientBinding.rgGender.checkedRadioButtonId == -1) {
 
@@ -210,18 +206,25 @@ class AddPatientActivity : AppCompatActivity() {
                         .show()
                 } else if (patientAge.isEmpty()) {
                     Toast.makeText(this, "patient Age is empty", Toast.LENGTH_SHORT).show()
+                } else if (patientWeight.isEmpty()) {
+                    Toast.makeText(this, "patient Weight is empty", Toast.LENGTH_SHORT).show()
                 } else if (patientMobileNo.isEmpty()) {
-                    Toast.makeText(this, "patient Mobile Number is empty", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "patient Mobile Number is empty", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (patientVillage.isEmpty()) {
+                    Toast.makeText(this, "patient Village is empty", Toast.LENGTH_SHORT).show()
                 } else {
                     if (flag == 1) {
                         progressBarDialog.show()
                         mDbRef.child("PatientList").child(patientUid!!).setValue(
                             PatientModelClass(
                                 patientImage!!,
-                                patientName!!,
+                                patientName,
                                 patientAge,
-                                patientGender!!,
+                                patientWeight,
                                 patientMobileNo,
+                                patientVillage,
+                                patientGender!!,
                                 patientUid!!
                             )
                         ).addOnCompleteListener {
@@ -249,10 +252,12 @@ class AddPatientActivity : AppCompatActivity() {
                         mDbRef.child("PatientList").child(patientUid).setValue(
                             PatientModelClass(
                                 patientImage!!,
-                                patientName!!,
+                                patientName,
                                 patientAge,
-                                patientGender!!,
+                                patientWeight,
                                 patientMobileNo,
+                                patientVillage,
+                                patientGender!!,
                                 patientUid
                             )
                         ).addOnCompleteListener {

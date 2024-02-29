@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.medicine
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data.medicine
 
 class PatientMedicineModelClass {
     var frontImage: String? = null

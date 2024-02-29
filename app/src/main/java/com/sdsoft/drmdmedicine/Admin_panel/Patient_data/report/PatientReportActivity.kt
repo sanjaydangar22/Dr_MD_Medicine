@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.report
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data.report
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

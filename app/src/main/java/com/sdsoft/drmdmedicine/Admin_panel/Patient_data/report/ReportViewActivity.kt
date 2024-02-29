@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.report
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data.report
 
 import android.app.Dialog
 import android.graphics.Color
@@ -23,7 +23,6 @@ import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityReportViewBinding
 import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
-import com.sdsoft.drmdmedicine.databinding.ReportZoomViewBinding
 
 
 class ReportViewActivity : AppCompatActivity() {

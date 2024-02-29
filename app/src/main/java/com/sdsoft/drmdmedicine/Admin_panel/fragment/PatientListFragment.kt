@@ -1,13 +1,18 @@
 package com.sdsoft.drmdmedicine.Admin_panel.fragment
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -19,11 +24,12 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.activity.AddPatientActivity
-import com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.PatientDataViewActivity
+import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.AddPatientActivity
+import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.PatientDataViewActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog
+import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
 import com.sdsoft.drmdmedicine.databinding.FragmentPatientListBinding
 
 class PatientListFragment : Fragment() {
@@ -55,15 +61,26 @@ class PatientListFragment : Fragment() {
         initView()
         return patientBinding.root
     }
+
     private fun initView() {
 //        patient List adapter
-        adapter = PatientListAdapter(requireContext()) {
-
+        adapter = PatientListAdapter(requireContext(), {
+            //view data
             var i = Intent(requireContext(), PatientDataViewActivity::class.java)
             i.putExtra("patientUid", it.patientUid)
             requireContext().startActivity(i)
-        }
-        var manger = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        }, { patientUid ->
+            //edit data
+            var i = Intent(requireContext(), AddPatientActivity::class.java)
+            i.putExtra("patientUid", patientUid)
+            i.putExtra("itemUpdate", true)
+            requireContext().startActivity(i)
+        }, { patientUid ->
+            //delete data
+            deleteRecordFromDatabase(patientUid)
+
+        })
+        var manger = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         patientBinding.rcvPatientList.layoutManager = manger
         patientBinding.rcvPatientList.adapter = adapter
@@ -156,5 +173,48 @@ class PatientListFragment : Fragment() {
             })
     }
 
+    private fun deleteRecordFromDatabase(patientUid: String) {
+
+        var deleteDialog = Dialog(requireContext())
+
+        var dialogBinding = DeleteDialogBinding.inflate(layoutInflater)
+        deleteDialog.setContentView(dialogBinding.root)
+
+        dialogBinding.btnCanselDelete.setOnClickListener {
+            deleteDialog.dismiss()
+            Toast.makeText(requireContext(), "Cansel", Toast.LENGTH_SHORT).show()
+        }
+        dialogBinding.btnDelete.setOnClickListener {
+            mDbRef.child("PatientList").child(patientUid)
+                .removeValue()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Record Deleted Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        progressBarDialog.dismiss()
+
+                    }
+                }.addOnFailureListener {
+
+                    Toast.makeText(requireContext(), "fail", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            deleteDialog.dismiss()
+        }
+
+        deleteDialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        );
+        deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        deleteDialog.show()
+
+    }
 
 }

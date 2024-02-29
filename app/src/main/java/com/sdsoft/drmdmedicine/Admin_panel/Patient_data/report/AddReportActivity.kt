@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.report
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data.report
 
 import android.app.Activity
 import android.app.Dialog
@@ -27,7 +27,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.databinding.ActivityAddReportBinding
 import com.sdsoft.drmdmedicine.databinding.ImageSelctedDialogBinding

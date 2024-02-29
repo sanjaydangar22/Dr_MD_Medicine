@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.medicine
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data.medicine
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
 import com.sdsoft.drmdmedicine.R
 
 class PatientMedicineListAdapter(var context: Context, var itemClick: (PatientMedicineModelClass) -> Unit) :

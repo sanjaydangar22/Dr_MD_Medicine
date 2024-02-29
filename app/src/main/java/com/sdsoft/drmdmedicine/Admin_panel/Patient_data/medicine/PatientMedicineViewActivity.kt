@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.Patient_data_view.medicine
+package com.sdsoft.drmdmedicine.Admin_panel.Patient_data.medicine
 
 import android.app.Dialog
 import android.content.Intent
@@ -19,12 +19,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.activity.AddMedicineActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.ViewPagerAdapter
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog
-import com.sdsoft.drmdmedicine.R
-import com.sdsoft.drmdmedicine.databinding.ActivityMedicineViewBinding
 import com.sdsoft.drmdmedicine.databinding.ActivityPatientMedicineViewBinding
 import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
 

@@ -64,28 +64,28 @@
             android:name=".Admin_panel.activity.NewAppointmentsActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data_view.medicine.PatientMedicineViewActivity"
+            android:name=".Admin_panel.Patient_data.medicine.PatientMedicineViewActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data_view.medicine.PatientMedicineAddActivity"
+            android:name=".Admin_panel.Patient_data.medicine.PatientMedicineAddActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data_view.medicine.PatientMedicineActivity"
+            android:name=".Admin_panel.Patient_data.medicine.PatientMedicineActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data_view.report.ReportViewActivity"
+            android:name=".Admin_panel.Patient_data.report.ReportViewActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data_view.report.AddReportActivity"
+            android:name=".Admin_panel.Patient_data.report.AddReportActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data_view.report.PatientReportActivity"
+            android:name=".Admin_panel.Patient_data.report.PatientReportActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data_view.PatientDataViewActivity"
+            android:name=".Admin_panel.Patient_data.PatientDataViewActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.activity.AddPatientActivity"
+            android:name=".Admin_panel.Patient_data.AddPatientActivity"
             android:exported="false" />
         <activity
             android:name=".Admin_panel.activity.MedicineViewActivity"

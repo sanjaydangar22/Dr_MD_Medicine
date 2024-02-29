@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Admin_panel.Patient_data_view.PatientDataViewActivity">
+    tools:context=".Admin_panel.Patient_data.PatientDataViewActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -43,6 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!--Patient image-->
             <LinearLayout
                 android:layout_width="@dimen/_90sdp"
                 android:layout_height="match_parent">
@@ -65,6 +66,7 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
+                <!--Patient name-->
                 <TextView
                     android:id="@+id/txtPatientName"
                     android:layout_width="match_parent"
@@ -74,7 +76,51 @@
                     android:textSize="@dimen/_15ssp"
                     android:textStyle="bold"
                     tools:text="Patient Name" />
+                <!--Patient Mobile number-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mo :-"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/txtPatientMobileNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_35sdp"
+                        android:textAlignment="center"
+                        tools:text="1234567890" />
+                </LinearLayout>
+
+                <!--Patient Village-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Village :-"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/txtPatientVillage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_18sdp"
+                        android:textAlignment="center"
+                        tools:text="Maliya" />
+                </LinearLayout>
+
+                <!--Patient Age-->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,11 +137,34 @@
                         android:id="@+id/txtPatientAge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_35sdp"
+                        android:layout_marginStart="@dimen/_33sdp"
                         android:textAlignment="center"
                         tools:text="22" />
                 </LinearLayout>
 
+                <!--Patient Weight-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Weight :-"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/txtPatientWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_18sdp"
+                        android:textAlignment="center"
+                        tools:text="43" />
+                </LinearLayout>
+
+                <!--Patient Gender-->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,26 +186,8 @@
                         tools:text="Male" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Mo :-"
-                        android:textAlignment="center" />
 
-                    <TextView
-                        android:id="@+id/txtPatientMobileNo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_35sdp"
-                        android:textAlignment="center"
-                        tools:text="1234567890" />
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
