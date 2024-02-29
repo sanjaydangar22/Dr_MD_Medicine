@@ -43,10 +43,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DrMDMedicine"
         tools:targetApi="31" >
-     >
+
         <activity
             android:name=".Admin_panel.Disease.DiseaseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".LoginOptionActivity"
             android:exported="false" />
@@ -108,24 +109,12 @@
             android:exported="true"
             android:windowSoftInputMode="adjustPan" >
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" >
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
     </application>
 

@@ -2,6 +2,9 @@ package com.sdsoft.drmdmedicine
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -74,6 +77,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+
+    }
+
+    private var doubleBackToExitPressedOnce = false
+    override fun onBackPressed() {
+
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+
 
     }
 }

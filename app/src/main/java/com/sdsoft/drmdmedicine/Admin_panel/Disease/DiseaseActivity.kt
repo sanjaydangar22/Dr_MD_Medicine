@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -22,6 +23,8 @@ import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityDiseaseBinding
+import com.sdsoft.drmdmedicine.databinding.DialogAddDiseaseBinding
+import java.util.Locale
 import java.util.UUID
 
 class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
@@ -29,6 +32,9 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
     lateinit var binding: ActivityDiseaseBinding
     var diseaseList = ArrayList<DiseaseModelClass>()
     lateinit var adapter: DiseaseListAdapter
+
+    lateinit var dialog: Dialog
+    lateinit var dialogBinding: DialogAddDiseaseBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDiseaseBinding.inflate(layoutInflater)
@@ -36,7 +42,29 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
         mDbRef = FirebaseDatabase.getInstance().reference
         progressBarDialog = ProgressBarDialog(this)
 
+
+        diseaseDialogFun()
         initView()
+    }
+
+    private fun diseaseDialogFun() {
+        dialog = Dialog(this)
+        dialogBinding = DialogAddDiseaseBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCancelable(false)
+
+        dialogBinding.imgClose.setOnClickListener {
+            dialog.dismiss()
+            dialogBinding.edtDiseaseName.setText("")
+        }
+
+
     }
 
     private fun initView() {
@@ -51,7 +79,9 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+
                     searchItems(newText)
+
                 }
                 return true
             }
@@ -59,7 +89,7 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
         progressBarDialog.show()
 //       disease List adapter
         adapter = DiseaseListAdapter(this) {
-
+            editAndDeleteDiseaseFun(it)
 
         }
         var manger = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -93,47 +123,27 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
             })
 
         binding.imgAddDisease.setOnClickListener {
-            diseaseDialogFun()
-        }
-    }
+            dialogBinding.btnSubmit.text = "Submit"
+            dialogBinding.cdDelete.visibility = View.GONE
+            dialog.show()
+            dialogBinding.btnSubmit.setOnClickListener {
+                var diseaseName = dialogBinding.edtDiseaseName.text.toString()
 
-    private fun diseaseDialogFun() {
+                if (diseaseName.isEmpty()) {
+                    Toast.makeText(this, "Please Enter Disease Name", Toast.LENGTH_SHORT).show()
+                } else {
+                    addDiseaseFun(diseaseName)
 
-
-        var dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_add_disease)
-
-        var edtDiseaseName: EditText = dialog.findViewById(R.id.edtDiseaseName)
-        var btnSubmit: Button = dialog.findViewById(R.id.btnSubmit)
-        var imgClose: ImageView = dialog.findViewById(R.id.imgClose)
-
-        imgClose.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnSubmit.setOnClickListener {
-            var diseaseName = edtDiseaseName.text.toString()
-
-            if (diseaseName.isEmpty()) {
-                Toast.makeText(this, "Please Enter Disease Name", Toast.LENGTH_SHORT).show()
-            } else {
-                addDiseaseFun(diseaseName)
-
-
-                dialog.dismiss()
+                }
             }
-        }
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
-        dialog.window?.setLayout(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        dialog.setCancelable(false)
-        dialog.show()
 
+        }
     }
+
 
     private fun addDiseaseFun(diseaseName: String) {
+
+
         var diseaseUid = UUID.randomUUID().toString()
         progressBarDialog.show()
         mDbRef.child("DiseaseList").child(diseaseUid)
@@ -147,13 +157,79 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
                     )
                         .show()
 
-
+                    dialogBinding.edtDiseaseName.setText("")
                     progressBarDialog.dismiss()
+                    dialog.dismiss()
                 }
             }.addOnFailureListener {
                 progressBarDialog.dismiss()
+                dialog.dismiss()
 
             }
+    }
+
+    private fun editAndDeleteDiseaseFun(model: DiseaseModelClass) {
+        dialog.show()
+        dialogBinding.txtDialogTitle.text = "Update Disease"
+        dialogBinding.edtDiseaseName.setText(model.diseaseName)
+        dialogBinding.cdDelete.visibility = View.VISIBLE
+
+
+        dialogBinding.btnSubmit.text = "Update"
+
+        dialogBinding.btnSubmit.setOnClickListener {
+            var diseaseName = dialogBinding.edtDiseaseName.text.toString()
+
+            if (diseaseName.isEmpty()) {
+                Toast.makeText(this, "Please Enter Disease Name", Toast.LENGTH_SHORT).show()
+            } else {
+
+
+                progressBarDialog.show()
+                mDbRef.child("DiseaseList").child(model.diseaseUid!!)
+                    .setValue(DiseaseModelClass(diseaseName, model.diseaseUid!!))
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            Toast.makeText(
+                                this,
+                                "Record Save Successfully",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+
+
+                            progressBarDialog.dismiss()
+                            dialog.dismiss()
+                        }
+                    }.addOnFailureListener {
+                        progressBarDialog.dismiss()
+
+                    }
+
+
+            }
+        }
+
+        dialogBinding.cdDelete.setOnClickListener {
+
+            progressBarDialog.show()
+            mDbRef.child("DiseaseList").child(model.diseaseUid!!)
+                .removeValue()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+
+                        Toast.makeText(this, "Record Deleted Successfully", Toast.LENGTH_SHORT)
+                            .show()
+                        progressBarDialog.dismiss()
+                        dialog.dismiss()
+
+                    }
+                }.addOnFailureListener {
+
+                    Toast.makeText(this, "fail", Toast.LENGTH_SHORT)
+                        .show()
+                }
+        }
     }
 
     //  search view function
@@ -167,15 +243,19 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
 
                     for (itemSnapshot in snapshot.children) {
                         val item = itemSnapshot.getValue(DiseaseModelClass::class.java)
-                        item?.let { searchItems.add(it) }
-                    }
+                        item?.let {
 
+                            searchItems.add(it)
+
+
+                        }
+                    }
 
                     adapter.updateList(searchItems)
 
                     if (searchItems.isEmpty()) {
                         binding.linNoDataFound.visibility = View.VISIBLE
-                    } else if (searchItems.isNotEmpty()) {
+                    } else {
                         binding.linNoDataFound.visibility = View.GONE
                     }
                 }
@@ -185,5 +265,6 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
                 }
             })
     }
+
 
 }

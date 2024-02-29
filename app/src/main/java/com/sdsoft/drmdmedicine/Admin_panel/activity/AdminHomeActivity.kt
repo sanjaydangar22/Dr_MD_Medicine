@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.GravityCompat
@@ -141,6 +142,22 @@ class AdminHomeActivity : BaseActivity(R.layout.activity_admin_home) {
     }
 
     private fun initView() {
+
+    }
+
+
+    private var doubleBackToExitPressedOnce = false
+    override fun onBackPressed() {
+
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+
 
     }
 }

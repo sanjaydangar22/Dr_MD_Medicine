@@ -13,10 +13,10 @@
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:layout_marginVertical="@dimen/_5sdp"
         android:background="@drawable/frame_round"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
         android:iconifiedByDefault="false"
-        android:queryHint="Search Medicine"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        android:queryHint="Search Medicine" />
 
 
     <!--        no video found-->
@@ -33,8 +33,8 @@
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_140sdp"
-            app:tint="@color/sky_blue"
-            android:src="@drawable/medicine_icon" />
+            android:src="@drawable/medicine_icon"
+            app:tint="@color/sky_blue" />
 
         <TextView
             android:layout_width="wrap_content"
