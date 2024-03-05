@@ -4,18 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin_panel.activity.NewAppointmentsActivity">
+    tools:context=".Admin_panel.activity.AppointmentsActivity">
+
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#CDF5FD">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:src="@drawable/ic_back_icon" />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Appointments"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+    </Toolbar>
+
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:layout_marginVertical="@dimen/_5sdp"
         android:background="@drawable/frame_round"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:iconifiedByDefault="false"
-        android:queryHint="Search Patient"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        android:queryHint="Search Appointments" />
 
 
     <!--        no Appointments found-->
@@ -32,8 +57,8 @@
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_140sdp"
-            app:tint="@color/sky_blue"
-            android:src="@drawable/list_icon" />
+            android:src="@drawable/list_icon"
+            app:tint="@color/sky_blue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,6 +83,9 @@
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
         android:src="@drawable/ic_add_icon" />
 </RelativeLayout>

@@ -10,8 +10,25 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linAppointmentNo"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="match_parent"
+            android:background="@color/blue"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/txtAppointmentsNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_18ssp"
+                android:textStyle="bold"
+                tools:text="10" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linPatient"
@@ -21,13 +38,13 @@
 
             <!--    Patient image-->
             <LinearLayout
-                android:layout_width="@dimen/_90sdp"
+                android:layout_width="@dimen/_70sdp"
                 android:layout_height="match_parent">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgPatientImage"
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:padding="@dimen/_2sdp"
@@ -59,7 +76,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -73,7 +89,7 @@
                         android:id="@+id/txtPatientMobileNo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_15sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:textAlignment="center"
                         android:textStyle="bold"
                         tools:text="1234567890" />
@@ -97,7 +113,7 @@
                         android:id="@+id/txtPatientVillage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_30sdp"
+                        android:layout_marginStart="@dimen/_20sdp"
                         android:textAlignment="center"
                         android:textStyle="bold"
                         tools:text="Maliya" />
@@ -121,7 +137,7 @@
                         android:id="@+id/txtPatientAge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_45sdp"
+                        android:layout_marginStart="@dimen/_35sdp"
                         android:textAlignment="center"
                         android:textStyle="bold"
                         tools:text="22" />
@@ -131,38 +147,6 @@
             </LinearLayout>
 
 
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:background="#C4C9CD" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/_5sdp">
-
-            <ImageView
-                android:id="@+id/imgEdit"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:src="@drawable/ic_edit_icon" />
-
-            <View
-                android:layout_width="@dimen/_1sdp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/_20sdp"
-                android:background="#C4C9CD" />
-
-            <ImageView
-                android:id="@+id/imgDelete"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:src="@drawable/ic_delete_icon"
-                app:tint="@color/black" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

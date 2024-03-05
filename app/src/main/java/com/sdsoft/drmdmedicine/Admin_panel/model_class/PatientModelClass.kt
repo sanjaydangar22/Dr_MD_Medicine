@@ -9,6 +9,8 @@ class PatientModelClass {
     var patientVillage: String? = null
     var patientGender: String? = null
     var patientUid: String? = null
+    var timestamp: String? = null
+    var appointmentsNumber: Int = 0
 
     constructor(
         patientImage: String,
@@ -18,7 +20,9 @@ class PatientModelClass {
         patientMobileNo: String,
         patientVillage: String,
         patientGender: String,
-        patientUid: String
+        patientUid: String,
+        timestamp: String,
+        appointmentsNumber: Int
     ) {
         this.patientImage = patientImage
         this.patientName = patientName
@@ -28,6 +32,8 @@ class PatientModelClass {
         this.patientVillage = patientVillage
         this.patientGender = patientGender
         this.patientUid = patientUid
+        this.timestamp = timestamp
+        this.appointmentsNumber = appointmentsNumber
     }
 
     constructor() {}

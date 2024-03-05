@@ -31,6 +31,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
+import com.sdsoft.drmdmedicine.Admin_panel.activity.AppointmentsActivity
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
@@ -56,6 +57,8 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
     var patientUid: String? = null
     var patientImage: String? = null
     var patientGender: String? = null
+    var timestamp: String? = null
+    var appointmentsNumber: Int = 0
 
 
     var flag = 0
@@ -138,7 +141,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                             // User data does not exist
                             Toast.makeText(
                                 this@AddPatientActivity,
-                                "No Medicine",
+                                "No Patient",
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
@@ -149,6 +152,88 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                     }
 
                 })
+
+        }
+
+        if (intent != null && intent.hasExtra("addNewAppointment")) {  // data update key access this class
+
+            flag = 2
+            imageUploadCompleted = 1
+
+            patientUid = intent.getStringExtra("patientUid")   // key set  variable
+            timestamp = intent.getStringExtra("timestamp")   // key set  variable
+            appointmentsNumber = intent.getIntExtra("appointmentsNumber", 0)   // key set  variable
+
+
+            mDbRef.child("PatientList").child(patientUid!!)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            val patientItem = snapshot.getValue(PatientModelClass::class.java)
+                            if (patientItem != null) {
+                                // User data retrieved successfully
+                                val patientUid = patientItem.patientUid
+                                patientImage = patientItem.patientImage
+                                val patientName = patientItem.patientName
+                                val patientAge = patientItem.patientAge
+                                val patientWeight = patientItem.patientWeight
+                                val patientMobileNo = patientItem.patientMobileNo
+                                val patientVillage = patientItem.patientVillage
+                                patientGender = patientItem.patientGender
+
+
+                                Glide.with(this@AddPatientActivity).load(patientImage)
+                                    .placeholder(R.drawable.ic_image)
+                                    .into(addPatientBinding.imgPatientImage)
+
+                                addPatientBinding.edtPatientName.setText(patientName.toString())
+                                addPatientBinding.edtPatientAge.setText(patientAge.toString())
+                                addPatientBinding.edtPatientWeight.setText(patientWeight.toString())
+                                addPatientBinding.edtPatientMobileNo.setText(patientMobileNo.toString())
+                                addPatientBinding.edtPatientVillage.setText(patientVillage.toString())
+
+                                if (patientGender == "Male") {
+                                    "Golden"
+                                    addPatientBinding.rbMale.isChecked = true
+                                } else if (patientGender == "Female") {
+                                    "Female"
+                                    addPatientBinding.rbFemale.isChecked = true
+                                } else {
+                                    "Other"
+                                    addPatientBinding.rbOther.isChecked = true
+                                }
+
+                                //change page title
+                                addPatientBinding.txtTitle.text = "Add Appointments"
+                                //change button name
+                                addPatientBinding.txtSave.text = "Save"
+
+                                patientImagePath = Uri.parse(patientImage)
+
+                            }
+                        } else {
+                            // User data does not exist
+                            Toast.makeText(
+                                this@AddPatientActivity,
+                                "No Patient",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+
+                })
+        }
+
+        if (intent != null && intent.hasExtra("addNewAppointmentWithPatient")) {  // data update key access this class
+
+            flag = 3
+
+            timestamp = intent.getStringExtra("timestamp")   // key set  variable
+            appointmentsNumber = intent.getIntExtra("appointmentsNumber", 0)   // key set  variable
 
         }
         addPatientBinding.imgAddPatientImage.setOnClickListener {
@@ -225,7 +310,9 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                 patientMobileNo,
                                 patientVillage,
                                 patientGender!!,
-                                patientUid!!
+                                patientUid!!,
+                                timestamp!!,
+                                appointmentsNumber
                             )
                         ).addOnCompleteListener {
                             if (it.isSuccessful) {
@@ -245,6 +332,99 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                             progressBarDialog.dismiss()
 
                         }
+                    } else if (flag == 2) {
+                        progressBarDialog.show()
+                        mDbRef.child("AppointmentList").child(patientUid!!).setValue(
+                            PatientModelClass(
+                                patientImage!!,
+                                patientName,
+                                patientAge,
+                                patientWeight,
+                                patientMobileNo,
+                                patientVillage,
+                                patientGender!!,
+                                patientUid!!,
+                                timestamp!!,
+                                appointmentsNumber
+                            )
+                        ).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    "Record Save Successfully",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+
+                                var i=Intent(this,AppointmentsActivity::class.java)
+                                startActivity(i)
+                                finish()
+                                progressBarDialog.dismiss()
+                            }
+                        }.addOnFailureListener {
+                            Log.e("TAG", "fail: " + it.message)
+                            progressBarDialog.dismiss()
+
+                        }
+                    } else if (flag == 3) {
+
+                        var patientUid = UUID.randomUUID().toString()
+                        progressBarDialog.show()
+                        mDbRef.child("PatientList").child(patientUid).setValue(
+                            PatientModelClass(
+                                patientImage!!,
+                                patientName,
+                                patientAge,
+                                patientWeight,
+                                patientMobileNo,
+                                patientVillage,
+                                patientGender!!,
+                                patientUid,
+                                timestamp!!,
+                                0
+                            )
+                        ).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                mDbRef.child("AppointmentList").child(patientUid).setValue(
+                                    PatientModelClass(
+                                        patientImage!!,
+                                        patientName,
+                                        patientAge,
+                                        patientWeight,
+                                        patientMobileNo,
+                                        patientVillage,
+                                        patientGender!!,
+                                        patientUid,
+                                        timestamp!!,
+                                        appointmentsNumber
+                                    )
+                                ).addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        Toast.makeText(
+                                            this,
+                                            "Record Save Successfully",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                        var i=Intent(this,AppointmentsActivity::class.java)
+                                        startActivity(i)
+                                        finish()
+                                        progressBarDialog.dismiss()
+                                    }
+                                }.addOnFailureListener {
+                                    Log.e("TAG", "fail: " + it.message)
+                                    progressBarDialog.dismiss()
+
+                                }
+
+                            }
+                        }.addOnFailureListener {
+                            Log.e("TAG", "fail: " + it.message)
+                            progressBarDialog.dismiss()
+
+                        }
+
+
                     } else {
 
                         var patientUid = UUID.randomUUID().toString()
@@ -258,7 +438,9 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                 patientMobileNo,
                                 patientVillage,
                                 patientGender!!,
-                                patientUid
+                                patientUid,
+                                timestamp!!,
+                                appointmentsNumber
                             )
                         ).addOnCompleteListener {
                             if (it.isSuccessful) {
