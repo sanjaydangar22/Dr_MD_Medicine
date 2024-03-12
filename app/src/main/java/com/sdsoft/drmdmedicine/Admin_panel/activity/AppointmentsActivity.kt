@@ -20,7 +20,7 @@ import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityAppointmentsBinding
-import com.sdsoft.drmdmedicine.databinding.DialogAddNewAppointmentsBinding
+import com.sdsoft.drmdmedicine.databinding.DialogAddNewItemBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -28,7 +28,7 @@ import java.util.Locale
 class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
     lateinit var binding: ActivityAppointmentsBinding
     lateinit var dialog: Dialog
-    lateinit var dialogBinding: DialogAddNewAppointmentsBinding
+    lateinit var dialogBinding: DialogAddNewItemBinding
     lateinit var adapter: AddAppointmentsListAdapter
 
     var appointmentsNumber: Int = 0
@@ -155,7 +155,7 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
 
     private fun addNewAppointmentDialog() {
         dialog = Dialog(this)
-        dialogBinding = DialogAddNewAppointmentsBinding.inflate(layoutInflater)
+        dialogBinding = DialogAddNewItemBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
@@ -177,7 +177,7 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
 
         }
 
-        dialogBinding.imgAddNewPatient.setOnClickListener {
+        dialogBinding.imgAddNewItem.setOnClickListener {
             // Increase appointmentsNumber by 1 when adding a new appointment
             appointmentsNumber += 1
             var i = Intent(this, AddPatientActivity::class.java)
@@ -226,8 +226,8 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
         }
         var manger = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        dialogBinding.rcvPatientList.layoutManager = manger
-        dialogBinding.rcvPatientList.adapter = adapter
+        dialogBinding.rcvItemList.layoutManager = manger
+        dialogBinding.rcvItemList.adapter = adapter
 
         var patientList = ArrayList<PatientModelClass>()
         //        patient list show in recycler view

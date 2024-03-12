@@ -57,7 +57,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:iconifiedByDefault="false"
-                    android:queryHint="Search Patient" />
+                    android:queryHint="Search" />
 
 
                 <!--        no Data found-->
@@ -81,13 +81,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
-                        android:text=" Patient Not Found"
+                        android:text=" Data Not Found"
                         android:textSize="@dimen/_15ssp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcvPatientList"
+                    android:id="@+id/rcvItemList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/_5sdp" />
@@ -95,7 +95,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imgAddNewPatient"
+                android:id="@+id/imgAddNewItem"
                 android:layout_width="@dimen/_50sdp"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_alignParentEnd="true"
