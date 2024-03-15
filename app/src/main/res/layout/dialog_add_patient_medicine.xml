@@ -48,7 +48,7 @@
                 android:queryHint="Search Medicine" />
 
 
-            <!--        no video found-->
+            <!--        no data found-->
             <LinearLayout
                 android:id="@+id/linNoDataFound"
                 android:layout_width="match_parent"
