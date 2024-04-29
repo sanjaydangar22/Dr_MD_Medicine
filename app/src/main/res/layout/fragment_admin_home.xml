@@ -62,7 +62,27 @@
 
 
     </androidx.cardview.widget.CardView>
+    <!--    Appointments-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cdAppointmentsCompleted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:elevation="@dimen/_10sdp"
+        app:cardBackgroundColor="@color/sky_blue"
+        app:cardCornerRadius="@dimen/_10sdp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_15sdp"
+            android:text="Completed Appointments"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+
+
+    </androidx.cardview.widget.CardView>
     <!--    Disease List-->
     <androidx.cardview.widget.CardView
         android:id="@+id/cdDiseaseList"

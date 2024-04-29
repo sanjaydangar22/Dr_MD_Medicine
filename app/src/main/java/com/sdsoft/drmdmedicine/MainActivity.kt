@@ -14,7 +14,7 @@ import com.sdsoft.drmdmedicine.fragment.MyMedicineFragment
 import com.sdsoft.drmdmedicine.fragment.ProfileFragment
 import com.sdsoft.drmdmedicine.fragment.ReportFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity(R.layout.activity_main) {
     lateinit var mainBinding: ActivityMainBinding
     lateinit var fragment: Fragment
     override fun onCreate(savedInstanceState: Bundle?) {

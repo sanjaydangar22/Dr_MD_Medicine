@@ -25,7 +25,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.MedicineListAdapter
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.ModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
@@ -43,7 +43,7 @@ class PatientMedicineActivity : AppCompatActivity() {
 
     lateinit var adapter: MedicineListAdapter
     var patientMedicineList = ArrayList<PatientMedicineModelClass>()
-    var medicineList = ArrayList<MedicineModelClass>()
+    var medicineList = ArrayList<ModelClass>()
     var patientUid: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -187,10 +187,10 @@ class PatientMedicineActivity : AppCompatActivity() {
 
         adapter = MedicineListAdapter(this@PatientMedicineActivity) {
 
-            var i = Intent(this, PatientMedicineAddActivity::class.java)
-            i.putExtra("patientUid", patientUid)
-            i.putExtra("medicineUid", it.medicineUid)
-            startActivity(i)
+//            var i = Intent(this, PatientMedicineAddActivity::class.java)
+//            i.putExtra("patientUid", patientUid)
+//            i.putExtra("medicineUid", it.medicineUid)
+//            startActivity(i)
         }
         var manger = GridLayoutManager(this@PatientMedicineActivity, 2)
 
@@ -209,15 +209,15 @@ class PatientMedicineActivity : AppCompatActivity() {
 
     //    search view function
     private fun searchItems(query: String, dialog: Dialog) {
-        mDbRef.child("MedicineList").orderByChild("medicineName")
+        mDbRef.child("MedicineList").orderByChild("name")
             .startAt(query)
             .endAt(query + "\uf8ff")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val searchItems = ArrayList<MedicineModelClass>()
+                    val searchItems = ArrayList<ModelClass>()
 
                     for (itemSnapshot in snapshot.children) {
-                        val item = itemSnapshot.getValue(MedicineModelClass::class.java)
+                        val item = itemSnapshot.getValue(ModelClass::class.java)
                         item?.let { searchItems.add(it) }
                     }
 
@@ -255,10 +255,10 @@ class PatientMedicineActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     medicineList.clear()
                     for (i in snapshot.children) {
-                        var data = i.getValue(MedicineModelClass::class.java)
+                        var data = i.getValue(ModelClass::class.java)
                         Log.e(
                             "TAG",
-                            "onDataChange: " + data?.medicineName + data?.medicineCompanyName
+                            "onDataChange: " + data?.name + data?.uid
                         )
                         data?.let { it1 -> medicineList.add(it1) }
                     }

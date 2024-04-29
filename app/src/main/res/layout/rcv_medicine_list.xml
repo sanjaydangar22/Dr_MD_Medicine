@@ -1,38 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     android:id="@+id/cdMedicine"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/_5sdp"
     app:cardCornerRadius="@dimen/_10sdp">
 
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="#D8EDF1"
+        android:padding="@dimen/_15sdp">
 
-        <ImageView
-            android:id="@+id/imgMedicineImage"
-            android:layout_width="@dimen/_130sdp"
-            android:layout_height="@dimen/_120sdp"
-            android:scaleType="fitXY"
-            android:src="@drawable/medicine_item_image" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:background="#D8EDF1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/txtMedicineName"
-                android:layout_width="wrap_content"
-                android:layout_marginHorizontal="@dimen/_2sdp"
-                android:layout_height="wrap_content"
-                android:text="Medicine Name"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/txtMedicineName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_2sdp"
+            android:text="Medicine Name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

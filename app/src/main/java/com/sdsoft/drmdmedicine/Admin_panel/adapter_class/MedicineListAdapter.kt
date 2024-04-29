@@ -9,16 +9,16 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.MedicineModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.ModelClass
 import com.sdsoft.drmdmedicine.R
 
-class MedicineListAdapter(var context: Context, var itemClick: (MedicineModelClass) -> Unit) :
+class MedicineListAdapter(var context: Context, var itemClick: (ModelClass) -> Unit) :
     RecyclerView.Adapter<MedicineListAdapter.MyViewHolder>() {
 
-    var medicineList = ArrayList<MedicineModelClass>()
+    var medicineList = ArrayList<ModelClass>()
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var medicineImage: ImageView = itemView.findViewById(R.id.imgMedicineImage)
+
         var medicineName: TextView = itemView.findViewById(R.id.txtMedicineName)
         var cdMedicine: CardView = itemView.findViewById(R.id.cdMedicine)
     }
@@ -34,17 +34,16 @@ class MedicineListAdapter(var context: Context, var itemClick: (MedicineModelCla
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.medicineName.text = medicineList[position].medicineName
+        holder.medicineName.text = medicineList[position].name
 
-        Glide.with(context).load(medicineList[position].frontImage)
-            .placeholder(R.drawable.ic_image).into(holder.medicineImage)
+
 
         holder.cdMedicine.setOnClickListener {
             itemClick.invoke(medicineList[position])
         }
     }
 
-    fun updateList(medicineList: ArrayList<MedicineModelClass>) {
+    fun updateList(medicineList: ArrayList<ModelClass>) {
         this.medicineList = medicineList
         notifyDataSetChanged()
     }

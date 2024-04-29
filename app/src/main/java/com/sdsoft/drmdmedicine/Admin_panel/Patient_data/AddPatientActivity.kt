@@ -32,6 +32,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AppointmentsActivity
+import com.sdsoft.drmdmedicine.Admin_panel.activity.PatientCheckUpActivity
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
@@ -182,9 +183,12 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                 patientGender = patientItem.patientGender
 
 
-                                Glide.with(this@AddPatientActivity).load(patientImage)
-                                    .placeholder(R.drawable.ic_image)
-                                    .into(addPatientBinding.imgPatientImage)
+                                if (!isDestroyed) {
+                                    Glide.with(this@AddPatientActivity)
+                                        .load(patientImage)
+                                        .placeholder(R.drawable.ic_image)
+                                        .into(addPatientBinding.imgPatientImage)
+                                }
 
                                 addPatientBinding.edtPatientName.setText(patientName.toString())
                                 addPatientBinding.edtPatientAge.setText(patientAge.toString())
@@ -234,6 +238,76 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
             timestamp = intent.getStringExtra("timestamp")   // key set  variable
             appointmentsNumber = intent.getIntExtra("appointmentsNumber", 0)   // key set  variable
+
+        }
+
+        if (intent != null && intent.hasExtra("itemUpdatePatientCheckUp")) {  // data update key access this class
+
+            flag = 4
+            imageUploadCompleted = 1
+
+            patientUid = intent.getStringExtra("patientUid")   // key set  variable
+
+            mDbRef.child("PatientList").child(patientUid!!)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            val patientItem = snapshot.getValue(PatientModelClass::class.java)
+                            if (patientItem != null) {
+                                // User data retrieved successfully
+                                val patientUid = patientItem.patientUid
+                                patientImage = patientItem.patientImage
+                                val patientName = patientItem.patientName
+                                val patientAge = patientItem.patientAge
+                                val patientWeight = patientItem.patientWeight
+                                val patientMobileNo = patientItem.patientMobileNo
+                                val patientVillage = patientItem.patientVillage
+                                patientGender = patientItem.patientGender
+
+                                Glide.with(this@AddPatientActivity).load(patientImage)
+                                    .placeholder(R.drawable.ic_image)
+                                    .into(addPatientBinding.imgPatientImage)
+
+                                addPatientBinding.edtPatientName.setText(patientName.toString())
+                                addPatientBinding.edtPatientAge.setText(patientAge.toString())
+                                addPatientBinding.edtPatientWeight.setText(patientWeight.toString())
+                                addPatientBinding.edtPatientMobileNo.setText(patientMobileNo.toString())
+                                addPatientBinding.edtPatientVillage.setText(patientVillage.toString())
+
+                                if (patientGender == "Male") {
+                                    "Golden"
+                                    addPatientBinding.rbMale.isChecked = true
+                                } else if (patientGender == "Female") {
+                                    "Female"
+                                    addPatientBinding.rbFemale.isChecked = true
+                                } else {
+                                    "Other"
+                                    addPatientBinding.rbOther.isChecked = true
+                                }
+
+                                //change page title
+                                addPatientBinding.txtTitle.text = "Patient Edit"
+                                //change button name
+                                addPatientBinding.txtSave.text = "Update"
+
+                                patientImagePath = Uri.parse(patientImage)
+
+                            }
+                        } else {
+                            // User data does not exist
+                            Toast.makeText(
+                                this@AddPatientActivity,
+                                "No Patient",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+
+                })
 
         }
         addPatientBinding.imgAddPatientImage.setOnClickListener {
@@ -300,6 +374,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                     Toast.makeText(this, "patient Village is empty", Toast.LENGTH_SHORT).show()
                 } else {
                     if (flag == 1) {
+                        timestamp=""
                         progressBarDialog.show()
                         mDbRef.child("PatientList").child(patientUid!!).setValue(
                             PatientModelClass(
@@ -355,11 +430,11 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
-
-                                var i=Intent(this,AppointmentsActivity::class.java)
+                                progressBarDialog.dismiss()
+                                var i = Intent(this, AppointmentsActivity::class.java)
                                 startActivity(i)
                                 finish()
-                                progressBarDialog.dismiss()
+
                             }
                         }.addOnFailureListener {
                             Log.e("TAG", "fail: " + it.message)
@@ -406,7 +481,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                             Toast.LENGTH_SHORT
                                         )
                                             .show()
-                                        var i=Intent(this,AppointmentsActivity::class.java)
+                                        var i = Intent(this, AppointmentsActivity::class.java)
                                         startActivity(i)
                                         finish()
                                         progressBarDialog.dismiss()
@@ -425,6 +500,41 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                         }
 
 
+                    } else if (flag == 4) {
+                        timestamp=""
+                        progressBarDialog.show()
+                        mDbRef.child("PatientList").child(patientUid!!).setValue(
+                            PatientModelClass(
+                                patientImage!!,
+                                patientName,
+                                patientAge,
+                                patientWeight,
+                                patientMobileNo,
+                                patientVillage,
+                                patientGender!!,
+                                patientUid!!,
+                                timestamp!!,
+                                appointmentsNumber
+                            )
+                        ).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    "Record Save Successfully",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+
+                                var i = Intent(this, PatientCheckUpActivity::class.java)
+                                i.putExtra("patientUid", patientUid)
+                                startActivity(i)
+                                progressBarDialog.dismiss()
+                            }
+                        }.addOnFailureListener {
+                            Log.e("TAG", "fail: " + it.message)
+                            progressBarDialog.dismiss()
+
+                        }
                     } else {
 
                         var patientUid = UUID.randomUUID().toString()

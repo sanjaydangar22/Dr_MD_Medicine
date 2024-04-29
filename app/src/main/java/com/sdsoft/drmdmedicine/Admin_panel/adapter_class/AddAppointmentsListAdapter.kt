@@ -55,21 +55,46 @@ class AddAppointmentsListAdapter(
             itemClick.invoke(patientList[position])
         }
 
-        if (listType == "AppointmentList") {
+        // Showing or hiding appointment number based on list type
+        if (listType == "AppointmentList" || listType == "AppointmentCompletedList") {
             holder.linAppointmentNo.visibility = View.VISIBLE
             holder.txtAppointmentsNo.text = patientList[position].appointmentsNumber.toString()
         } else {
             holder.linAppointmentNo.visibility = View.GONE
         }
     }
-
     fun updateList(updatedList: ArrayList<PatientModelClass>) {
-        this.patientList = if (listType == "AppointmentList") {
-            updatedList.sortedBy { it.appointmentsNumber }
-                .filter { it.appointmentsNumber in 1..updatedList.size } as ArrayList<PatientModelClass>
+        this.patientList = if (listType == "AppointmentList" || listType == "AppointmentCompletedList") {
+            // Group patients by their appointmentsNumber
+            val groupedByAppointmentsNumber = updatedList.groupBy { it.appointmentsNumber }
+
+            // Filter out patients with appointmentsNumber 1 if they have other appointments
+            val filteredList = groupedByAppointmentsNumber.flatMap { (_, patients) ->
+                if (patients.any { it.appointmentsNumber > 1 }) {
+                    // If a patient has appointments other than 1, exclude the appointmentNumber 1 from the list
+                    patients.filter { it.appointmentsNumber != 1 }
+                } else {
+                    // If a patient only has appointmentNumber 1, include it in the list
+                    patients
+                }
+            }
+
+            filteredList as ArrayList<PatientModelClass>
         } else {
             updatedList
         }
+
+        // Notify any observers that the dataset has changed
         notifyDataSetChanged()
     }
+
+//    fun updateList(updatedList: ArrayList<PatientModelClass>) {
+//        this.patientList = if (listType == "AppointmentList" || listType == "AppointmentCompletedList") {
+//            updatedList.sortedBy { it.appointmentsNumber } .filter { it.appointmentsNumber in 1..updatedList.size }as ArrayList<PatientModelClass>
+//        } else {
+//            updatedList
+//        }
+//        notifyDataSetChanged()
+//    }
+
 }

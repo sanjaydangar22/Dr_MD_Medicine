@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.sdsoft.drmdmedicine.Admin_panel.Disease.DiseaseActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AppointmentsActivity
+import com.sdsoft.drmdmedicine.Admin_panel.activity.CompletedAppointmentsActivity
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.databinding.FragmentAdminHomeBinding
 import java.text.SimpleDateFormat
@@ -50,6 +51,7 @@ class AdminHomeFragment : Fragment() {
 
                         if (appointmentDate != formattedCurrentDate) {
                             mDbRef.child("AppointmentList").removeValue()
+                            mDbRef.child("AppointmentCompletedList").removeValue()
                         }
 
                     }
@@ -62,6 +64,10 @@ class AdminHomeFragment : Fragment() {
             })
         binding.cdNewAppointments.setOnClickListener {
             var i = Intent(requireContext(), AppointmentsActivity::class.java)
+            startActivity(i)
+        }
+        binding.cdAppointmentsCompleted.setOnClickListener {
+            var i = Intent(requireContext(), CompletedAppointmentsActivity::class.java)
             startActivity(i)
         }
         binding.cdDiseaseList.setOnClickListener {

@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.DiseaseModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.ModelClass
 import com.sdsoft.drmdmedicine.R
 
-class DiseaseListAdapter(var context: Context, var itemClick: (DiseaseModelClass) -> Unit) :
+class DiseaseListAdapter(var context: Context, var itemClick: (ModelClass) -> Unit) :
     RecyclerView.Adapter<DiseaseListAdapter.MyViewHolder>() {
 
-    var diseaseList = ArrayList<DiseaseModelClass>()
+    var diseaseList = ArrayList<ModelClass>()
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -32,7 +32,7 @@ class DiseaseListAdapter(var context: Context, var itemClick: (DiseaseModelClass
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.diseaseName.text = diseaseList[position].diseaseName
+        holder.diseaseName.text = diseaseList[position].name
 
 
         holder.cdDisease.setOnClickListener {
@@ -40,7 +40,7 @@ class DiseaseListAdapter(var context: Context, var itemClick: (DiseaseModelClass
         }
     }
 
-    fun updateList(diseaseList: ArrayList<DiseaseModelClass>) {
+    fun updateList(diseaseList: ArrayList<ModelClass>) {
         this.diseaseList = diseaseList
         notifyDataSetChanged()
     }

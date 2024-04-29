@@ -20,7 +20,7 @@ import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityAppointmentsBinding
-import com.sdsoft.drmdmedicine.databinding.DialogAddNewItemBinding
+import com.sdsoft.drmdmedicine.databinding.DialogShowListAndAddNewItemBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -28,7 +28,7 @@ import java.util.Locale
 class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
     lateinit var binding: ActivityAppointmentsBinding
     lateinit var dialog: Dialog
-    lateinit var dialogBinding: DialogAddNewItemBinding
+    lateinit var dialogBinding: DialogShowListAndAddNewItemBinding
     lateinit var adapter: AddAppointmentsListAdapter
 
     var appointmentsNumber: Int = 0
@@ -155,7 +155,7 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
 
     private fun addNewAppointmentDialog() {
         dialog = Dialog(this)
-        dialogBinding = DialogAddNewItemBinding.inflate(layoutInflater)
+        dialogBinding = DialogShowListAndAddNewItemBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
@@ -214,6 +214,7 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
         listType = "patientList"
         adapter = AddAppointmentsListAdapter(this, listType!!) {
             // Increase appointmentsNumber by 1 when adding a new appointment
+            dialog.dismiss()
             appointmentsNumber += 1
             //add new Appointment data
             var i = Intent(this, AddPatientActivity::class.java)

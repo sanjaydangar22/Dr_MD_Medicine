@@ -32,7 +32,7 @@ class PatientReportActivity : AppCompatActivity() {
     private lateinit var mDbRef: DatabaseReference
     lateinit var storageReference: StorageReference
 
-    lateinit var adapter: ReportAdapter
+//    lateinit var adapter: ReportAdapter
     var reportList = ArrayList<ReportModelClass>()
 
      var patientUid: String?=null
@@ -114,20 +114,20 @@ class PatientReportActivity : AppCompatActivity() {
     private fun reports() {
 
 //        Reports List adapter
-        adapter = ReportAdapter(this) {
+//        adapter = ReportAdapter(this) {
 
-            var i = Intent(this, ReportViewActivity::class.java)
-            i.putExtra("patientUid", patientUid)
-            i.putExtra("reportUid", it.reportUid)
-            startActivity(i)
-        }
-        var manger = GridLayoutManager(this, 2)
-
-        patientDataViewBinding.rcvReportList.layoutManager = manger
-        patientDataViewBinding.rcvReportList.adapter = adapter
-
-        //progress dialog show
-        progressBarDialog.show()
+//            var i = Intent(this, ReportViewActivity::class.java)
+//            i.putExtra("patientUid", patientUid)
+//            i.putExtra("reportUid", it.reportUid)
+//            startActivity(i)
+//        }
+//        var manger = GridLayoutManager(this, 2)
+//
+//        patientDataViewBinding.rcvReportList.layoutManager = manger
+//        patientDataViewBinding.rcvReportList.adapter = adapter
+//
+//        //progress dialog show
+//        progressBarDialog.show()
 
 
         //       Patient Report  show in recycler view
@@ -151,7 +151,7 @@ class PatientReportActivity : AppCompatActivity() {
                     }
 
                     progressBarDialog.dismiss()
-                    adapter.updateList(reportList)
+//                    adapter.updateList(reportList)
                     progressBarDialog.dismiss()
                 }
 

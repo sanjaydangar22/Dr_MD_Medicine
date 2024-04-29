@@ -4,11 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
@@ -18,23 +14,22 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.DiseaseListAdapter
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.DiseaseModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.ModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityDiseaseBinding
-import com.sdsoft.drmdmedicine.databinding.DialogAddDiseaseBinding
-import java.util.Locale
+import com.sdsoft.drmdmedicine.databinding.DialogAddNewItemBinding
 import java.util.UUID
 
 class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
 
     lateinit var binding: ActivityDiseaseBinding
-    var diseaseList = ArrayList<DiseaseModelClass>()
+    var diseaseList = ArrayList<ModelClass>()
     lateinit var adapter: DiseaseListAdapter
 
     lateinit var dialog: Dialog
-    lateinit var dialogBinding: DialogAddDiseaseBinding
+    lateinit var dialogBinding: DialogAddNewItemBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDiseaseBinding.inflate(layoutInflater)
@@ -49,7 +44,7 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
 
     private fun diseaseDialogFun() {
         dialog = Dialog(this)
-        dialogBinding = DialogAddDiseaseBinding.inflate(layoutInflater)
+        dialogBinding = DialogAddNewItemBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
@@ -61,7 +56,7 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
 
         dialogBinding.imgClose.setOnClickListener {
             dialog.dismiss()
-            dialogBinding.edtDiseaseName.setText("")
+            dialogBinding.edtName.setText("")
         }
 
 
@@ -103,7 +98,7 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     diseaseList.clear()
                     for (i in snapshot.children) {
-                        var data = i.getValue(DiseaseModelClass::class.java)
+                        var data = i.getValue(ModelClass::class.java)
 
                         data?.let { it1 -> diseaseList.add(it1) }
                     }
@@ -127,7 +122,7 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
             dialogBinding.cdDelete.visibility = View.GONE
             dialog.show()
             dialogBinding.btnSubmit.setOnClickListener {
-                var diseaseName = dialogBinding.edtDiseaseName.text.toString()
+                var diseaseName = dialogBinding.edtName.text.toString()
 
                 if (diseaseName.isEmpty()) {
                     Toast.makeText(this, "Please Enter Disease Name", Toast.LENGTH_SHORT).show()
@@ -147,7 +142,7 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
         var diseaseUid = UUID.randomUUID().toString()
         progressBarDialog.show()
         mDbRef.child("DiseaseList").child(diseaseUid)
-            .setValue(DiseaseModelClass(diseaseName, diseaseUid))
+            .setValue(ModelClass(diseaseName, diseaseUid))
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     Toast.makeText(
@@ -157,7 +152,7 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
                     )
                         .show()
 
-                    dialogBinding.edtDiseaseName.setText("")
+                    dialogBinding.edtName.setText("")
                     progressBarDialog.dismiss()
                     dialog.dismiss()
                 }
@@ -168,17 +163,17 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
             }
     }
 
-    private fun editAndDeleteDiseaseFun(model: DiseaseModelClass) {
+    private fun editAndDeleteDiseaseFun(model: ModelClass) {
         dialog.show()
         dialogBinding.txtDialogTitle.text = "Update Disease"
-        dialogBinding.edtDiseaseName.setText(model.diseaseName)
+        dialogBinding.edtName.setText(model.name)
         dialogBinding.cdDelete.visibility = View.VISIBLE
 
 
         dialogBinding.btnSubmit.text = "Update"
 
         dialogBinding.btnSubmit.setOnClickListener {
-            var diseaseName = dialogBinding.edtDiseaseName.text.toString()
+            var diseaseName = dialogBinding.edtName.text.toString()
 
             if (diseaseName.isEmpty()) {
                 Toast.makeText(this, "Please Enter Disease Name", Toast.LENGTH_SHORT).show()
@@ -186,8 +181,8 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
 
 
                 progressBarDialog.show()
-                mDbRef.child("DiseaseList").child(model.diseaseUid!!)
-                    .setValue(DiseaseModelClass(diseaseName, model.diseaseUid!!))
+                mDbRef.child("DiseaseList").child(model.uid!!)
+                    .setValue(ModelClass(diseaseName, model.uid!!))
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
                             Toast.makeText(
@@ -213,7 +208,7 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
         dialogBinding.cdDelete.setOnClickListener {
 
             progressBarDialog.show()
-            mDbRef.child("DiseaseList").child(model.diseaseUid!!)
+            mDbRef.child("DiseaseList").child(model.uid!!)
                 .removeValue()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -234,15 +229,15 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
 
     //  search view function
     private fun searchItems(query: String) {
-        mDbRef.child("DiseaseList").orderByChild("diseaseName")
+        mDbRef.child("DiseaseList").orderByChild("name")
             .startAt(query)
             .endAt(query + "\uf8ff")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val searchItems = ArrayList<DiseaseModelClass>()
+                    val searchItems = ArrayList<ModelClass>()
 
                     for (itemSnapshot in snapshot.children) {
-                        val item = itemSnapshot.getValue(DiseaseModelClass::class.java)
+                        val item = itemSnapshot.getValue(ModelClass::class.java)
                         item?.let {
 
                             searchItems.add(it)

@@ -17,7 +17,7 @@ class PatientMedicineListAdapter(var context: Context, var itemClick: (PatientMe
     var medicineList = ArrayList<PatientMedicineModelClass>()
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var medicineImage: ImageView = itemView.findViewById(R.id.imgMedicineImage)
+//        var medicineImage: ImageView = itemView.findViewById(R.id.imgMedicineImage)
         var medicineName: TextView = itemView.findViewById(R.id.txtMedicineName)
         var cdMedicine: CardView = itemView.findViewById(R.id.cdMedicine)
     }
@@ -35,8 +35,8 @@ class PatientMedicineListAdapter(var context: Context, var itemClick: (PatientMe
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.medicineName.text = medicineList[position].medicineName
 
-        Glide.with(context).load(medicineList[position].frontImage)
-            .placeholder(R.drawable.ic_image).into(holder.medicineImage)
+//        Glide.with(context).load(medicineList[position].frontImage)
+//            .placeholder(R.drawable.ic_image).into(holder.medicineImage)
 
         holder.cdMedicine.setOnClickListener {
             itemClick.invoke(medicineList[position])

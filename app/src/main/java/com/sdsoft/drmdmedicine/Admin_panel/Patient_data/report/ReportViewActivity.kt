@@ -28,7 +28,6 @@ import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
 class ReportViewActivity : AppCompatActivity() {
 
     lateinit var reportViewBinding: ActivityReportViewBinding
-//    lateinit var reportZoomViewBinding: ReportZoomViewBinding
     lateinit var progressBarDialog: ProgressBarDialog
 
     private lateinit var auth: FirebaseAuth
@@ -38,25 +37,12 @@ class ReportViewActivity : AppCompatActivity() {
     var reportImage: String? = null
     var patientUid: String? = null
     var reportUid: String? = null
+    var reportDate: String? = null
 
-    private var useReportZoomLayout = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        reportZoomViewBinding = ReportZoomViewBinding.inflate(layoutInflater)
         reportViewBinding = ActivityReportViewBinding.inflate(layoutInflater)
-
-
-//        if (useReportZoomLayout == 1) {
-//            Log.e("TAG", "onCreate: Image Zoom ")
-//            setContentView(reportZoomViewBinding.root)
-//        } else {
-            Log.e("TAG", "onCreate: Image Not Zoom ")
             setContentView(reportViewBinding.root)
-            // Initialize useReportZoomLayout before setting the content view
-//            useReportZoomLayout = 1 // Set to 1 if you want to use reportZoomViewBinding
-//
-//        }
 
         progressBarDialog = ProgressBarDialog(this)
 
@@ -76,12 +62,14 @@ class ReportViewActivity : AppCompatActivity() {
         }
         patientUid = intent.getStringExtra("patientUid").toString()
         reportUid = intent.getStringExtra("reportUid").toString()
+        reportDate = intent.getStringExtra("currentDateToday").toString()
 
         Log.e("TAG", "reportUid:  $reportUid ")
 
 
         progressBarDialog.show()
-        mDbRef.child("PatientList").child(patientUid!!).child("Reports").child(reportUid!!)
+        mDbRef.child("PatientList").child(patientUid!!)
+            .child("PatientCheckUpDetails").child(reportDate!!).child("PatientReportImage").child(reportUid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -154,7 +142,8 @@ class ReportViewActivity : AppCompatActivity() {
         }
         dialogBinding.btnDelete.setOnClickListener {
             progressBarDialog.show()
-            mDbRef.child("PatientList").child(patientUid).child("Reports").child(reportUid)
+            mDbRef.child("PatientList").child(patientUid)
+                .child("PatientCheckUpDetails").child(reportDate!!).child("PatientReportImage").child(reportUid)
                 .removeValue()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {

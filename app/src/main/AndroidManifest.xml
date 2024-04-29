@@ -44,6 +44,9 @@
         android:theme="@style/Theme.DrMDMedicine"
         tools:targetApi="31">
         <activity
+            android:name=".Admin_panel.activity.CompletedAppointmentsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Admin_panel.activity.PatientCheckUpActivity"
             android:exported="false" />
         <activity
@@ -69,9 +72,6 @@
             android:name=".Admin_panel.Patient_data.medicine.PatientMedicineViewActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data.medicine.PatientMedicineAddActivity"
-            android:exported="false" />
-        <activity
             android:name=".Admin_panel.Patient_data.medicine.PatientMedicineActivity"
             android:exported="false" />
         <activity
@@ -91,9 +91,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Admin_panel.activity.MedicineViewActivity"
-            android:exported="false" />
-        <activity
             android:name=".Admin_panel.activity.AdminLoginActivity"
             android:exported="true">
 
@@ -105,16 +102,13 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".Admin_panel.activity.AddMedicineActivity"
-            android:exported="false" />
-        <activity
             android:name=".Admin_panel.activity.AdminHomeActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

@@ -4,19 +4,21 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.DiseaseModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.ModelClass
 import com.sdsoft.drmdmedicine.R
 
-class PatientDiseaseAdapter(
-    var context: Context
-) : RecyclerView.Adapter<PatientDiseaseAdapter.MyViewHolder>() {
+class PatientCheckUpAdapter(
+    var context: Context, var delete: (String) -> Unit
+) : RecyclerView.Adapter<PatientCheckUpAdapter.MyViewHolder>() {
 
-    var list = ArrayList<DiseaseModelClass>()
+    var list = ArrayList<ModelClass>()
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var txtTextView: TextView = itemView.findViewById(R.id.txtTextView)
+        var imgDeleteBtn: ImageView = itemView.findViewById(R.id.imgDeleteBtn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -31,12 +33,15 @@ class PatientDiseaseAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.txtTextView.text = list[position].diseaseName
+        holder.txtTextView.text = list[position].name
+        holder.imgDeleteBtn.setOnClickListener {
+            delete.invoke(list[position].uid!!)
+        }
 
     }
 
-    fun updateList(updatedList: ArrayList<DiseaseModelClass>) {
-       this.list=updatedList
+    fun updateList(updatedList: ArrayList<ModelClass>) {
+        this.list = updatedList
         notifyDataSetChanged()
     }
 }

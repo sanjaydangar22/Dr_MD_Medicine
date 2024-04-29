@@ -113,11 +113,11 @@ class PatientMedicineViewActivity : AppCompatActivity() {
             })
 
         binding.txtEdit.setOnClickListener {
-            var i = Intent(this, PatientMedicineAddActivity::class.java)
-            i.putExtra("patientMedicineUid", patientMedicineUid)
-            i.putExtra("patientUid", patientUid)
-            i.putExtra("itemUpdate", true)
-            startActivity(i)
+//            var i = Intent(this, PatientMedicineAddActivity::class.java)
+//            i.putExtra("patientMedicineUid", patientMedicineUid)
+//            i.putExtra("patientUid", patientUid)
+//            i.putExtra("itemUpdate", true)
+//            startActivity(i)
         }
 
         binding.cdDelete.setOnClickListener {
