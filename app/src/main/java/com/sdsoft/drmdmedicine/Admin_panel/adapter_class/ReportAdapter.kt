@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.report.ReportModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.ReportModelClass
 import com.sdsoft.drmdmedicine.R
 
 class ReportAdapter(var context: Context, var itemClick: (ReportModelClass) -> Unit) :

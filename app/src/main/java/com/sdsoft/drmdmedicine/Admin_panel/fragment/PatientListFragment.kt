@@ -24,8 +24,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.AddPatientActivity
-import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.PatientDataViewActivity
+import com.sdsoft.drmdmedicine.Admin_panel.activity.AddPatientActivity
+import com.sdsoft.drmdmedicine.Admin_panel.activity.PatientDataViewActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.ProgressBarDialog

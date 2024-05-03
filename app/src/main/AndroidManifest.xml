@@ -44,6 +44,9 @@
         android:theme="@style/Theme.DrMDMedicine"
         tools:targetApi="31">
         <activity
+            android:name=".Admin_panel.activity.CreateNewStaffActivity"
+            android:exported="false" />
+        <activity
             android:name=".Admin_panel.activity.CompletedAppointmentsActivity"
             android:exported="false" />
         <activity
@@ -69,44 +72,20 @@
             android:name=".Admin_panel.activity.AppointmentsActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data.medicine.PatientMedicineViewActivity"
+            android:name=".Admin_panel.activity.ReportViewActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data.medicine.PatientMedicineActivity"
+            android:name=".Admin_panel.activity.PatientDataViewActivity"
             android:exported="false" />
         <activity
-            android:name=".Admin_panel.Patient_data.report.ReportViewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Admin_panel.Patient_data.report.AddReportActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Admin_panel.Patient_data.report.PatientReportActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Admin_panel.Patient_data.PatientDataViewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Admin_panel.Patient_data.AddPatientActivity"
+            android:name=".Admin_panel.activity.AddPatientActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Admin_panel.activity.AdminLoginActivity"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".Admin_panel.activity.AdminHomeActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
     </application>

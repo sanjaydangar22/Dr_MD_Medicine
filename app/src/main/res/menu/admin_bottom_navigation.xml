@@ -13,7 +13,7 @@
         android:icon="@drawable/medicine_icon"
         android:title="Medicine" />
     <item
-        android:id="@+id/bottom_Profile"
+        android:id="@+id/bottom_Staff"
         android:icon="@drawable/user_icon"
-        android:title="Profile" />
+        android:title="Staff" />
 </menu>

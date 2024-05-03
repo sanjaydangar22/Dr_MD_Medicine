@@ -88,13 +88,6 @@ class AddAppointmentsListAdapter(
         notifyDataSetChanged()
     }
 
-//    fun updateList(updatedList: ArrayList<PatientModelClass>) {
-//        this.patientList = if (listType == "AppointmentList" || listType == "AppointmentCompletedList") {
-//            updatedList.sortedBy { it.appointmentsNumber } .filter { it.appointmentsNumber in 1..updatedList.size }as ArrayList<PatientModelClass>
-//        } else {
-//            updatedList
-//        }
-//        notifyDataSetChanged()
-//    }
+
 
 }

@@ -21,6 +21,8 @@ class PatientCheckUpAdapter(
         var imgDeleteBtn: ImageView = itemView.findViewById(R.id.imgDeleteBtn)
     }
 
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
             LayoutInflater.from(parent.context)

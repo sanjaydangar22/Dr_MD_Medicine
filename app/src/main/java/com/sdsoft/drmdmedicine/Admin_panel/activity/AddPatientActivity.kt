@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.Patient_data
+package com.sdsoft.drmdmedicine.Admin_panel.activity
 
 import android.app.Activity
 import android.app.Dialog
@@ -30,9 +30,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
-import com.sdsoft.drmdmedicine.Admin_panel.activity.AppointmentsActivity
-import com.sdsoft.drmdmedicine.Admin_panel.activity.PatientCheckUpActivity
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
@@ -430,6 +427,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
+                                mDbRef.child("AppointmentNumber").setValue(appointmentsNumber)
                                 progressBarDialog.dismiss()
                                 var i = Intent(this, AppointmentsActivity::class.java)
                                 startActivity(i)
@@ -481,10 +479,12 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                             Toast.LENGTH_SHORT
                                         )
                                             .show()
+                                        progressBarDialog.dismiss()
+                                        mDbRef.child("AppointmentNumber").setValue(appointmentsNumber)
                                         var i = Intent(this, AppointmentsActivity::class.java)
                                         startActivity(i)
                                         finish()
-                                        progressBarDialog.dismiss()
+
                                     }
                                 }.addOnFailureListener {
                                     Log.e("TAG", "fail: " + it.message)

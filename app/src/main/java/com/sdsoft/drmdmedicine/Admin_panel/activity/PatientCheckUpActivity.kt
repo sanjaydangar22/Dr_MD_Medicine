@@ -33,10 +33,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.AddPatientActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.ReportAdapter
-import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.report.ReportModelClass
-import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.report.ReportViewActivity
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.ReportModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.DiseaseListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientCheckUpAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.ModelClass
@@ -186,7 +184,6 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
 
 
         val diseaseList = ArrayList<ModelClass>()
-
         mDbRef.child("PatientList").child(patientUid!!)
             .child("PatientCheckUpDetails").child(currentDateToday!!).child("PatientDisease")
             .addValueEventListener(object : ValueEventListener {

@@ -50,8 +50,10 @@ class AdminHomeFragment : Fragment() {
                         var appointmentDate = data!!.timestamp
 
                         if (appointmentDate != formattedCurrentDate) {
+                            mDbRef.child("AppointmentNumber").setValue(0)
                             mDbRef.child("AppointmentList").removeValue()
                             mDbRef.child("AppointmentCompletedList").removeValue()
+
                         }
 
                     }

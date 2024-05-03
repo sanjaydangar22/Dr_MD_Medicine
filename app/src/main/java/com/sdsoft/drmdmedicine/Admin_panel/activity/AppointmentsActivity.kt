@@ -14,7 +14,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.sdsoft.drmdmedicine.Admin_panel.Patient_data.AddPatientActivity
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.AddAppointmentsListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
@@ -62,10 +61,27 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
             }
         })
 
+        mDbRef.child("AppointmentNumber").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val number = snapshot.value
+                if (number is Long) {
+                    appointmentsNumber = number.toInt()
+                    Log.e("TAG", "onDataChange: appointmentsNumber = $appointmentsNumber")
+                } else {
+                    Log.e("TAG", "onDataChange: AppointmentNumber is not a Long")
+                    // Handle the case where the data type of AppointmentNumber is not as expected
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("TAG", "onCancelled: Error fetching AppointmentNumber", error.toException())
+                // Handle the error appropriately
+            }
+        })
+
         binding.imgAddAppointment.setOnClickListener {
             addNewAppointmentDialog()
         }
-
         //        Appointment List adapter
         listType = "AppointmentList"
         adapter = AddAppointmentsListAdapter(this, listType!!) {
@@ -96,20 +112,7 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
                     } else if (appointmentList.isNotEmpty()) {
                         binding.linNoDataFound.visibility = View.GONE
                     }
-                    val sortedList = appointmentList.sortedBy { it.appointmentsNumber }
-                    val filteredList =
-                        sortedList.filter { it.appointmentsNumber in 1..appointmentList.size }
-                    // Check if the filteredList is not empty
-                    if (filteredList.isNotEmpty()) {
-                        // Find the last element based on appointmentsNumber
-                        val lastAppointment = filteredList.lastOrNull()
 
-                        // Now you can use the lastAppointment as needed
-                        appointmentsNumber = lastAppointment!!.appointmentsNumber
-
-                    } else {
-                        println("No appointments found in the specified range.")
-                    }
 
                     adapter.updateList(appointmentList)
                     progressBarDialog.dismiss()
@@ -216,6 +219,7 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
             // Increase appointmentsNumber by 1 when adding a new appointment
             dialog.dismiss()
             appointmentsNumber += 1
+
             //add new Appointment data
             var i = Intent(this, AddPatientActivity::class.java)
             i.putExtra("patientUid", it.patientUid)

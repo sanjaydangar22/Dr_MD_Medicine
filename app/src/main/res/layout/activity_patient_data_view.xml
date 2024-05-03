@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Admin_panel.Patient_data.PatientDataViewActivity">
+    tools:context=".Admin_panel.activity.PatientDataViewActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -187,7 +187,6 @@
                 </LinearLayout>
 
 
-
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -198,82 +197,203 @@
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:background="#C4C9CD" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvCheckUpDateList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--        no data found-->
     <LinearLayout
+        android:id="@+id/linNotSelectAnyDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:orientation="horizontal">
-        <!--Patient Report-->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cdReport"
-            android:layout_width="@dimen/_130sdp"
-            android:layout_height="@dimen/_120sdp"
-            android:layout_margin="@dimen/_5sdp"
-            app:cardCornerRadius="@dimen/_10sdp">
+        android:layout_marginTop="@dimen/_50sdp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
 
+        <ImageView
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:src="@drawable/medicine_icon"
+            app:tint="@color/sky_blue" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="@dimen/_130sdp"
-                    android:layout_height="@dimen/_90sdp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/report_item_image" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:background="#D8EDF1"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_2sdp"
-                        android:text="Reports"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!--Patient Medicine-->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cdMedicine"
-            android:layout_width="@dimen/_130sdp"
-            android:layout_height="@dimen/_120sdp"
-            android:layout_margin="@dimen/_5sdp"
-            app:cardCornerRadius="@dimen/_10sdp">
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="@dimen/_130sdp"
-                    android:layout_height="@dimen/_90sdp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/medicin_item_image1" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:background="#D8EDF1"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_2sdp"
-                        android:text="Medicine"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="Please Select any Date"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
     </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Patient Disease List-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_140sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginVertical="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/txtDiseaseTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#07689F"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Patient Disease List"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvDiseaseList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtDiseaseTitle"
+                    android:layout_marginTop="@dimen/_5sdp" />
+                <!--        no data found-->
+                <LinearLayout
+                    android:id="@+id/linDiseaseNoDataFound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:src="@drawable/medicine_icon"
+                        app:tint="@color/sky_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Data Not Found"
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!-- Patient Medicine List-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_140sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginVertical="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/txtMedicineTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#07689F"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Patient Medicine List"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvMedicineList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtMedicineTitle"
+                    android:layout_marginTop="@dimen/_5sdp" />
+                <!--        no data found-->
+                <LinearLayout
+                    android:id="@+id/linMedicineNoDataFound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:src="@drawable/medicine_icon"
+                        app:tint="@color/sky_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Data Not Found"
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <!-- Patient report Image List-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_140sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginVertical="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/txtReportTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#07689F"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Patient Report Image List"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+                <!--        no data found-->
+                <LinearLayout
+                    android:id="@+id/linReportNoDataFound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:src="@drawable/medicine_icon"
+                        app:tint="@color/sky_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Data Not Found"
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvReportImageList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtReportTitle"
+                    android:layout_marginTop="@dimen/_5sdp" />
+
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
 </LinearLayout>

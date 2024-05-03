@@ -1,4 +1,4 @@
-package com.sdsoft.drmdmedicine.Admin_panel.Patient_data.report
+package com.sdsoft.drmdmedicine.Admin_panel.model_class
 
 class ReportModelClass {
     var reportImage: String? = null

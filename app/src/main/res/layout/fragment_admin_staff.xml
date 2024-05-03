@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Admin_panel.fragment.AdminStaffFragment">
+
+
+    <!--   Create new StaffAccount-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cdNewStaffAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_30sdp"
+        android:elevation="@dimen/_10sdp"
+        app:cardBackgroundColor="@color/sky_blue"
+        app:cardCornerRadius="@dimen/_10sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_15sdp"
+            android:text="Create Staff Account"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/txtMedicineTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#07689F"
+        android:padding="@dimen/_5sdp"
+        android:text="Staff List"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold" />
+    <!--        no data found-->
+    <LinearLayout
+        android:id="@+id/linStaffNotFound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:src="@drawable/medicine_icon"
+            app:tint="@color/sky_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="Staff Not Found"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <!--    staff list-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvStaffList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

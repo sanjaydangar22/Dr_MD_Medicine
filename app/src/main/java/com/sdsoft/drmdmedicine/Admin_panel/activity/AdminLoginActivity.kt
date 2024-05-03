@@ -80,7 +80,7 @@ class AdminLoginActivity : BaseActivity(R.layout.activity_admin_login) {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful) {
 
-                        if (email == "admin@gmail.com") {
+                        if (email == "krishnaclinic@gmail.com") {
                             progressBarDialog.dismiss()
 
                             var myEdit: SharedPreferences.Editor =
