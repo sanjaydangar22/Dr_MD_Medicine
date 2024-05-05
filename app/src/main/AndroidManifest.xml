@@ -44,6 +44,9 @@
         android:theme="@style/Theme.DrMDMedicine"
         tools:targetApi="31">
         <activity
+            android:name=".Admin_panel.activity.PatientHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".Admin_panel.activity.CreateNewStaffActivity"
             android:exported="false" />
         <activity
@@ -83,7 +86,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Admin_panel.activity.AdminLoginActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Admin_panel.activity.AdminHomeActivity"
             android:exported="true"

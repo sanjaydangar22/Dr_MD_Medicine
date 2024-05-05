@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -48,14 +49,11 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
     var patientImagePath: Uri? = null
 
-    var imageUploadCompleted = 0
-    var selectedImage = 0
-
 
     var patientUid: String? = null
     var patientImage: String? = null
     var patientGender: String? = null
-    var timestamp: String? = null
+    var timestamp: String = ""
     var appointmentsNumber: Int = 0
 
 
@@ -80,10 +78,13 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
         addPatientBinding.imgBack.setOnClickListener {
             onBackPressed()
         }
+
+        patientImage = Drawable.createFromPath(R.drawable.user_icon.toString()).toString()
+
         if (intent != null && intent.hasExtra("itemUpdate")) {  // data update key access this class
 
             flag = 1
-            imageUploadCompleted = 1
+
 
             patientUid = intent.getStringExtra("patientUid")   // key set  variable
 
@@ -156,10 +157,10 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
         if (intent != null && intent.hasExtra("addNewAppointment")) {  // data update key access this class
 
             flag = 2
-            imageUploadCompleted = 1
+
 
             patientUid = intent.getStringExtra("patientUid")   // key set  variable
-            timestamp = intent.getStringExtra("timestamp")   // key set  variable
+            timestamp = intent.getStringExtra("timestamp").toString()   // key set  variable
             appointmentsNumber = intent.getIntExtra("appointmentsNumber", 0)   // key set  variable
 
 
@@ -233,7 +234,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
             flag = 3
 
-            timestamp = intent.getStringExtra("timestamp")   // key set  variable
+            timestamp = intent.getStringExtra("timestamp").toString()   // key set  variable
             appointmentsNumber = intent.getIntExtra("appointmentsNumber", 0)   // key set  variable
 
         }
@@ -241,7 +242,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
         if (intent != null && intent.hasExtra("itemUpdatePatientCheckUp")) {  // data update key access this class
 
             flag = 4
-            imageUploadCompleted = 1
+
 
             patientUid = intent.getStringExtra("patientUid")   // key set  variable
 
@@ -309,7 +310,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
         }
         addPatientBinding.imgAddPatientImage.setOnClickListener {
 
-            selectedImage = 1
+
             selectedImageDialog()
         }
 
@@ -331,49 +332,120 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
         addPatientBinding.cdSave.setOnClickListener {
 
-            if (imageUploadCompleted == 1) {
 
-                var patientImage = patientImage
-                var patientName = addPatientBinding.edtPatientName.text.toString()
-                var patientAge = addPatientBinding.edtPatientAge.text.toString()
-                var patientWeight = addPatientBinding.edtPatientWeight.text.toString()
-                var patientMobileNo = addPatientBinding.edtPatientMobileNo.text.toString()
-                var patientVillage = addPatientBinding.edtPatientVillage.text.toString()
+            var patientImage = patientImage
+            var patientName = addPatientBinding.edtPatientName.text.toString()
+            var patientAge = addPatientBinding.edtPatientAge.text.toString()
+            var patientWeight = addPatientBinding.edtPatientWeight.text.toString()
+            var patientMobileNo = addPatientBinding.edtPatientMobileNo.text.toString()
+            var patientVillage = addPatientBinding.edtPatientVillage.text.toString()
 
-                if (addPatientBinding.rgGender.checkedRadioButtonId == -1) {
+            if (addPatientBinding.rgGender.checkedRadioButtonId == -1) {
 
+            } else {
+                val selectId: Int = addPatientBinding.rgGender.checkedRadioButtonId
+                var selectedRadioButton: RadioButton = findViewById(selectId)
+                var text = selectedRadioButton.text.toString()
+
+                patientGender = if (text == "Male") {
+                    "Male"
+                } else if (text == "Female") {
+                    "Female"
                 } else {
-                    val selectId: Int = addPatientBinding.rgGender.checkedRadioButtonId
-                    var selectedRadioButton: RadioButton = findViewById(selectId)
-                    var text = selectedRadioButton.text.toString()
-
-                    patientGender = if (text == "Male") {
-                        "Male"
-                    } else if (text == "Female") {
-                        "Female"
-                    } else {
-                        "Other"
-                    }
-
+                    "Other"
                 }
 
-                if (patientName.isEmpty()) {
-                    Toast.makeText(this, "patient Name is empty", Toast.LENGTH_SHORT)
-                        .show()
-                } else if (patientAge.isEmpty()) {
-                    Toast.makeText(this, "patient Age is empty", Toast.LENGTH_SHORT).show()
-                } else if (patientWeight.isEmpty()) {
-                    Toast.makeText(this, "patient Weight is empty", Toast.LENGTH_SHORT).show()
-                } else if (patientMobileNo.isEmpty()) {
-                    Toast.makeText(this, "patient Mobile Number is empty", Toast.LENGTH_SHORT)
-                        .show()
-                } else if (patientVillage.isEmpty()) {
-                    Toast.makeText(this, "patient Village is empty", Toast.LENGTH_SHORT).show()
-                } else {
-                    if (flag == 1) {
-                        timestamp=""
-                        progressBarDialog.show()
-                        mDbRef.child("PatientList").child(patientUid!!).setValue(
+            }
+
+            if (flag == 1) {
+                timestamp = ""
+                progressBarDialog.show()
+                mDbRef.child("PatientList").child(patientUid!!).setValue(
+                    PatientModelClass(
+                        patientImage!!,
+                        patientName,
+                        patientAge,
+                        patientWeight,
+                        patientMobileNo,
+                        patientVillage,
+                        patientGender!!,
+                        patientUid!!,
+                        timestamp!!,
+                        appointmentsNumber
+                    )
+                ).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Record Save Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+
+                        var i = Intent(this, AdminHomeActivity::class.java)
+                        startActivity(i)
+                        progressBarDialog.dismiss()
+                    }
+                }.addOnFailureListener {
+                    Log.e("TAG", "fail: " + it.message)
+                    progressBarDialog.dismiss()
+
+                }
+            } else if (flag == 2) {
+                progressBarDialog.show()
+                mDbRef.child("AppointmentList").child(patientUid!!).setValue(
+                    PatientModelClass(
+                        patientImage!!,
+                        patientName,
+                        patientAge,
+                        patientWeight,
+                        patientMobileNo,
+                        patientVillage,
+                        patientGender!!,
+                        patientUid!!,
+                        timestamp!!,
+                        appointmentsNumber
+                    )
+                ).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Record Save Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        mDbRef.child("AppointmentNumber").setValue(appointmentsNumber)
+                        progressBarDialog.dismiss()
+                        var i = Intent(this, AppointmentsActivity::class.java)
+                        startActivity(i)
+                        finish()
+
+                    }
+                }.addOnFailureListener {
+                    Log.e("TAG", "fail: " + it.message)
+                    progressBarDialog.dismiss()
+
+                }
+            } else if (flag == 3) {
+
+                var patientUid = UUID.randomUUID().toString()
+                progressBarDialog.show()
+                mDbRef.child("PatientList").child(patientUid).setValue(
+                    PatientModelClass(
+                        patientImage!!,
+                        patientName,
+                        patientAge,
+                        patientWeight,
+                        patientMobileNo,
+                        patientVillage,
+                        patientGender!!,
+                        patientUid,
+                        timestamp!!,
+                        0
+                    )
+                ).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        mDbRef.child("AppointmentList").child(patientUid).setValue(
                             PatientModelClass(
                                 patientImage!!,
                                 patientName,
@@ -382,7 +454,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                 patientMobileNo,
                                 patientVillage,
                                 patientGender!!,
-                                patientUid!!,
+                                patientUid,
                                 timestamp!!,
                                 appointmentsNumber
                             )
@@ -394,41 +466,8 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
-
-                                var i = Intent(this, AdminHomeActivity::class.java)
-                                startActivity(i)
                                 progressBarDialog.dismiss()
-                            }
-                        }.addOnFailureListener {
-                            Log.e("TAG", "fail: " + it.message)
-                            progressBarDialog.dismiss()
-
-                        }
-                    } else if (flag == 2) {
-                        progressBarDialog.show()
-                        mDbRef.child("AppointmentList").child(patientUid!!).setValue(
-                            PatientModelClass(
-                                patientImage!!,
-                                patientName,
-                                patientAge,
-                                patientWeight,
-                                patientMobileNo,
-                                patientVillage,
-                                patientGender!!,
-                                patientUid!!,
-                                timestamp!!,
-                                appointmentsNumber
-                            )
-                        ).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                Toast.makeText(
-                                    this,
-                                    "Record Save Successfully",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
                                 mDbRef.child("AppointmentNumber").setValue(appointmentsNumber)
-                                progressBarDialog.dismiss()
                                 var i = Intent(this, AppointmentsActivity::class.java)
                                 startActivity(i)
                                 finish()
@@ -439,146 +478,89 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                             progressBarDialog.dismiss()
 
                         }
-                    } else if (flag == 3) {
 
-                        var patientUid = UUID.randomUUID().toString()
-                        progressBarDialog.show()
-                        mDbRef.child("PatientList").child(patientUid).setValue(
-                            PatientModelClass(
-                                patientImage!!,
-                                patientName,
-                                patientAge,
-                                patientWeight,
-                                patientMobileNo,
-                                patientVillage,
-                                patientGender!!,
-                                patientUid,
-                                timestamp!!,
-                                0
-                            )
-                        ).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                mDbRef.child("AppointmentList").child(patientUid).setValue(
-                                    PatientModelClass(
-                                        patientImage!!,
-                                        patientName,
-                                        patientAge,
-                                        patientWeight,
-                                        patientMobileNo,
-                                        patientVillage,
-                                        patientGender!!,
-                                        patientUid,
-                                        timestamp!!,
-                                        appointmentsNumber
-                                    )
-                                ).addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        Toast.makeText(
-                                            this,
-                                            "Record Save Successfully",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                            .show()
-                                        progressBarDialog.dismiss()
-                                        mDbRef.child("AppointmentNumber").setValue(appointmentsNumber)
-                                        var i = Intent(this, AppointmentsActivity::class.java)
-                                        startActivity(i)
-                                        finish()
-
-                                    }
-                                }.addOnFailureListener {
-                                    Log.e("TAG", "fail: " + it.message)
-                                    progressBarDialog.dismiss()
-
-                                }
-
-                            }
-                        }.addOnFailureListener {
-                            Log.e("TAG", "fail: " + it.message)
-                            progressBarDialog.dismiss()
-
-                        }
-
-
-                    } else if (flag == 4) {
-                        timestamp=""
-                        progressBarDialog.show()
-                        mDbRef.child("PatientList").child(patientUid!!).setValue(
-                            PatientModelClass(
-                                patientImage!!,
-                                patientName,
-                                patientAge,
-                                patientWeight,
-                                patientMobileNo,
-                                patientVillage,
-                                patientGender!!,
-                                patientUid!!,
-                                timestamp!!,
-                                appointmentsNumber
-                            )
-                        ).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                Toast.makeText(
-                                    this,
-                                    "Record Save Successfully",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-
-                                var i = Intent(this, PatientCheckUpActivity::class.java)
-                                i.putExtra("patientUid", patientUid)
-                                startActivity(i)
-                                progressBarDialog.dismiss()
-                            }
-                        }.addOnFailureListener {
-                            Log.e("TAG", "fail: " + it.message)
-                            progressBarDialog.dismiss()
-
-                        }
-                    } else {
-
-                        var patientUid = UUID.randomUUID().toString()
-                        progressBarDialog.show()
-                        mDbRef.child("PatientList").child(patientUid).setValue(
-                            PatientModelClass(
-                                patientImage!!,
-                                patientName,
-                                patientAge,
-                                patientWeight,
-                                patientMobileNo,
-                                patientVillage,
-                                patientGender!!,
-                                patientUid,
-                                timestamp!!,
-                                appointmentsNumber
-                            )
-                        ).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                Toast.makeText(
-                                    this,
-                                    "Record Save Successfully",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-
-                                var i = Intent(this, AdminHomeActivity::class.java)
-                                startActivity(i)
-                                progressBarDialog.dismiss()
-                            }
-                        }.addOnFailureListener {
-                            Log.e("TAG", "fail: " + it.message)
-                            progressBarDialog.dismiss()
-
-                        }
                     }
+                }.addOnFailureListener {
+                    Log.e("TAG", "fail: " + it.message)
+                    progressBarDialog.dismiss()
+
                 }
 
 
-            } else {
-                Toast.makeText(this, "First Image Upload", Toast.LENGTH_SHORT).show()
-            }
+            } else if (flag == 4) {
+                timestamp = ""
+                progressBarDialog.show()
+                mDbRef.child("PatientList").child(patientUid!!).setValue(
+                    PatientModelClass(
+                        patientImage!!,
+                        patientName,
+                        patientAge,
+                        patientWeight,
+                        patientMobileNo,
+                        patientVillage,
+                        patientGender!!,
+                        patientUid!!,
+                        timestamp!!,
+                        appointmentsNumber
+                    )
+                ).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Record Save Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
 
+                        var i = Intent(this, PatientCheckUpActivity::class.java)
+                        i.putExtra("patientUid", patientUid)
+                        startActivity(i)
+                        progressBarDialog.dismiss()
+                    }
+                }.addOnFailureListener {
+                    Log.e("TAG", "fail: " + it.message)
+                    progressBarDialog.dismiss()
+
+                }
+            } else {
+
+                var patientUid = UUID.randomUUID().toString()
+                progressBarDialog.show()
+                mDbRef.child("PatientList").child(patientUid).setValue(
+                    PatientModelClass(
+                        patientImage!!,
+                        patientName,
+                        patientAge,
+                        patientWeight,
+                        patientMobileNo,
+                        patientVillage,
+                        patientGender!!,
+                        patientUid,
+                        timestamp!!,
+                        appointmentsNumber
+                    )
+                ).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Record Save Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+
+                        var i = Intent(this, AdminHomeActivity::class.java)
+                        startActivity(i)
+                        progressBarDialog.dismiss()
+                    }
+                }.addOnFailureListener {
+                    Log.e("TAG", "fail: " + it.message)
+                    progressBarDialog.dismiss()
+
+                }
+            }
         }
+
+
     }
 
 
@@ -696,7 +678,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                     // Dismiss dialog
                     progressDialog.dismiss()
                     Toast.makeText(this, "Image Uploaded!!", Toast.LENGTH_SHORT).show()
-                    imageUploadCompleted = 1
+
                 }
                 .addOnFailureListener { e -> // Error, Image not uploaded
                     progressDialog.dismiss()

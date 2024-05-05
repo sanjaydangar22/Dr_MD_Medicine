@@ -34,7 +34,7 @@
     <!--Patient Detail-->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_130sdp"
+        android:layout_height="@dimen/_100sdp"
         android:layout_margin="@dimen/_10sdp"
         app:cardBackgroundColor="#E1F6FA"
         app:cardCornerRadius="@dimen/_10sdp">
@@ -50,8 +50,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgPatientImage"
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:padding="@dimen/_2sdp"
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_20sdp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp"
+                    android:textSize="@dimen/_12ssp"
                     android:textStyle="bold"
                     tools:text="Patient Name" />
                 <!--Patient Mobile number-->
@@ -87,7 +87,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Mo :-"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="@dimen/_10ssp" />
 
                     <TextView
                         android:id="@+id/txtPatientMobileNo"
@@ -95,6 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_35sdp"
                         android:textAlignment="center"
+                        android:textSize="@dimen/_10ssp"
                         tools:text="1234567890" />
                 </LinearLayout>
 
@@ -109,7 +111,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Village :-"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="@dimen/_10ssp" />
 
                     <TextView
                         android:id="@+id/txtPatientVillage"
@@ -117,53 +120,64 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_18sdp"
                         android:textAlignment="center"
+                        android:textSize="@dimen/_10ssp"
                         tools:text="Maliya" />
                 </LinearLayout>
 
-                <!--Patient Age-->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_20sdp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Age :-"
-                        android:textAlignment="center" />
 
-                    <TextView
-                        android:id="@+id/txtPatientAge"
-                        android:layout_width="match_parent"
+                    <!--Patient Age-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_33sdp"
-                        android:textAlignment="center"
-                        tools:text="22" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Age :-"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/_10ssp" />
+
+                        <TextView
+                            android:id="@+id/txtPatientAge"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_33sdp"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/_10ssp"
+                            tools:text="22" />
+                    </LinearLayout>
+
+                    <!--Patient Weight-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Weight :-"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/_10ssp" />
+
+                        <TextView
+                            android:id="@+id/txtPatientWeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_18sdp"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/_10ssp"
+                            tools:text="43" />
+                    </LinearLayout>
                 </LinearLayout>
-
-                <!--Patient Weight-->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Weight :-"
-                        android:textAlignment="center" />
-
-                    <TextView
-                        android:id="@+id/txtPatientWeight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_18sdp"
-                        android:textAlignment="center"
-                        tools:text="43" />
-                </LinearLayout>
-
                 <!--Patient Gender-->
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -175,7 +189,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Gender :-"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="@dimen/_10ssp" />
 
                     <TextView
                         android:id="@+id/txtPatientGender"
@@ -183,6 +198,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_18sdp"
                         android:textAlignment="center"
+                        android:textSize="@dimen/_10ssp"
                         tools:text="Male" />
                 </LinearLayout>
 
@@ -251,7 +267,7 @@
                     android:layout_height="wrap_content"
                     android:background="#07689F"
                     android:padding="@dimen/_5sdp"
-                    android:text="Patient Disease List"
+                    android:text="Patient Complain"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
@@ -286,10 +302,27 @@
                         android:textSize="@dimen/_10ssp"
                         android:textStyle="bold" />
                 </LinearLayout>
+                <!--patient disease add-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cdAddDisease"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="@dimen/_10sdp"
+                    app:cardBackgroundColor="#76C0FB"
+                    app:cardCornerRadius="@dimen/_10sdp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:text="Add Disease"
+                        android:textSize="@dimen/_10ssp" />
+                </androidx.cardview.widget.CardView>
             </RelativeLayout>
 
-            <!-- Patient Medicine List-->
+            <!-- Patient Medicine-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_140sdp"
@@ -302,7 +335,7 @@
                     android:layout_height="wrap_content"
                     android:background="#07689F"
                     android:padding="@dimen/_5sdp"
-                    android:text="Patient Medicine List"
+                    android:text="Patient Medicine"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
@@ -338,7 +371,27 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <!--patient Medicine add-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cdAddMedicine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="#76C0FB"
+                    app:cardCornerRadius="@dimen/_10sdp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:text="Add Medicine"
+                        android:textSize="@dimen/_10ssp" />
+                </androidx.cardview.widget.CardView>
             </RelativeLayout>
 
             <!-- Patient report Image List-->
@@ -354,7 +407,7 @@
                     android:layout_height="wrap_content"
                     android:background="#07689F"
                     android:padding="@dimen/_5sdp"
-                    android:text="Patient Report Image List"
+                    android:text="Patient Report Image"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
                 <!--        no data found-->
@@ -390,7 +443,27 @@
                     android:layout_below="@id/txtReportTitle"
                     android:layout_marginTop="@dimen/_5sdp" />
 
+                <!--patient Report Image add-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cdAddReportImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="#76C0FB"
+                    app:cardCornerRadius="@dimen/_10sdp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:text="Add Report Image"
+                        android:textSize="@dimen/_10ssp" />
+                </androidx.cardview.widget.CardView>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

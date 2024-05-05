@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener
 import com.sdsoft.drmdmedicine.Admin_panel.Disease.DiseaseActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AppointmentsActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.CompletedAppointmentsActivity
+import com.sdsoft.drmdmedicine.Admin_panel.activity.PatientHistoryActivity
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.databinding.FragmentAdminHomeBinding
 import java.text.SimpleDateFormat
@@ -27,7 +28,7 @@ class AdminHomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAdminHomeBinding.inflate(layoutInflater, container, false)
         mDbRef = FirebaseDatabase.getInstance().reference
         initView()
@@ -76,7 +77,10 @@ class AdminHomeFragment : Fragment() {
             var i = Intent(requireContext(), DiseaseActivity::class.java)
             startActivity(i)
         }
-
+        binding.cdPatientHistory.setOnClickListener {
+            var i = Intent(requireContext(), PatientHistoryActivity::class.java)
+            startActivity(i)
+        }
     }
 
 

@@ -66,15 +66,15 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
                 val number = snapshot.value
                 if (number is Long) {
                     appointmentsNumber = number.toInt()
-                    Log.e("TAG", "onDataChange: appointmentsNumber = $appointmentsNumber")
+
                 } else {
-                    Log.e("TAG", "onDataChange: AppointmentNumber is not a Long")
+
                     // Handle the case where the data type of AppointmentNumber is not as expected
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG", "onCancelled: Error fetching AppointmentNumber", error.toException())
+
                 // Handle the error appropriately
             }
         })

@@ -17,7 +17,7 @@
             android:id="@+id/linPatient"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/_5sdp">
+            android:padding="@dimen/_3sdp">
 
             <!--    Patient image-->
             <LinearLayout
@@ -26,8 +26,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgPatientImage"
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_5sdp"
                     android:padding="@dimen/_2sdp"
@@ -47,10 +47,10 @@
                     android:id="@+id/txtPatientName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp"
+                    android:textSize="@dimen/_12ssp"
                     android:textStyle="bold"
                     tools:text="Patient Name" />
 
@@ -59,18 +59,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Mobile No:-"
+                        android:textSize="@dimen/_10ssp"
                         android:textAlignment="center"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtPatientMobileNo"
+                        android:textSize="@dimen/_10ssp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_15sdp"
@@ -91,6 +92,7 @@
                         android:layout_height="wrap_content"
                         android:text="Village :-"
                         android:textAlignment="center"
+                        android:textSize="@dimen/_10ssp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -98,6 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_30sdp"
+                        android:textSize="@dimen/_10ssp"
                         android:textAlignment="center"
                         android:textStyle="bold"
                         tools:text="Maliya" />
@@ -115,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:text="Age :-"
                         android:textAlignment="center"
+                        android:textSize="@dimen/_10ssp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -122,6 +126,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_45sdp"
+                        android:textSize="@dimen/_10ssp"
                         android:textAlignment="center"
                         android:textStyle="bold"
                         tools:text="22" />
@@ -147,8 +152,8 @@
 
             <ImageView
                 android:id="@+id/imgEdit"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_edit_icon" />
 
             <View
@@ -159,8 +164,8 @@
 
             <ImageView
                 android:id="@+id/imgDelete"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_delete_icon"
                 app:tint="@color/black" />
         </LinearLayout>

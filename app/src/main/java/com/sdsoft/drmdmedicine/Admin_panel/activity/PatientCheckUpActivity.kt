@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -733,6 +734,8 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
     }
 
     private fun dialogReportImageFun() {
+        reportImage = Drawable.createFromPath(R.drawable.ic_image.toString()).toString()
+
         reportImageDialog = Dialog(this)
         reportImageDialogBinding = DialogAddPatientReportImageBinding.inflate(layoutInflater)
         reportImageDialog.setContentView(reportImageDialogBinding.root)
@@ -760,56 +763,40 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
 
         reportImageDialogBinding.cdSave.setOnClickListener {
 
+            var reportImage = reportImage
+            var reportName = reportImageDialogBinding.edtReportName.text.toString()
 
-            if (imageUploadCompleted == 1) {
-
-                var reportImage = reportImage
-                var reportName = reportImageDialogBinding.edtReportName.text.toString()
-
-
-
-                if (reportName.isEmpty()) {
-                    Toast.makeText(this, "Report Name is empty", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    progressBarDialog.show()
-                    var reportUid = UUID.randomUUID().toString()
-                    progressBarDialog.show()
-                    mDbRef.child("PatientList").child(patientUid!!)
-                        .child("PatientCheckUpDetails").child(currentDateToday!!)
-                        .child("PatientReportImage").child(reportUid).setValue(
-                            ReportModelClass(
-                                reportImage!!,
-                                reportName,
-                                reportUid
-                            )
-                        ).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                Toast.makeText(
-                                    this,
-                                    "Record Save Successfully",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                imageAndNameSaveCompleted = 1
-                                progressBarDialog.dismiss()
-                                reportImageDialog.dismiss()
+            progressBarDialog.show()
+            var reportUid = UUID.randomUUID().toString()
+            progressBarDialog.show()
+            mDbRef.child("PatientList").child(patientUid!!)
+                .child("PatientCheckUpDetails").child(currentDateToday!!)
+                .child("PatientReportImage").child(reportUid).setValue(
+                    ReportModelClass(
+                        reportImage!!,
+                        reportName,
+                        reportUid
+                    )
+                ).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Record Save Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        imageAndNameSaveCompleted = 1
+                        progressBarDialog.dismiss()
+                        reportImageDialog.dismiss()
 
 
-                            }
-                        }.addOnFailureListener {
-                            Log.e("TAG", "fail: " + it.message)
-                            progressBarDialog.dismiss()
-                            reportImageDialog.dismiss()
-
-                        }
+                    }
+                }.addOnFailureListener {
+                    Log.e("TAG", "fail: " + it.message)
+                    progressBarDialog.dismiss()
+                    reportImageDialog.dismiss()
 
                 }
-
-
-            } else {
-                Toast.makeText(this, "First Image Upload", Toast.LENGTH_SHORT).show()
-            }
 
         }
 
@@ -1040,7 +1027,34 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
 
                                 }
                             }.addOnFailureListener {
-                                Log.e("TAG", "fail: " + it.message)
+
+                                progressBarDialog.dismiss()
+
+                            }
+
+                            mDbRef.child("PatientHistoryData").child(currentDateToday!!)
+                                .child(patientUid).setValue(
+                                PatientModelClass(
+                                    patientImage,
+                                    patientName,
+                                    patientAge,
+                                    patientWeight,
+                                    patientMobileNo,
+                                    patientVillage,
+                                    patientGender,
+                                    patientUid,
+                                    timestamp,
+                                    appointmentsNumber
+                                )
+                            ).addOnCompleteListener {
+                                if (it.isSuccessful) {
+
+                                    progressBarDialog.dismiss()
+                                    finish()
+
+                                }
+                            }.addOnFailureListener {
+
                                 progressBarDialog.dismiss()
 
                             }
@@ -1060,6 +1074,7 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
                 }
 
             })
+
     }
 
     private fun removePatientAppointment() {

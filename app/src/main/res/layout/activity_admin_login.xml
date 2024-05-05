@@ -109,6 +109,17 @@
                 app:tint="@color/black" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/txtForgotPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginHorizontal="@dimen/_25sdp"
+            android:layout_marginVertical="@dimen/_5sdp"
+            android:text="Forgot Password?. Recover"
+            android:textColor="#BD0505"
+            android:textStyle="bold" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/btnLogin"
             android:layout_width="wrap_content"

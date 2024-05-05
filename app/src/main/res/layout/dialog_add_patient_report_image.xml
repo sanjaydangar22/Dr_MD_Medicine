@@ -43,150 +43,163 @@
                     android:src="@drawable/ic_close_icon" />
             </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginVertical="@dimen/_5sdp"
-                android:hint="Report Name">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtReportName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                app:cardCornerRadius="@dimen/_10sdp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_10sdp">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/_5sdp"
-                        android:text="Report Image"
-                        android:textStyle="bold" />
 
-                    <RelativeLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_marginVertical="@dimen/_5sdp"
+                        android:hint="Report Name">
 
-                        <ImageView
-                            android:id="@+id/imgReportImage"
-                            android:layout_width="@dimen/_250sdp"
-                            android:layout_height="@dimen/_250sdp"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_image" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtReportName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        app:cardCornerRadius="@dimen/_10sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_10sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="@dimen/_5sdp"
+                                android:text="Report Image"
+                                android:textStyle="bold" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/imgReportImage"
+                                    android:layout_width="@dimen/_250sdp"
+                                    android:layout_height="@dimen/_250sdp"
+                                    android:layout_centerHorizontal="true"
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/ic_image" />
 
 
-                    </RelativeLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/_5sdp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/_5sdp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cdAddImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    app:cardBackgroundColor="#76C0FB"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cdAddImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            app:cardBackgroundColor="#76C0FB"
+                            app:cardCornerRadius="@dimen/_10sdp">
 
-                    <TextView
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:text="Add Image" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cdUploadImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            app:cardBackgroundColor="#76C0FB"
+                            app:cardCornerRadius="@dimen/_10sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:text="Upload Image" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cdSave"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        app:cardBackgroundColor="#359FF4"
+                        app:cardCornerRadius="@dimen/_10sdp">
+
+                        <TextView
+                            android:id="@+id/txtSave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_20sdp"
+                            android:layout_marginVertical="@dimen/_10sdp"
+                            android:text="Save"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_15ssp"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cdDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnSubmit"
+                        android:layout_centerHorizontal="true"
                         android:layout_margin="@dimen/_10sdp"
-                        android:text="Add Image" />
-                </androidx.cardview.widget.CardView>
+                        android:visibility="gone"
+                        app:cardBackgroundColor="#FB9B94"
+                        app:cardCornerRadius="@dimen/_10sdp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cdUploadImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    app:cardBackgroundColor="#76C0FB"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_10sdp"
-                        android:text="Upload Image" />
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:layout_marginHorizontal="@dimen/_5sdp"
+                                android:src="@drawable/ic_delete_icon" />
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/_5sdp"
+                                android:layout_marginVertical="@dimen/_10sdp"
+                                android:text="Delete Item"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cdSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                app:cardBackgroundColor="#359FF4"
-                app:cardCornerRadius="@dimen/_10sdp">
-
-                <TextView
-                    android:id="@+id/txtSave"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_20sdp"
-                    android:layout_marginVertical="@dimen/_10sdp"
-                    android:text="Save"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15ssp"
-                    android:textStyle="bold" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cdDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnSubmit"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="@dimen/_10sdp"
-                android:visibility="gone"
-                app:cardBackgroundColor="#FB9B94"
-                app:cardCornerRadius="@dimen/_10sdp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginHorizontal="@dimen/_5sdp"
-                        android:src="@drawable/ic_delete_icon" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_5sdp"
-                        android:layout_marginVertical="@dimen/_10sdp"
-                        android:text="Delete Item"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </ScrollView>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
