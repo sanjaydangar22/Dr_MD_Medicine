@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
@@ -23,17 +24,18 @@ abstract class BaseActivity(view: Int) : AppCompatActivity() {
 
     private var layoutView = view
     lateinit var progressBarDialog: ProgressBarDialog
-    lateinit var doctorsharedPreferences: SharedPreferences
+    lateinit var loginSharedPreferences: SharedPreferences
 
     lateinit var mDbRef: DatabaseReference
+    lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutView)
         mDbRef = FirebaseDatabase.getInstance().reference
         progressBarDialog = ProgressBarDialog(this)
 
-        doctorsharedPreferences =
-            getSharedPreferences("DoctorSharePref", AppCompatActivity.MODE_PRIVATE)
+        loginSharedPreferences =
+            getSharedPreferences("LoginSharePref", AppCompatActivity.MODE_PRIVATE)
 
         permissionFun()
     }

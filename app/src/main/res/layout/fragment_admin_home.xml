@@ -32,7 +32,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!--    Appointments-->
+    <!--    Appointments complete-->
     <androidx.cardview.widget.CardView
         android:id="@+id/cdAppointmentsCompleted"
         android:layout_width="match_parent"

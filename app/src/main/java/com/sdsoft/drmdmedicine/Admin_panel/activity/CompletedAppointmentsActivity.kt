@@ -2,9 +2,13 @@ package com.sdsoft.drmdmedicine.Admin_panel.activity
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -15,12 +19,13 @@ import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityCompletedAppointmentsBinding
+import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
 
 class CompletedAppointmentsActivity : BaseActivity(R.layout.activity_completed_appointments) {
     lateinit var binding: ActivityCompletedAppointmentsBinding
     lateinit var dialog: Dialog
     lateinit var adapter: AddAppointmentsListAdapter
-
+    var userType: String? = null
     var appointmentsNumber: Int = 0
     var listType: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +33,7 @@ class CompletedAppointmentsActivity : BaseActivity(R.layout.activity_completed_a
         binding = ActivityCompletedAppointmentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mDbRef = FirebaseDatabase.getInstance().reference
+        userType = intent.getStringExtra("userType")
         initView()
     }
 
@@ -55,12 +61,17 @@ class CompletedAppointmentsActivity : BaseActivity(R.layout.activity_completed_a
 
         //        Appointment List adapter
         listType = "AppointmentCompletedList"
-        adapter = AddAppointmentsListAdapter(this, listType!!) {
-            var i = Intent(this, PatientCheckUpActivity::class.java)
-            i.putExtra("patientUid", it.patientUid)
-            startActivity(i)
-            finish()
-        }
+        adapter = AddAppointmentsListAdapter(this, listType!!, {
+            if (userType == "Doctor") {
+                var i = Intent(this, PatientCheckUpActivity::class.java)
+                i.putExtra("patientUid", it.patientUid)
+                startActivity(i)
+                finish()
+            }
+        },{
+            //delete data
+            deleteRecordFromDatabase(it.patientUid!!)
+        })
         var manger = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.rcvAppointmentsList.layoutManager = manger
@@ -95,7 +106,7 @@ class CompletedAppointmentsActivity : BaseActivity(R.layout.activity_completed_a
                         appointmentsNumber = lastAppointment!!.appointmentsNumber
 
                     } else {
-                        println("No appointments found in the specified range.")
+
                     }
 
                     adapter.updateList(appointmentList)
@@ -107,6 +118,50 @@ class CompletedAppointmentsActivity : BaseActivity(R.layout.activity_completed_a
 
             })
 
+
+    }
+
+    private fun deleteRecordFromDatabase(patientUid: String) {
+
+        var deleteDialog = Dialog(this)
+
+        var dialogBinding = DeleteDialogBinding.inflate(layoutInflater)
+        deleteDialog.setContentView(dialogBinding.root)
+
+        dialogBinding.btnCanselDelete.setOnClickListener {
+            deleteDialog.dismiss()
+            Toast.makeText(this, "Cansel", Toast.LENGTH_SHORT).show()
+        }
+        dialogBinding.btnDelete.setOnClickListener {
+            mDbRef.child("AppointmentCompletedList").child(patientUid)
+                .removeValue()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+
+                        Toast.makeText(
+                            this,
+                            "Record Deleted Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        progressBarDialog.dismiss()
+
+                    }
+                }.addOnFailureListener {
+
+                    Toast.makeText(this, "fail", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            deleteDialog.dismiss()
+        }
+
+        deleteDialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        );
+        deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        deleteDialog.show()
 
     }
 

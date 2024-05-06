@@ -138,10 +138,7 @@ class MedicineFragment : Fragment() {
                     medicineList.clear()
                     for (i in snapshot.children) {
                         var data = i.getValue(ModelClass::class.java)
-                        Log.e(
-                            "TAG",
-                            "onDataChange: " + data?.name + data?.uid
-                        )
+
                         data?.let { it1 -> medicineList.add(it1) }
                     }
 

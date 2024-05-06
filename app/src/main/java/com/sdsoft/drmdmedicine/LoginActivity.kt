@@ -1,38 +1,29 @@
-package com.sdsoft.drmdmedicine.Admin_panel.activity
+package com.sdsoft.drmdmedicine
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import android.text.InputType
 import android.text.method.PasswordTransformationMethod
-import android.view.Gravity
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.sdsoft.drmdmedicine.BaseActivity
-import com.sdsoft.drmdmedicine.ProgressBarDialog
-import com.sdsoft.drmdmedicine.R
-import com.sdsoft.drmdmedicine.databinding.ActivityAdminLoginBinding
+import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
+import com.sdsoft.drmdmedicine.databinding.ActivityLoginBinding
 import com.sdsoft.drmdmedicine.databinding.DialogRecoverPasswordBinding
-import com.sdsoft.drmdmedicine.databinding.ImageSelctedDialogBinding
+import com.sdsoft.drmdmedicine.staff_panel.StaffHomeActivity
 
-class AdminLoginActivity : BaseActivity(R.layout.activity_admin_login) {
-    lateinit var adminLoginBinding: ActivityAdminLoginBinding
-    lateinit var auth: FirebaseAuth
+class LoginActivity : BaseActivity(R.layout.activity_login) {
+    lateinit var adminLoginBinding: ActivityLoginBinding
+
     private var isPasswordVisible = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adminLoginBinding = ActivityAdminLoginBinding.inflate(layoutInflater)
+        adminLoginBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(adminLoginBinding.root)
         auth = Firebase.auth
         progressBarDialog = ProgressBarDialog(this)
@@ -96,7 +87,7 @@ class AdminLoginActivity : BaseActivity(R.layout.activity_admin_login) {
                             progressBarDialog.dismiss()
 
                             var myEdit: SharedPreferences.Editor =
-                                doctorsharedPreferences.edit()
+                                loginSharedPreferences.edit()
                             myEdit.putBoolean("isLogin", true)
                             myEdit.putString("email", email)
                             myEdit.commit()
@@ -107,7 +98,16 @@ class AdminLoginActivity : BaseActivity(R.layout.activity_admin_login) {
                             finish()
                         } else {
                             progressBarDialog.dismiss()
-                            Toast.makeText(this, "You are not Doctor", Toast.LENGTH_SHORT).show()
+                            var myEdit: SharedPreferences.Editor =
+                                loginSharedPreferences.edit()
+                            myEdit.putBoolean("isLogin", true)
+                            myEdit.putString("email", email)
+                            myEdit.commit()
+
+                            Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, StaffHomeActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }
 
                     }
@@ -124,7 +124,7 @@ class AdminLoginActivity : BaseActivity(R.layout.activity_admin_login) {
         }
     }
 
-    fun passwordRecoverDialog(){
+    fun passwordRecoverDialog() {
         val dialog = Dialog(this)
         val dialogBinding: DialogRecoverPasswordBinding =
             DialogRecoverPasswordBinding.inflate(
@@ -151,6 +151,7 @@ class AdminLoginActivity : BaseActivity(R.layout.activity_admin_login) {
         dialog.setCancelable(false)
         dialog.show()
     }
+
     private fun beginRecovery(email: String) {
         auth.sendPasswordResetEmail(email).addOnCompleteListener {
             if (it.isSuccessful) {

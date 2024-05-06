@@ -22,7 +22,6 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -44,7 +43,6 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
     lateinit var addPatientBinding: ActivityAddPatientBinding
 
-    private lateinit var auth: FirebaseAuth
     lateinit var storageReference: StorageReference
 
     var patientImagePath: Uri? = null
@@ -87,9 +85,6 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
 
             patientUid = intent.getStringExtra("patientUid")   // key set  variable
-
-            Log.e("TAG", "patientUid: " + patientUid)
-
 
             mDbRef.child("PatientList").child(patientUid!!)
                 .addValueEventListener(object : ValueEventListener {
@@ -370,7 +365,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                         patientVillage,
                         patientGender!!,
                         patientUid!!,
-                        timestamp!!,
+                        timestamp,
                         appointmentsNumber
                     )
                 ).addOnCompleteListener {
@@ -387,7 +382,6 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                         progressBarDialog.dismiss()
                     }
                 }.addOnFailureListener {
-                    Log.e("TAG", "fail: " + it.message)
                     progressBarDialog.dismiss()
 
                 }
@@ -422,7 +416,6 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
                     }
                 }.addOnFailureListener {
-                    Log.e("TAG", "fail: " + it.message)
                     progressBarDialog.dismiss()
 
                 }
@@ -474,14 +467,12 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
                             }
                         }.addOnFailureListener {
-                            Log.e("TAG", "fail: " + it.message)
                             progressBarDialog.dismiss()
 
                         }
 
                     }
                 }.addOnFailureListener {
-                    Log.e("TAG", "fail: " + it.message)
                     progressBarDialog.dismiss()
 
                 }
@@ -518,7 +509,6 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                         progressBarDialog.dismiss()
                     }
                 }.addOnFailureListener {
-                    Log.e("TAG", "fail: " + it.message)
                     progressBarDialog.dismiss()
 
                 }
@@ -536,7 +526,7 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                         patientVillage,
                         patientGender!!,
                         patientUid,
-                        timestamp!!,
+                        timestamp,
                         appointmentsNumber
                     )
                 ).addOnCompleteListener {
@@ -553,7 +543,6 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                         progressBarDialog.dismiss()
                     }
                 }.addOnFailureListener {
-                    Log.e("TAG", "fail: " + it.message)
                     progressBarDialog.dismiss()
 
                 }
@@ -612,7 +601,6 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
 
 //
                 patientImagePath = getImageUri(applicationContext, imageBitmap!!)
-                Log.e("TAG", "patientImagePath:  $patientImagePath")
 
                 addPatientBinding.imgPatientImage.setImageBitmap(imageBitmap)
 
@@ -671,7 +659,6 @@ class AddPatientActivity : BaseActivity(R.layout.activity_add_patient) {
                 ref.downloadUrl.addOnSuccessListener {
 
                     patientImage = it.toString()
-                    Log.e("TAG", "uploadImage: " + patientImagePath)
                 }
             }
                 .addOnSuccessListener { // Image uploaded successfully

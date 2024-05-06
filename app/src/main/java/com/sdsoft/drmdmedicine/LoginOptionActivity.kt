@@ -1,10 +1,8 @@
 package com.sdsoft.drmdmedicine
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
-import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminLoginActivity
 import com.sdsoft.drmdmedicine.databinding.ActivityLoginOptionBinding
 
 class LoginOptionActivity : BaseActivity(R.layout.activity_login_option) {
@@ -25,7 +23,12 @@ class LoginOptionActivity : BaseActivity(R.layout.activity_login_option) {
 
     private fun initView() {
         binding.relDoctorLogin.setOnClickListener{
-            var i=Intent(this,AdminLoginActivity::class.java)
+            var i=Intent(this, LoginActivity::class.java)
+            startActivity(i)
+            finish()
+        }
+        binding.relStaffLogin.setOnClickListener{
+            var i=Intent(this, LoginActivity::class.java)
             startActivity(i)
             finish()
         }

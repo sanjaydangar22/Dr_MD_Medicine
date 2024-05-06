@@ -118,10 +118,7 @@ class PatientListFragment : Fragment() {
                     patientList.clear()
                     for (i in snapshot.children) {
                         var data = i.getValue(PatientModelClass::class.java)
-                        Log.e(
-                            "TAG",
-                            "onDataChange: " + data?.patientName + data?.patientAge
-                        )
+
                         data?.let { it1 -> patientList.add(it1) }
                     }
 

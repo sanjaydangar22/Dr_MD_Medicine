@@ -15,7 +15,8 @@ import com.sdsoft.drmdmedicine.R
 class AddAppointmentsListAdapter(
     var context: Context,
     var listType: String,
-    var itemClick: (PatientModelClass) -> Unit
+    var itemClick: (PatientModelClass) -> Unit,
+    var delete: (PatientModelClass) -> Unit
 ) : RecyclerView.Adapter<AddAppointmentsListAdapter.MyViewHolder>() {
 
     var patientList = ArrayList<PatientModelClass>()
@@ -29,6 +30,8 @@ class AddAppointmentsListAdapter(
         var linPatient: LinearLayout = itemView.findViewById(R.id.linPatient)
         var linAppointmentNo: LinearLayout = itemView.findViewById(R.id.linAppointmentNo)
         var txtAppointmentsNo: TextView = itemView.findViewById(R.id.txtAppointmentsNo)
+        var linEditTool: LinearLayout = itemView.findViewById(R.id.linEditTool)
+        var imgDelete: ImageView = itemView.findViewById(R.id.imgDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -62,32 +65,45 @@ class AddAppointmentsListAdapter(
         } else {
             holder.linAppointmentNo.visibility = View.GONE
         }
-    }
-    fun updateList(updatedList: ArrayList<PatientModelClass>) {
-        this.patientList = if (listType == "AppointmentList" || listType == "AppointmentCompletedList") {
-            // Group patients by their appointmentsNumber
-            val groupedByAppointmentsNumber = updatedList.groupBy { it.appointmentsNumber }
 
-            // Filter out patients with appointmentsNumber 1 if they have other appointments
-            val filteredList = groupedByAppointmentsNumber.flatMap { (_, patients) ->
-                if (patients.any { it.appointmentsNumber > 1 }) {
-                    // If a patient has appointments other than 1, exclude the appointmentNumber 1 from the list
-                    patients.filter { it.appointmentsNumber != 1 }
-                } else {
-                    // If a patient only has appointmentNumber 1, include it in the list
-                    patients
-                }
-            }
 
-            filteredList as ArrayList<PatientModelClass>
+        if (listType == "patientList") {
+            holder.linEditTool.visibility = View.GONE
+
         } else {
-            updatedList
+            holder.linEditTool.visibility= View.VISIBLE
         }
+
+        holder.imgDelete.setOnClickListener {
+            delete.invoke(patientList[position])
+        }
+    }
+
+    fun updateList(updatedList: ArrayList<PatientModelClass>) {
+        this.patientList =
+            if (listType == "AppointmentList" || listType == "AppointmentCompletedList") {
+                // Group patients by their appointmentsNumber
+                val groupedByAppointmentsNumber = updatedList.groupBy { it.appointmentsNumber }
+
+                // Filter out patients with appointmentsNumber 1 if they have other appointments
+                val filteredList = groupedByAppointmentsNumber.flatMap { (_, patients) ->
+                    if (patients.any { it.appointmentsNumber > 1 }) {
+                        // If a patient has appointments other than 1, exclude the appointmentNumber 1 from the list
+                        patients.filter { it.appointmentsNumber != 1 }
+                    } else {
+                        // If a patient only has appointmentNumber 1, include it in the list
+                        patients
+                    }
+                }
+
+                filteredList as ArrayList<PatientModelClass>
+            } else {
+                updatedList
+            }
 
         // Notify any observers that the dataset has changed
         notifyDataSetChanged()
     }
-
 
 
 }

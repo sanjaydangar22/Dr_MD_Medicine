@@ -1,38 +1,39 @@
 package com.sdsoft.drmdmedicine.Admin_panel.activity
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.StorageReference
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.AddAppointmentsListAdapter
-import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityPatientHistoryBinding
+import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
-    lateinit var  binding:ActivityPatientHistoryBinding
+    lateinit var binding: ActivityPatientHistoryBinding
     var patientList = ArrayList<PatientModelClass>()
     private var selectedDate: String? = null
     lateinit var adapter: AddAppointmentsListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityPatientHistoryBinding.inflate(layoutInflater)
+        binding = ActivityPatientHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mDbRef = FirebaseDatabase.getInstance().reference
         progressBarDialog = ProgressBarDialog(this)
@@ -40,6 +41,7 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
         currentDateGet()
         initView()
     }
+
     private fun currentDateGet() {
         // Set up date format
         val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -69,7 +71,7 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
 
                     // Set the formatted date in the TextView
                     binding.txtDate.text = formattedDate
-                    selectedDate=formattedDate
+                    selectedDate = formattedDate
                     adapter.notifyDataSetChanged()
                 },
                 year,
@@ -80,6 +82,7 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
             datePickerDialog.show()
         }
     }
+
     private fun initView() {
         binding.imgBack.setOnClickListener {
             onBackPressed()
@@ -102,12 +105,14 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
 
         //        patient List adapter
 
-        adapter = AddAppointmentsListAdapter(this, "") {
+        adapter = AddAppointmentsListAdapter(this, "PatientHistoryList", {
             var i = Intent(this, PatientCheckUpActivity::class.java)
             i.putExtra("patientUid", it.patientUid)
             startActivity(i)
             finish()
-        }
+        }, {       //delete data
+            deleteRecordFromDatabase(it.patientUid!!)
+        })
         var manger = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.rcvPatientList.layoutManager = manger
@@ -140,6 +145,50 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
                 }
 
             })
+    }
+
+    private fun deleteRecordFromDatabase(patientUid: String) {
+
+        var deleteDialog = Dialog(this)
+
+        var dialogBinding = DeleteDialogBinding.inflate(layoutInflater)
+        deleteDialog.setContentView(dialogBinding.root)
+
+        dialogBinding.btnCanselDelete.setOnClickListener {
+            deleteDialog.dismiss()
+            Toast.makeText(this, "Cansel", Toast.LENGTH_SHORT).show()
+        }
+        dialogBinding.btnDelete.setOnClickListener {
+            mDbRef.child("PatientHistoryData").child(selectedDate!!).child(patientUid)
+                .removeValue()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+
+                        Toast.makeText(
+                            this,
+                            "Record Deleted Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        progressBarDialog.dismiss()
+
+                    }
+                }.addOnFailureListener {
+
+                    Toast.makeText(this, "fail", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            deleteDialog.dismiss()
+        }
+
+        deleteDialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        );
+        deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        deleteDialog.show()
+
     }
 
     //    search view function

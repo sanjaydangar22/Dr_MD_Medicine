@@ -1,24 +1,17 @@
 package com.sdsoft.drmdmedicine.Admin_panel.activity
 
 import android.content.Intent
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.util.Patterns
-import android.widget.RadioButton
 import android.widget.Toast
-import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.StaffModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.ProgressBarDialog
@@ -28,7 +21,6 @@ import java.util.UUID
 
 class CreateNewStaffActivity : BaseActivity(R.layout.activity_create_new_staff) {
     lateinit var binding: ActivityCreateNewStaffBinding
-    lateinit var auth: FirebaseAuth
     var flag = 0
 
     private var isPasswordVisible = false
@@ -76,9 +68,6 @@ class CreateNewStaffActivity : BaseActivity(R.layout.activity_create_new_staff) 
             flag = 1
 
             staffUid = intent.getStringExtra("staffUid")   // key set  variable
-
-            Log.e("TAG", "staffUid: " + staffUid)
-
 
             mDbRef.child("StaffList").child(staffUid!!)
                 .addValueEventListener(object : ValueEventListener {
@@ -131,12 +120,7 @@ class CreateNewStaffActivity : BaseActivity(R.layout.activity_create_new_staff) 
             var staffPassword = binding.edtPassword.text.toString()
 
 
-            if (staffName.isEmpty()) {
-                Toast.makeText(this, "Staff Name is empty", Toast.LENGTH_SHORT)
-                    .show()
-            } else if (staffMobileNumber.isEmpty()) {
-                Toast.makeText(this, "Mobile Number is empty", Toast.LENGTH_SHORT).show()
-            } else if (staffEmail.isEmpty()) {
+          if (staffEmail.isEmpty()) {
                 Toast.makeText(this, "Email is empty", Toast.LENGTH_SHORT).show()
             } else if (!Patterns.EMAIL_ADDRESS.matcher(staffEmail).matches()) {
                 Toast.makeText(this, "Please Enter Valid Email", Toast.LENGTH_SHORT).show()
@@ -172,7 +156,7 @@ class CreateNewStaffActivity : BaseActivity(R.layout.activity_create_new_staff) 
                             progressBarDialog.dismiss()
                         }
                     }.addOnFailureListener {
-                        Log.e("TAG", "fail: " + it.message)
+
                         progressBarDialog.dismiss()
 
                     }
@@ -197,7 +181,7 @@ class CreateNewStaffActivity : BaseActivity(R.layout.activity_create_new_staff) 
                                 finish()
                             }
                         }.addOnFailureListener {
-                            Log.e("TAG", "createUserWithEmail:Fail  " + it.message)
+
                             Toast.makeText(this, "Account Create Fail", Toast.LENGTH_SHORT).show()
                             progressBarDialog.dismiss()
                         }
@@ -232,7 +216,6 @@ class CreateNewStaffActivity : BaseActivity(R.layout.activity_create_new_staff) 
                     .show()
             }
         }.addOnFailureListener {
-            Log.e("TAG", "fail: " + it.message)
 
 
         }

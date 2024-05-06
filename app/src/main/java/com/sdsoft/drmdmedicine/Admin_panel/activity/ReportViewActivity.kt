@@ -4,11 +4,9 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,8 +26,6 @@ import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
 class ReportViewActivity : BaseActivity(R.layout.activity_report_view) {
 
     lateinit var reportViewBinding: ActivityReportViewBinding
-
-    private lateinit var auth: FirebaseAuth
     lateinit var storageReference: StorageReference
 
     var reportImage: String? = null
@@ -62,7 +58,7 @@ class ReportViewActivity : BaseActivity(R.layout.activity_report_view) {
         reportUid = intent.getStringExtra("reportUid").toString()
         reportDate = intent.getStringExtra("currentDateToday").toString()
 
-        Log.e("TAG", "reportUid:  $reportUid ")
+
 
 
         progressBarDialog.show()
@@ -78,8 +74,6 @@ class ReportViewActivity : BaseActivity(R.layout.activity_report_view) {
                             val reportUid = reportItem.reportUid
                             reportImage = reportItem.reportImage!!
                             val reportName = reportItem.reportName
-
-
 
 
                             reportViewBinding.txtReportName.text =
@@ -105,28 +99,10 @@ class ReportViewActivity : BaseActivity(R.layout.activity_report_view) {
 
             })
 
-//        reportViewBinding.imgFullScreen.setOnClickListener {
-//
-//            Toast.makeText(this, "Image Zoom", Toast.LENGTH_SHORT).show()
-//            reportZoomFunction(reportImage)
-//        }
-
         reportViewBinding.cdDelete.setOnClickListener {
             deleteRecordFromDatabase(patientUid!!, reportUid!!)
         }
     }
-
-//    private fun reportZoomFunction(Image: String?) {
-////        useReportZoomLayout =true
-//
-//        Log.e("TAG", "reportZoomFunction: $Image", )
-//
-//
-//                            Glide.with(this@ReportViewActivity).load(Image)
-//                                .placeholder(R.drawable.ic_image)
-//                                .into(reportZoomViewBinding.imgZoomReportImage)
-//
-//    }
 
     private fun deleteRecordFromDatabase(patientUid: String, reportUid: String) {
 
@@ -155,7 +131,7 @@ class ReportViewActivity : BaseActivity(R.layout.activity_report_view) {
                         onBackPressed()
                     }
                 }.addOnFailureListener {
-                    Log.e("TAG", "initView: " + it.message)
+
                     Toast.makeText(this, "fail", Toast.LENGTH_SHORT)
                         .show()
                 }

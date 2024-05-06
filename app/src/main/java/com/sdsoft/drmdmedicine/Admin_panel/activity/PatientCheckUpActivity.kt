@@ -25,7 +25,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -57,7 +56,6 @@ import java.util.UUID
 
 class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) {
     private lateinit var binding: ActivityPatientCheckUpBinding
-    private lateinit var auth: FirebaseAuth
     private lateinit var storageReference: StorageReference
     private lateinit var diseaseDialog: Dialog
     private lateinit var diseaseDialogBinding: DialogShowListAndAddNewItemBinding
@@ -792,7 +790,7 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
 
                     }
                 }.addOnFailureListener {
-                    Log.e("TAG", "fail: " + it.message)
+
                     progressBarDialog.dismiss()
                     reportImageDialog.dismiss()
 
@@ -858,10 +856,8 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
                 val data: Intent = result.data!!
                 val imageBitmap = data.extras?.getParcelable("data") as Bitmap?
 
-
-//
                 reportImagePath = getImageUri(applicationContext, imageBitmap!!)
-                Log.e("TAG", "reportImagePath:  $reportImagePath")
+
 
                 reportImageDialogBinding.imgReportImage.setImageBitmap(imageBitmap)
 
@@ -884,7 +880,6 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
             if (result.resultCode == RESULT_OK) {
                 val data: Intent = result.data!!
 
-//                var selectedImageUri = getImagePathFromURI(uri!!)
 
                 reportImagePath = data.data!!
                 reportImageDialogBinding.imgReportImage.setImageURI(reportImagePath)
@@ -919,7 +914,6 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
                 ref.downloadUrl.addOnSuccessListener {
 
                     reportImage = it.toString()
-                    Log.e("TAG", "uploadImage: " + reportImage)
                 }
             }
                 .addOnSuccessListener { // Image uploaded successfully

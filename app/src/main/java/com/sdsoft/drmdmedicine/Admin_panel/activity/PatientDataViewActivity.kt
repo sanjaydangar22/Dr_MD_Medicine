@@ -26,7 +26,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -57,7 +56,6 @@ import java.util.UUID
 class PatientDataViewActivity : BaseActivity(R.layout.activity_patient_data_view) {
 
     lateinit var patientDataViewBinding: ActivityPatientDataViewBinding
-    private lateinit var auth: FirebaseAuth
     lateinit var storageReference: StorageReference
     lateinit var patientUid: String
     private lateinit var diseaseDialog: Dialog
@@ -84,7 +82,7 @@ class PatientDataViewActivity : BaseActivity(R.layout.activity_patient_data_view
         storageReference = FirebaseStorage.getInstance().reference
 
         patientUid = intent.getStringExtra("patientUid").toString()
-        Log.e("TAG", "patientUid:  $patientUid ")
+
 
         dialogFun()
         initView()
@@ -886,10 +884,7 @@ class PatientDataViewActivity : BaseActivity(R.layout.activity_patient_data_view
                 val data: Intent = result.data!!
                 val imageBitmap = data.extras?.getParcelable("data") as Bitmap?
 
-
-//
                 reportImagePath = getImageUri(applicationContext, imageBitmap!!)
-                Log.e("TAG", "reportImagePath:  $reportImagePath")
 
                 reportImageDialogBinding.imgReportImage.setImageBitmap(imageBitmap)
 
@@ -942,12 +937,10 @@ class PatientDataViewActivity : BaseActivity(R.layout.activity_patient_data_view
             // or failure of image
             ref.putFile(reportImagePath!!).addOnCompleteListener {
 
-//                it.result.uploadSessionUri
-
                 ref.downloadUrl.addOnSuccessListener {
 
                     reportImage = it.toString()
-                    Log.e("TAG", "uploadImage: " + reportImage)
+
                 }
             }
                 .addOnSuccessListener { // Image uploaded successfully

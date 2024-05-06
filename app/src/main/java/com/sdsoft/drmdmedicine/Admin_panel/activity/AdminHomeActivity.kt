@@ -9,7 +9,6 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sdsoft.drmdmedicine.Admin_panel.fragment.AdminHomeFragment
@@ -24,7 +23,6 @@ import com.sdsoft.drmdmedicine.databinding.ActivityAdminHomeBinding
 class AdminHomeActivity : BaseActivity(R.layout.activity_admin_home) {
     lateinit var adminHomeBinding: ActivityAdminHomeBinding
     lateinit var fragment: Fragment
-    lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adminHomeBinding= ActivityAdminHomeBinding.inflate(layoutInflater)
@@ -62,7 +60,7 @@ class AdminHomeActivity : BaseActivity(R.layout.activity_admin_home) {
 
 
 
-            var myEdit: SharedPreferences.Editor = doctorsharedPreferences.edit()
+            var myEdit: SharedPreferences.Editor = loginSharedPreferences.edit()
             myEdit.remove("isLogin")
             myEdit.commit()
             auth.signOut()

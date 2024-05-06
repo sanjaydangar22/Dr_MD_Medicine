@@ -67,10 +67,12 @@ class AdminHomeFragment : Fragment() {
             })
         binding.cdNewAppointments.setOnClickListener {
             var i = Intent(requireContext(), AppointmentsActivity::class.java)
+            i.putExtra("userType","Doctor")
             startActivity(i)
         }
         binding.cdAppointmentsCompleted.setOnClickListener {
             var i = Intent(requireContext(), CompletedAppointmentsActivity::class.java)
+            i.putExtra("userType","Doctor")
             startActivity(i)
         }
         binding.cdDiseaseList.setOnClickListener {
