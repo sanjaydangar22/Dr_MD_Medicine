@@ -12,7 +12,7 @@ class LoginOptionActivity : BaseActivity(R.layout.activity_login_option) {
         super.onCreate(savedInstanceState)
         binding= ActivityLoginOptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (doctorsharedPreferences.getBoolean("isLogin", false) == true) {
+        if (loginSharedPreferences.getBoolean("isLogin", false) == true) {
             val intent = Intent(this, AdminHomeActivity::class.java)
             startActivity(intent)
             finish()
