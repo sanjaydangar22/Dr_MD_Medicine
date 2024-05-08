@@ -38,11 +38,11 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
         mDbRef = FirebaseDatabase.getInstance().reference
         progressBarDialog = ProgressBarDialog(this)
 
-        currentDateGet()
+        currentDateAndSelectDateGet()
         initView()
     }
 
-    private fun currentDateGet() {
+    private fun currentDateAndSelectDateGet() {
         // Set up date format
         val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
@@ -69,10 +69,13 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
 
                     val formattedDate = dateFormat.format(selectedDateCalendar.time)
 
+                    progressBarDialog.show()
+
                     // Set the formatted date in the TextView
                     binding.txtDate.text = formattedDate
                     selectedDate = formattedDate
                     adapter.notifyDataSetChanged()
+                    initView()
                 },
                 year,
                 month,
@@ -81,6 +84,7 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
 
             datePickerDialog.show()
         }
+
     }
 
     private fun initView() {

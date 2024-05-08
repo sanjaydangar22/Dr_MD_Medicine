@@ -37,34 +37,7 @@ class AdminHomeFragment : Fragment() {
 
     private fun initView() {
 
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        // Get the current date
-        val currentDate = Calendar.getInstance()
-        // Format and set the current date in the first TextView
-        val formattedCurrentDate = dateFormat.format(currentDate.time)
 
-        mDbRef.child("AppointmentList")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (i in snapshot.children) {
-                        var data = i.getValue(PatientModelClass::class.java)
-                        var appointmentDate = data!!.timestamp
-
-                        if (appointmentDate != formattedCurrentDate) {
-                            mDbRef.child("AppointmentNumber").setValue(0)
-                            mDbRef.child("AppointmentList").removeValue()
-                            mDbRef.child("AppointmentCompletedList").removeValue()
-
-                        }
-
-                    }
-
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
-
-            })
         binding.cdNewAppointments.setOnClickListener {
             var i = Intent(requireContext(), AppointmentsActivity::class.java)
             i.putExtra("userType","Doctor")

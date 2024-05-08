@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -37,12 +36,15 @@ import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.ReportAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.ReportModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.DiseaseListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientCheckUpAdapter
+import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientCheckUpMedicineAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.ModelClass
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientMedicineModel
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityPatientCheckUpBinding
 import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
+import com.sdsoft.drmdmedicine.databinding.DialogAddMedicineBinding
 import com.sdsoft.drmdmedicine.databinding.DialogAddNewItemBinding
 import com.sdsoft.drmdmedicine.databinding.DialogAddPatientReportImageBinding
 import com.sdsoft.drmdmedicine.databinding.DialogAppointmentsSaveBinding
@@ -432,7 +434,7 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
         }
 
 
-        val medicineList = ArrayList<ModelClass>()
+        val medicineList = ArrayList<PatientMedicineModel>()
 
         mDbRef.child("PatientList").child(patientUid!!)
             .child("PatientCheckUpDetails").child(currentDateToday!!).child("PatientMedicine")
@@ -440,12 +442,13 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     medicineList.clear()
                     for (i in snapshot.children) {
-                        val data = i.getValue(ModelClass::class.java)
+                        val data = i.getValue(PatientMedicineModel::class.java)
                         data?.let { medicineList.add(it) }
                     }
-                    val medicineAdapter = PatientCheckUpAdapter(this@PatientCheckUpActivity) {
-                        patientCheckUpMedicineDeleteFun(it)
-                    }
+                    val medicineAdapter =
+                        PatientCheckUpMedicineAdapter(this@PatientCheckUpActivity) {
+                            patientCheckUpMedicineEditFun(it)
+                        }
                     binding.rcvMedicineList.layoutManager =
                         LinearLayoutManager(
                             this@PatientCheckUpActivity,
@@ -581,10 +584,61 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
     }
 
     private fun addPatientMedicineFun(model: ModelClass) {
-        mDbRef.child("PatientList").child(patientUid!!)
-            .child("PatientCheckUpDetails").child(currentDateToday!!)
-            .child("PatientMedicine").child(model.uid!!).setValue(model)
+        var dialog = Dialog(this)
+        var dialogBinding = DialogAddMedicineBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCancelable(false)
+        dialogBinding.txtMedicineName.text = model.name
+
+        dialogBinding.imgClose.setOnClickListener {
+            dialog.dismiss()
+            dialogBinding.edtMedicineTime.setText("")
+            dialogBinding.edtMedicineQty.setText("")
+        }
+
+        dialogBinding.cdDelete.visibility = View.GONE
+        dialog.show()
+        dialogBinding.btnSubmit.setOnClickListener {
+            var name = dialogBinding.txtMedicineName.text.toString()
+            var qty = dialogBinding.edtMedicineQty.text.toString()
+            var medicineTime = dialogBinding.edtMedicineTime.text.toString()
+
+
+            progressBarDialog.show()
+            mDbRef.child("PatientList").child(patientUid!!)
+                .child("PatientCheckUpDetails").child(currentDateToday!!)
+                .child("PatientMedicine").child(model.uid!!)
+                .setValue(PatientMedicineModel(name, qty, medicineTime, model.uid!!))
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Record Save Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        dialogBinding.edtMedicineTime.setText("")
+                        dialogBinding.edtMedicineQty.setText("")
+                        progressBarDialog.dismiss()
+                        dialog.dismiss()
+
+
+                    }
+                }.addOnFailureListener {
+                    progressBarDialog.dismiss()
+                    dialog.dismiss()
+
+                }
+
+        }
     }
+
 
     private fun searchMedicineFun() {
         diseaseDialogBinding.searchView.setOnQueryTextListener(object :
@@ -633,7 +687,69 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
             })
     }
 
-    private fun patientCheckUpMedicineDeleteFun(diseaseUid: String) {
+    private fun patientCheckUpMedicineEditFun(model: PatientMedicineModel) {
+        var dialog = Dialog(this)
+        var dialogBinding = DialogAddMedicineBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCancelable(false)
+        dialogBinding.txtMedicineName.text = model.name
+        dialogBinding.edtMedicineQty.setText(model.qty)
+        dialogBinding.edtMedicineTime.setText(model.time)
+
+        dialogBinding.imgClose.setOnClickListener {
+            dialog.dismiss()
+            dialogBinding.edtMedicineTime.setText("")
+            dialogBinding.edtMedicineQty.setText("")
+        }
+
+        dialogBinding.cdDelete.visibility = View.VISIBLE
+        dialogBinding.cdDelete.setOnClickListener {
+            patientCheckUpMedicineDeleteFun(model.uid!!)
+            dialog.dismiss()
+        }
+        dialog.show()
+        dialogBinding.btnSubmit.setOnClickListener {
+            var name = dialogBinding.txtMedicineName.text.toString()
+            var qty = dialogBinding.edtMedicineQty.text.toString()
+            var medicineTime = dialogBinding.edtMedicineTime.text.toString()
+
+
+            progressBarDialog.show()
+            mDbRef.child("PatientList").child(patientUid!!)
+                .child("PatientCheckUpDetails").child(currentDateToday!!)
+                .child("PatientMedicine").child(model.uid!!)
+                .setValue(PatientMedicineModel(name, qty, medicineTime, model.uid!!))
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Record Save Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        dialogBinding.edtMedicineTime.setText("")
+                        dialogBinding.edtMedicineQty.setText("")
+                        progressBarDialog.dismiss()
+                        dialog.dismiss()
+
+
+                    }
+                }.addOnFailureListener {
+                    progressBarDialog.dismiss()
+                    dialog.dismiss()
+
+                }
+
+        }
+    }
+
+    private fun patientCheckUpMedicineDeleteFun(medicineUid: String) {
         var deleteDialog = Dialog(this)
 
         var dialogBinding = DeleteDialogBinding.inflate(layoutInflater)
@@ -646,7 +762,7 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
         dialogBinding.btnDelete.setOnClickListener {
             mDbRef.child("PatientList").child(patientUid!!)
                 .child("PatientCheckUpDetails").child(currentDateToday!!).child("PatientMedicine")
-                .child(diseaseUid)
+                .child(medicineUid)
                 .removeValue()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -940,7 +1056,6 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
         }
     }
 
-
     private fun saveDataAndAppointmentsCompleted() {
         var dialog = Dialog(this)
         var dialogBinding = DialogAppointmentsSaveBinding.inflate(layoutInflater)
@@ -963,7 +1078,6 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
         dialog.setCancelable(false)
         dialog.show()
     }
-
 
     private fun patientCheckUpCompleteFun() {
         var patientImage: String
@@ -1028,30 +1142,30 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
 
                             mDbRef.child("PatientHistoryData").child(currentDateToday!!)
                                 .child(patientUid).setValue(
-                                PatientModelClass(
-                                    patientImage,
-                                    patientName,
-                                    patientAge,
-                                    patientWeight,
-                                    patientMobileNo,
-                                    patientVillage,
-                                    patientGender,
-                                    patientUid,
-                                    timestamp,
-                                    appointmentsNumber
-                                )
-                            ).addOnCompleteListener {
-                                if (it.isSuccessful) {
+                                    PatientModelClass(
+                                        patientImage,
+                                        patientName,
+                                        patientAge,
+                                        patientWeight,
+                                        patientMobileNo,
+                                        patientVillage,
+                                        patientGender,
+                                        patientUid,
+                                        timestamp,
+                                        appointmentsNumber
+                                    )
+                                ).addOnCompleteListener {
+                                    if (it.isSuccessful) {
+
+                                        progressBarDialog.dismiss()
+                                        finish()
+
+                                    }
+                                }.addOnFailureListener {
 
                                     progressBarDialog.dismiss()
-                                    finish()
 
                                 }
-                            }.addOnFailureListener {
-
-                                progressBarDialog.dismiss()
-
-                            }
                         }
                     } else {
                         // User data does not exist

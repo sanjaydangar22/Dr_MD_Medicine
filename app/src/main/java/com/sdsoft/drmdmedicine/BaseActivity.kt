@@ -15,9 +15,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 abstract class BaseActivity(view: Int) : AppCompatActivity() {
@@ -37,8 +44,34 @@ abstract class BaseActivity(view: Int) : AppCompatActivity() {
         loginSharedPreferences =
             getSharedPreferences("LoginSharePref", AppCompatActivity.MODE_PRIVATE)
 
+
+        dateCheckAndRemoveValue()
         permissionFun()
     }
+
+    private fun dateCheckAndRemoveValue() {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val currentDate = Calendar.getInstance().time
+        val formattedCurrentDate = dateFormat.format(currentDate)
+
+        mDbRef.child("TodayDate").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val storedDate = snapshot.getValue(String::class.java)
+
+                if (storedDate != null && storedDate != formattedCurrentDate) {
+                    mDbRef.child("TodayDate").setValue(formattedCurrentDate)
+                    mDbRef.child("AppointmentNumber").setValue(0)
+                    mDbRef.child("AppointmentList").removeValue()
+                    mDbRef.child("AppointmentCompletedList").removeValue()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle onCancelled
+            }
+        })
+    }
+
 
     fun permissionFun() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

@@ -12,10 +12,12 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.AddAppointmentsListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.BaseActivity
@@ -40,8 +42,27 @@ class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
         binding = ActivityAppointmentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mDbRef = FirebaseDatabase.getInstance().reference
+        // Initialize Firebase Auth
+        auth = Firebase.auth
 
-        userType = intent.getStringExtra("userType")
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            // User is signed in
+            val email = currentUser.email
+            if (email == "dangarmahipatsinh11@gmail.com") {
+                userType = "Doctor"
+            } else {
+                userType = intent.getStringExtra("userType")
+            }
+            // You can access other properties of the user object as needed
+            // For example, currentUser.displayName, currentUser.photoUrl, etc.
+        } else {
+            // No user is signed in
+            // Handle this case as per your application's requirements
+
+        }
+
         initView()
     }
 
