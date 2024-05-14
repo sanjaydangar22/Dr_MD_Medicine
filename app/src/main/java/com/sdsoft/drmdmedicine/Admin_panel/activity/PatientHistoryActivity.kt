@@ -198,15 +198,15 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
     //    search view function
     private fun searchAppointmentItems(query: String) {
         mDbRef.child("PatientHistoryData").child(selectedDate!!).orderByChild("patientName")
-            .startAt(query)
-            .endAt(query + "\uf8ff")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val searchItems = ArrayList<PatientModelClass>()
 
                     for (itemSnapshot in snapshot.children) {
                         val item = itemSnapshot.getValue(PatientModelClass::class.java)
-                        item?.let { searchItems.add(it) }
+                        if (item!!.patientName!!.lowercase().contains(query.lowercase())) {
+                            searchItems.add(item)
+                        }
                     }
 
 

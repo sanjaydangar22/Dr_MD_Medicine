@@ -1,5 +1,6 @@
 package com.sdsoft.drmdmedicine.Admin_panel.fragment
 
+import android.R
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
@@ -63,6 +65,7 @@ class MedicineFragment : Fragment() {
         initView()
         return medicineBinding.root
     }
+
     private fun dialogFun() {
         dialog = Dialog(requireContext())
         dialogBinding = DialogAddNewItemBinding.inflate(layoutInflater)
@@ -82,13 +85,14 @@ class MedicineFragment : Fragment() {
 
 
     }
+
     private fun initView() {
 //        medicine List adapter
         adapter = MedicineListAdapter(requireContext()) {
 
             editAndDeleteMedicineFun(it)
         }
-        var manger = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        var manger = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         medicineBinding.rcvMedicineList.layoutManager = manger
         medicineBinding.rcvMedicineList.adapter = adapter
@@ -122,7 +126,11 @@ class MedicineFragment : Fragment() {
                 var diseaseName = dialogBinding.edtName.text.toString()
 
                 if (diseaseName.isEmpty()) {
-                    Toast.makeText(requireContext(), "Please Enter Medicine Name", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please Enter Medicine Name",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     addMedicineFun(diseaseName)
 
@@ -158,6 +166,7 @@ class MedicineFragment : Fragment() {
 
 
     }
+
     private fun addMedicineFun(name: String) {
 
 
@@ -198,7 +207,8 @@ class MedicineFragment : Fragment() {
             var diseaseName = dialogBinding.edtName.text.toString()
 
             if (diseaseName.isEmpty()) {
-                Toast.makeText(requireContext(), "Please Enter Medicine Name", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Please Enter Medicine Name", Toast.LENGTH_SHORT)
+                    .show()
             } else {
 
 
@@ -235,7 +245,11 @@ class MedicineFragment : Fragment() {
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
 
-                        Toast.makeText(requireContext(), "Record Deleted Successfully", Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            requireContext(),
+                            "Record Deleted Successfully",
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                         progressBarDialog.dismiss()
                         dialog.dismiss()
@@ -249,20 +263,21 @@ class MedicineFragment : Fragment() {
         }
     }
 
-//    search view function
+    //    search view function
     private fun searchItems(query: String) {
+
+
         mDbRef.child("MedicineList").orderByChild("name")
-            .startAt(query)
-            .endAt(query + "\uf8ff")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val searchItems = ArrayList<ModelClass>()
 
                     for (itemSnapshot in snapshot.children) {
                         val item = itemSnapshot.getValue(ModelClass::class.java)
-                        item?.let { searchItems.add(it) }
+                        if (item!!.name!!.lowercase().contains(query.lowercase())) {
+                            searchItems.add(item)
+                        }
                     }
-
 
                     adapter.updateList(searchItems)
 

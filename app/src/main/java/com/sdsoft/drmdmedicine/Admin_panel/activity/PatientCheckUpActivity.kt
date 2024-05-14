@@ -396,19 +396,14 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
 
     private fun searchDiseaseItems(query: String) {
         mDbRef.child("DiseaseList").orderByChild("name")
-            .startAt(query)
-            .endAt(query + "\uf8ff")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val searchItems = ArrayList<ModelClass>()
 
                     for (itemSnapshot in snapshot.children) {
                         val item = itemSnapshot.getValue(ModelClass::class.java)
-                        item?.let {
-
-                            searchItems.add(it)
-
-
+                        if (item!!.name!!.lowercase().contains(query.lowercase())) {
+                            searchItems.add(item)
                         }
                     }
 
@@ -656,19 +651,14 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
 
     private fun searchMedicineItems(query: String) {
         mDbRef.child("MedicineList").orderByChild("name")
-            .startAt(query)
-            .endAt(query + "\uf8ff")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val searchItems = ArrayList<ModelClass>()
 
                     for (itemSnapshot in snapshot.children) {
                         val item = itemSnapshot.getValue(ModelClass::class.java)
-                        item?.let {
-
-                            searchItems.add(it)
-
-
+                        if (item!!.name!!.lowercase().contains(query.lowercase())) {
+                            searchItems.add(item)
                         }
                     }
 

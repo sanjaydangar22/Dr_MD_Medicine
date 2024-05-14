@@ -230,19 +230,14 @@ class DiseaseActivity : BaseActivity(R.layout.activity_disease) {
     //  search view function
     private fun searchItems(query: String) {
         mDbRef.child("DiseaseList").orderByChild("name")
-            .startAt(query)
-            .endAt(query + "\uf8ff")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val searchItems = ArrayList<ModelClass>()
 
                     for (itemSnapshot in snapshot.children) {
                         val item = itemSnapshot.getValue(ModelClass::class.java)
-                        item?.let {
-
-                            searchItems.add(it)
-
-
+                        if (item!!.name!!.lowercase().contains(query.lowercase())) {
+                            searchItems.add(item)
                         }
                     }
 
