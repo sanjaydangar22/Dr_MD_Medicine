@@ -62,6 +62,7 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
     private lateinit var diseaseDialog: Dialog
     private lateinit var diseaseDialogBinding: DialogShowListAndAddNewItemBinding
     private var patientUid: String? = null
+    private var selectedDate: String? = null
     private var currentDateToday: String? = null
     private lateinit var adapter: DiseaseListAdapter
     var imageUploadCompleted = 0
@@ -82,6 +83,7 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
         storageReference = FirebaseStorage.getInstance().reference
 
         patientUid = intent.getStringExtra("patientUid")
+        selectedDate = intent.getStringExtra("selectedDate")
 
         dataGetAndEditFun()
         currentDateGet()
@@ -154,11 +156,16 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
     }
 
     private fun currentDateGet() {
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val currentDate = Calendar.getInstance()
-        val formattedCurrentDate = dateFormat.format(currentDate.time)
-        binding.txtCurrentDate.text = formattedCurrentDate
-        currentDateToday = formattedCurrentDate
+        if (selectedDate != null) {
+            currentDateToday = selectedDate
+            binding.txtCurrentDate.text = selectedDate
+        } else {
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+            val currentDate = Calendar.getInstance()
+            val formattedCurrentDate = dateFormat.format(currentDate.time)
+            binding.txtCurrentDate.text = formattedCurrentDate
+            currentDateToday = formattedCurrentDate
+        }
     }
 
     private fun dialogFun() {
@@ -427,7 +434,6 @@ class PatientCheckUpActivity : BaseActivity(R.layout.activity_patient_check_up) 
         binding.cdAddMedicine.setOnClickListener {
             addMedicineDialog()
         }
-
 
         val medicineList = ArrayList<PatientMedicineModel>()
 

@@ -112,6 +112,7 @@ class PatientHistoryActivity : BaseActivity(R.layout.activity_patient_history) {
         adapter = AddAppointmentsListAdapter(this, "PatientHistoryList", {
             var i = Intent(this, PatientCheckUpActivity::class.java)
             i.putExtra("patientUid", it.patientUid)
+            i.putExtra("selectedDate", selectedDate)
             startActivity(i)
             finish()
         }, {       //delete data

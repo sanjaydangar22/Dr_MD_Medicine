@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sdsoft.drmdmedicine.Admin_panel.activity.AdminHomeActivity
 
 
-class SplashScreenActivity : AppCompatActivity() {
+class SplashScreenActivity : BaseActivity(R.layout.activity_splash_screen) {
 
      val SPLASH_TIME_OUT = 3000L // 3 seconds
 

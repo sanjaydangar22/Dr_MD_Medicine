@@ -53,6 +53,7 @@ abstract class BaseActivity(view: Int) : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val currentDate = Calendar.getInstance().time
         val formattedCurrentDate = dateFormat.format(currentDate)
+        mDbRef.child("TodayDate").setValue(formattedCurrentDate)
 
         mDbRef.child("TodayDate").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

@@ -38,14 +38,17 @@ import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.DiseaseListAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.ReportModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientCheckUpAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientCheckUpDetailsAdapter
+import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.PatientCheckUpMedicineAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.adapter_class.ReportAdapter
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.ModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientModelClass
 import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientCheckUpDetails
+import com.sdsoft.drmdmedicine.Admin_panel.model_class.PatientMedicineModel
 import com.sdsoft.drmdmedicine.BaseActivity
 import com.sdsoft.drmdmedicine.R
 import com.sdsoft.drmdmedicine.databinding.ActivityPatientDataViewBinding
 import com.sdsoft.drmdmedicine.databinding.DeleteDialogBinding
+import com.sdsoft.drmdmedicine.databinding.DialogAddMedicineBinding
 import com.sdsoft.drmdmedicine.databinding.DialogAddNewItemBinding
 import com.sdsoft.drmdmedicine.databinding.DialogAddPatientReportImageBinding
 import com.sdsoft.drmdmedicine.databinding.DialogShowListAndAddNewItemBinding
@@ -251,20 +254,21 @@ class PatientDataViewActivity : BaseActivity(R.layout.activity_patient_data_view
         patientDataViewBinding.cdAddMedicine.setOnClickListener {
             addMedicineDialog(patientCheckUpDetails.date!!)
         }
-        val medicineList = ArrayList<ModelClass>()
+        val medicineList = ArrayList<PatientMedicineModel>()
+
         mDbRef.child("PatientList").child(patientUid)
-            .child("PatientCheckUpDetails").child(patientCheckUpDetails.date!!)
-            .child("PatientMedicine")
+            .child("PatientCheckUpDetails").child(patientCheckUpDetails.date!!).child("PatientMedicine")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     medicineList.clear()
                     for (i in snapshot.children) {
-                        val data = i.getValue(ModelClass::class.java)
+                        val data = i.getValue(PatientMedicineModel::class.java)
                         data?.let { medicineList.add(it) }
                     }
-                    val medicineAdapter = PatientCheckUpAdapter(this@PatientDataViewActivity) {
-                        patientCheckUpMedicineDeleteFun(it, patientCheckUpDetails.date!!)
-                    }
+                    val medicineAdapter =
+                        PatientCheckUpMedicineAdapter(this@PatientDataViewActivity) {
+                            patientCheckUpMedicineEditFun(it,patientCheckUpDetails.date!!)
+                        }
                     patientDataViewBinding.rcvMedicineList.layoutManager =
                         LinearLayoutManager(
                             this@PatientDataViewActivity,
@@ -390,6 +394,70 @@ class PatientDataViewActivity : BaseActivity(R.layout.activity_patient_data_view
         );
         deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         deleteDialog.show()
+    }
+
+    private fun patientCheckUpMedicineEditFun(model: PatientMedicineModel, date: String) {
+        var dialog = Dialog(this)
+        var dialogBinding = DialogAddMedicineBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCancelable(false)
+        dialogBinding.txtDialogTitle.text = "Update Medicine"
+        dialogBinding.btnSubmit.text = "Update"
+        dialogBinding.txtMedicineName.text = model.name
+        dialogBinding.edtMedicineQty.setText(model.qty)
+        dialogBinding.edtMedicineTime.setText(model.time)
+
+        dialogBinding.imgClose.setOnClickListener {
+            dialog.dismiss()
+            dialogBinding.edtMedicineTime.setText("")
+            dialogBinding.edtMedicineQty.setText("")
+        }
+
+        dialogBinding.cdDelete.visibility = View.VISIBLE
+        dialogBinding.cdDelete.setOnClickListener {
+            patientCheckUpMedicineDeleteFun(model.uid!!,date)
+            dialog.dismiss()
+        }
+        dialog.show()
+        dialogBinding.btnSubmit.setOnClickListener {
+            var name = dialogBinding.txtMedicineName.text.toString()
+            var qty = dialogBinding.edtMedicineQty.text.toString()
+            var medicineTime = dialogBinding.edtMedicineTime.text.toString()
+
+
+            progressBarDialog.show()
+            mDbRef.child("PatientList").child(patientUid)
+                .child("PatientCheckUpDetails").child(date)
+                .child("PatientMedicine").child(model.uid!!)
+                .setValue(PatientMedicineModel(name, qty, medicineTime, model.uid!!))
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Record Save Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        dialogBinding.edtMedicineTime.setText("")
+                        dialogBinding.edtMedicineQty.setText("")
+                        progressBarDialog.dismiss()
+                        dialog.dismiss()
+
+
+                    }
+                }.addOnFailureListener {
+                    progressBarDialog.dismiss()
+                    dialog.dismiss()
+
+                }
+
+        }
     }
 
     private fun patientCheckUpMedicineDeleteFun(diseaseUid: String, date: String) {
