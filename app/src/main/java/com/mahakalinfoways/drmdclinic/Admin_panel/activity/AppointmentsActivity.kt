@@ -1,0 +1,370 @@
+package com.mahakalinfoways.drmdclinic.Admin_panel.activity
+
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.SearchView
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import com.mahakalinfoways.drmdclinic.Admin_panel.adapter_class.AddAppointmentsListAdapter
+import com.mahakalinfoways.drmdclinic.Admin_panel.model_class.PatientModelClass
+import com.mahakalinfoways.drmdclinic.BaseActivity
+import com.mahakalinfoways.drmdclinic.R
+import com.mahakalinfoways.drmdclinic.databinding.ActivityAppointmentsBinding
+import com.mahakalinfoways.drmdclinic.databinding.DeleteDialogBinding
+import com.mahakalinfoways.drmdclinic.databinding.DialogShowListAndAddNewItemBinding
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+
+class AppointmentsActivity : BaseActivity(R.layout.activity_appointments) {
+    lateinit var binding: ActivityAppointmentsBinding
+    lateinit var dialog: Dialog
+    lateinit var dialogBinding: DialogShowListAndAddNewItemBinding
+    lateinit var adapter: AddAppointmentsListAdapter
+    var userType: String? = null
+    var appointmentsNumber: Int = 0
+    var listType: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityAppointmentsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        mDbRef = FirebaseDatabase.getInstance().reference
+        // Initialize Firebase Auth
+        auth = Firebase.auth
+
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            // User is signed in
+            val email = currentUser.email
+            if (email == "dangarmahipatsinh11@gmail.com") {
+                userType = "Doctor"
+            } else {
+                userType = intent.getStringExtra("userType")
+            }
+            // You can access other properties of the user object as needed
+            // For example, currentUser.displayName, currentUser.photoUrl, etc.
+        } else {
+            // No user is signed in
+            // Handle this case as per your application's requirements
+
+        }
+
+        initView()
+    }
+
+    private fun initView() {
+
+
+        binding.imgBack.setOnClickListener {
+            onBackPressed()
+        }
+
+        //search patient
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searchAppointmentItems(newText)
+                }
+                return true
+            }
+        })
+
+        mDbRef.child("AppointmentNumber")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val number = snapshot.value
+                    if (number is Long) {
+                        appointmentsNumber = number.toInt()
+
+                    } else {
+
+                        // Handle the case where the data type of AppointmentNumber is not as expected
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                    // Handle the error appropriately
+                }
+            })
+
+        binding.imgAddAppointment.setOnClickListener {
+            addNewAppointmentDialog()
+        }
+        //        Appointment List adapter
+        listType = "AppointmentList"
+        adapter = AddAppointmentsListAdapter(this, listType!!, {
+            if (userType == "Doctor") {
+                var i = Intent(this, PatientCheckUpActivity::class.java)
+                i.putExtra("patientUid", it.patientUid)
+                startActivity(i)
+                finish()
+            }
+        }, {
+            //delete data
+            deleteRecordFromDatabase(it.patientUid!!)
+
+        })
+        var manger = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        binding.rcvAppointmentsList.layoutManager = manger
+        binding.rcvAppointmentsList.adapter = adapter
+        var appointmentList = ArrayList<PatientModelClass>()
+        //       AppointmentList show in recycler view
+        mDbRef.child("AppointmentList")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    appointmentList.clear()
+
+                    for (i in snapshot.children) {
+                        var data = i.getValue(PatientModelClass::class.java)
+
+                        data?.let { it1 -> appointmentList.add(it1) }
+                    }
+
+                    if (appointmentList.isEmpty()) {
+                        binding.linNoDataFound.visibility = View.VISIBLE
+                    } else if (appointmentList.isNotEmpty()) {
+                        binding.linNoDataFound.visibility = View.GONE
+                    }
+
+
+                    adapter.updateList(appointmentList)
+                    progressBarDialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+
+
+    }
+
+    private fun deleteRecordFromDatabase(patientUid: String) {
+
+        var deleteDialog = Dialog(this)
+
+        var dialogBinding = DeleteDialogBinding.inflate(layoutInflater)
+        deleteDialog.setContentView(dialogBinding.root)
+
+        dialogBinding.btnCanselDelete.setOnClickListener {
+            deleteDialog.dismiss()
+            Toast.makeText(this, "Cansel", Toast.LENGTH_SHORT).show()
+        }
+        dialogBinding.btnDelete.setOnClickListener {
+            mDbRef.child("AppointmentList").child(patientUid)
+                .removeValue()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+
+                        Toast.makeText(
+                            this,
+                            "Record Deleted Successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        progressBarDialog.dismiss()
+
+                    }
+                }.addOnFailureListener {
+
+                    Toast.makeText(this, "fail", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            deleteDialog.dismiss()
+        }
+
+        deleteDialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        );
+        deleteDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        deleteDialog.show()
+
+    }
+
+    //    search view function
+    private fun searchAppointmentItems(query: String) {
+        mDbRef.child("AppointmentList").orderByChild("patientName")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val searchItems = ArrayList<PatientModelClass>()
+
+                    for (itemSnapshot in snapshot.children) {
+                        val item = itemSnapshot.getValue(PatientModelClass::class.java)
+                        if (item!!.patientName!!.lowercase().contains(query.lowercase())) {
+                            searchItems.add(item)
+                        }
+                    }
+
+
+                    adapter.updateList(searchItems)
+
+                    if (searchItems.isEmpty()) {
+                        binding.linNoDataFound.visibility = View.VISIBLE
+                    } else if (searchItems.isNotEmpty()) {
+                        binding.linNoDataFound.visibility = View.GONE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle database error
+                }
+            })
+    }
+
+    private fun addNewAppointmentDialog() {
+        dialog = Dialog(this)
+        dialogBinding = DialogShowListAndAddNewItemBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Set the window background to transparent
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        // Get the current date
+        val currentDate = Calendar.getInstance()
+        // Format and set the current date in the first TextView
+        val formattedCurrentDate = dateFormat.format(currentDate.time)
+
+        searchPatientFun()
+        patientListShowFun(formattedCurrentDate)
+
+        dialogBinding.imgClose.setOnClickListener {
+            dialog.dismiss()
+
+        }
+
+        dialogBinding.imgAddNewItem.setOnClickListener {
+            // Increase appointmentsNumber by 1 when adding a new appointment
+            appointmentsNumber += 1
+            var i = Intent(this, AddPatientActivity::class.java)
+            i.putExtra("appointmentsNumber", appointmentsNumber)
+            i.putExtra("timestamp", formattedCurrentDate)
+            i.putExtra("addNewAppointmentWithPatient", true)
+            startActivity(i)
+            finish()
+        }
+        dialog.setCancelable(false)
+        dialog.show()
+    }
+
+    private fun searchPatientFun() {
+        //search patient
+        dialogBinding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searchItems(newText)
+                }
+                return true
+            }
+        })
+    }
+
+
+    private fun patientListShowFun(formattedCurrentDate: String) {
+
+        //        patient List adapter
+        listType = "patientList"
+        adapter = AddAppointmentsListAdapter(this, listType!!, {
+            // Increase appointmentsNumber by 1 when adding a new appointment
+            dialog.dismiss()
+            appointmentsNumber += 1
+
+            //add new Appointment data
+            var i = Intent(this, AddPatientActivity::class.java)
+            i.putExtra("patientUid", it.patientUid)
+            i.putExtra("appointmentsNumber", appointmentsNumber)
+            i.putExtra("timestamp", formattedCurrentDate)
+            i.putExtra("addNewAppointment", true)
+            startActivity(i)
+            finish()
+        }, {})
+        var manger = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        dialogBinding.rcvItemList.layoutManager = manger
+        dialogBinding.rcvItemList.adapter = adapter
+
+        var patientList = ArrayList<PatientModelClass>()
+        //        patient list show in recycler view
+        mDbRef.child("PatientList")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    patientList.clear()
+                    for (i in snapshot.children) {
+                        var data = i.getValue(PatientModelClass::class.java)
+
+                        data?.let { it1 -> patientList.add(it1) }
+                    }
+
+                    if (patientList.isEmpty()) {
+                        dialogBinding.linNoDataFound.visibility = View.VISIBLE
+                    } else if (patientList.isNotEmpty()) {
+                        dialogBinding.linNoDataFound.visibility = View.GONE
+                    }
+                    adapter.updateList(patientList)
+                    progressBarDialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+    }
+
+
+    //    search view function
+    private fun searchItems(query: String) {
+        mDbRef.child("PatientList").orderByChild("patientName")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val searchItems = ArrayList<PatientModelClass>()
+
+                    for (itemSnapshot in snapshot.children) {
+                        val item = itemSnapshot.getValue(PatientModelClass::class.java)
+                        if (item!!.patientName!!.lowercase().contains(query.lowercase())) {
+                            searchItems.add(item)
+                        }
+                    }
+
+
+                    adapter.updateList(searchItems)
+
+                    if (searchItems.isEmpty()) {
+                        dialogBinding.linNoDataFound.visibility = View.VISIBLE
+                    } else if (searchItems.isNotEmpty()) {
+                        dialogBinding.linNoDataFound.visibility = View.GONE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle database error
+                }
+            })
+    }
+}

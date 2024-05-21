@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "103755695344",
-    "project_id": "dr-md-medicine",
-    "storage_bucket": "dr-md-medicine.appspot.com"
+    "project_number": "878363868794",
+    "project_id": "dr-md-clinic",
+    "storage_bucket": "dr-md-clinic.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:103755695344:android:7673c5d3de0eea04892e35",
+        "mobilesdk_app_id": "1:878363868794:android:79fe3750361a977c47c5c3",
         "android_client_info": {
-          "package_name": "com.sdsoft.drmdmedicine"
+          "package_name": "com.mahakalinfoways.drmdclinic"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAzA7nHuQmkK7CydH-0FMmQXGBz8Bd7RP0"
+          "current_key": "AIzaSyATD9iP8xj45yPWk61Zch0nXJlCpZ68ZNo"
         }
       ],
       "services": {

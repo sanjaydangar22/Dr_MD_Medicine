@@ -1,12 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.DrMDMedicine" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.DrMDClinic" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
     </style>
 
-    <style name="Theme.DrMDMedicine" parent="Base.Theme.DrMDMedicine" >
+    <style name="Theme.DrMDClinic" parent="Base.Theme.DrMDClinic" >
         <!-- Status bar color. -->
         <item name="android:statusBarColor">#CDF5FD</item>
         <!--  Status bar text color change-->
